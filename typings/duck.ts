@@ -5,9 +5,9 @@ type Action<T extends string, P> = {
 
 type ActionCreator<T extends string, P> = (payload: P) => Action<T, P>;
 
-type Reducer<S> = (initialState: S, action?: Action<string, unknown>) => S;
+type Reducer<S> = (state?: S, action?: Action<string, unknown>) => S;
 
-type ActionReducerMapping<S> = Record<string, Reducer<S>>;
+type ReducerMapping<S> = Record<string, Reducer<S>>;
 
 type Selector<S> = (state: S) => unknown;
 

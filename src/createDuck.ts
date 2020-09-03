@@ -16,11 +16,11 @@ export function createDuck<State>({
 }: {
     name: string;
     initialState: State;
-    reducers: ActionReducerMapping<State>;
+    reducers: ReducerMapping<State>;
     selectors?: Record<string, Selector<State>>;
 }): Duck<State> {
     const actions = Object.keys(reducers).reduce((axns, actionType) => {
-        axns[getNS(name, actionType)] = createAction(actionType);
+        axns[actionType] = createAction(getNS(name, actionType));
         return axns;
     }, {} as Duck<State>["actions"]);
 

@@ -1,14 +1,11 @@
 export function createReducer<State>(
     initialState: State,
-    actionHandlers: ActionReducerMapping<State>,
-    defaultHandler: Reducer<State> = (s): State => s,
+    actionTypeToReducer: ReducerMapping<State>,
+    defaultReducer?: Reducer<State>,
 ): Reducer<State> {
-    return (state = initialState, action?): State => {
-        for (const [actionType, reducer] of Object.entries(actionHandlers)) {
-            if (actionType === action?.type) {
-                return reducer(state, action);
-            }
-        }
-        return defaultHandler(state, action);
-    };
+    return (state = initialState, action?): State =>
+        ((action && actionTypeToReducer[action.type]) ?? defaultReducer)?.(
+            state,
+            action,
+        ) ?? state;
 }
