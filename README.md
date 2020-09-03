@@ -68,3 +68,14 @@ ReactDOM.render(
     rootElement,
 );
 ```
+
+## Next
+
+- Implement slice selectors and `useSelector` hook
+- Implement asynchronous middleware support
+
+## Suggestions
+
+- Use `immer` to create immutable reducers, [see guide][immer-intro].
+
+[immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3

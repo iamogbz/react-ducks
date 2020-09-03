@@ -1,12 +1,6 @@
-import React from "react";
+import * as React from "react";
+import { ActionTypes } from "./utils/actionTypes";
 import { createAction } from "./createAction";
-
-const randomString = (): string =>
-    Math.random().toString(36).substring(7).split("").join(".");
-
-const ActionTypes = {
-    INIT: `@@context/INIT${randomString()}`,
-};
 
 export function createRootProvider<State>(
     Context: React.Context<ContextValue<State>>,

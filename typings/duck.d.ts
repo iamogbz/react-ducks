@@ -22,9 +22,9 @@ type ReducerMapping<S, T extends string = string, P = unknown> = Record<
     Reducer<S, T, P>
 >;
 
-type Selector<S, T extends string = string, P = unknown> = (
+type Selector<S, R = unknown, T extends string = string, P = unknown> = (
     state: React.ReducerState<React.Reducer<S, Action<T, P>>>,
-) => unknown;
+) => R;
 
 type Duck<S, T extends string = string, P = unknown> = {
     actions: ActionCreatorMapping;

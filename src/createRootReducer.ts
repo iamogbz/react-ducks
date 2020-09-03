@@ -1,4 +1,6 @@
-function combineReducers<State>(
+type State = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+function combineReducers(
     initialState: Record<string, State>,
     reducerMapping: ReducerMapping<State>,
 ): Reducer<Record<string, State>> {
@@ -14,7 +16,7 @@ function combineReducers<State>(
     };
 }
 
-export function createRootReducer<State>(
+export function createRootReducer(
     ...ducks: Duck<State>[]
 ): Reducer<Record<string, State>> {
     const { initialState, reducerMapping } = ducks.reduce(
