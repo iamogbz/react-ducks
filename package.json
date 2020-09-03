@@ -1,0 +1,129 @@
+{
+    "name": "boilerplate",
+    "version": "0.0.1",
+    "description": "NodeJS Boilerplate with precommit test and linting configured",
+    "author": "iamogbz",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iamogbz/node-js-boilerplate"
+    },
+    "bugs": {
+        "url": "https://github.com/iamogbz/node-js-boilerplate/issues"
+    },
+    "homepage": "https://github.com/iamogbz/node-js-boilerplate#readme",
+    "keywords": [
+        "node",
+        "nodejs",
+        "typescript",
+        "boilerplate",
+        "testing",
+        "linting",
+        "ci",
+        "package",
+        "npm"
+    ],
+    "engines": {
+        "node": ">=8",
+        "npm": ">=6"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "typings"
+    ],
+    "scripts": {
+        "lint": "eslint . --ext .js,.ts",
+        "build": "rm -rf ./dist && tsc --project tsconfig.prod.json",
+        "build-watch": "tsc --watch",
+        "test": "jest",
+        "coveralls": "cat ./artifacts/coverage/lcov.info | coveralls",
+        "typecheck": "tsc --noEmit",
+        "commit": "git-cz",
+        "release": "semantic-release"
+    },
+    "release": {
+        "dryRun": true,
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            "@semantic-release/npm",
+            "@semantic-release/github"
+        ]
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "moduleDirectories": [
+            ".",
+            "./node_modules"
+        ],
+        "testPathIgnorePatterns": [
+            "./artifacts/",
+            "./dist/",
+            "./node_modules/"
+        ],
+        "coverageDirectory": "./artifacts/coverage"
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts}": [
+            "npm run lint",
+            "npm test -- --bail --findRelatedTests"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+            "pre-commit": "lint-staged"
+        }
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.11.5",
+        "@babel/core": "^7.11.5",
+        "@babel/preset-typescript": "^7.10.4",
+        "@commitlint/cli": "^9.1.2",
+        "@commitlint/config-conventional": "^9.1.2",
+        "@commitlint/travis-cli": "^9.1.2",
+        "@types/jest": "^26.0.12",
+        "@types/node": "^14.6.2",
+        "@typescript-eslint/eslint-plugin": "^2.34.0",
+        "@typescript-eslint/parser": "^2.34.0",
+        "acorn": "^7.4.0",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.1.0",
+        "babel-plugin-transform-class-properties": "^6.24.1",
+        "commitizen": "^4.2.1",
+        "coveralls": "^3.1.0",
+        "cz-conventional-changelog": "^3.3.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb": "^18.2.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-import": "^2.22.0",
+        "eslint-plugin-jsx-a11y": "^6.3.1",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-react": "^7.20.6",
+        "husky": "^4.2.5",
+        "jest": "^25.5.4",
+        "lint-staged": "^10.2.13",
+        "prettier": "^2.1.1",
+        "prettier-eslint": "^11.0.0",
+        "rxjs": "^6.6.2",
+        "semantic-release": "^17.1.1",
+        "stylelint": "^13.7.0",
+        "stylelint-config-standard": "^20.0.0",
+        "stylelint-config-styled-components": "^0.1.1",
+        "stylelint-processor-styled-components": "^1.10.0",
+        "ts-jest": "^25.5.1",
+        "ts-node": "^9.0.0",
+        "typescript": "^3.9.7"
+    }
+}
