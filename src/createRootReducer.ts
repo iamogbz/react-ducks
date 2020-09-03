@@ -20,7 +20,7 @@ export function createRootReducer<State>(
     const { initialState, reducerMapping } = ducks.reduce(
         (acc, duck) => {
             acc.reducerMapping[duck.name] = duck.reducer;
-            acc.initialState[duck.name] = duck.reducer();
+            acc.initialState[duck.name] = duck.initialState;
             return acc;
         },
         { initialState: {}, reducerMapping: {} } as {

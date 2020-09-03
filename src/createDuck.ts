@@ -27,8 +27,9 @@ export function createDuck<State>({
     const reducer = createReducer(initialState, reducers);
 
     return {
-        name,
         actions,
+        initialState,
+        name,
         reducer,
         selectors,
     };

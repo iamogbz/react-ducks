@@ -81,6 +81,9 @@
             "pre-commit": "lint-staged"
         }
     },
+    "peerDependencies": {
+        "react": "^16.13.0"
+    },
     "devDependencies": {
         "@babel/cli": "^7.11.5",
         "@babel/core": "^7.11.5",
@@ -90,6 +93,7 @@
         "@commitlint/travis-cli": "^9.1.2",
         "@types/jest": "^26.0.12",
         "@types/node": "^14.6.2",
+        "@types/react": "^16.9.49",
         "@typescript-eslint/eslint-plugin": "^2.34.0",
         "@typescript-eslint/parser": "^2.34.0",
         "acorn": "^7.4.0",
@@ -111,6 +115,7 @@
         "lint-staged": "^10.2.13",
         "prettier": "^2.1.1",
         "prettier-eslint": "^11.0.0",
+        "react": "^16.13.1",
         "rxjs": "^6.6.2",
         "semantic-release": "^17.1.1",
         "stylelint": "^13.7.0",
