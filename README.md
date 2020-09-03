@@ -22,18 +22,18 @@ export default createDuck({
 });
 ```
 
-Create the root reducer from all the duck reducers.
+Create the root duck from all ducks
 
 ```js
-// reducer.js
-export default createRootReducer(counterDuck, otherDuck);
+// duck.js
+export default createRootDuck(counterDuck, otherDuck);
 ```
 
 Create the global context.
 
 ```js
 // context.js
-export default createContext(rootReducer, preloadedState);
+export default createContext(rootDuck.reducer, rootDuck.initialState);
 ```
 
 Use the state and actions in your component.
@@ -67,6 +67,20 @@ ReactDOM.render(
     </Provider>,
     rootElement,
 );
+```
+
+Note: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
+
+```git
+diff --git a/index.jsx b/index.jsx
+index 0a0a0a0..1b1b1b1 100644
+--- a/index.jsx
++++ b/index.jsx
+const rootElement = document.getElementById("root");
+- const Provider = createRootProvider(Context);
+ReactDOM.render(
+-     <Provider>
++     <Provider Context={Context}>
 ```
 
 ## Example

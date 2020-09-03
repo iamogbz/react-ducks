@@ -4,8 +4,8 @@ import {
     createAction,
     createContext,
     createDuck,
+    createRootDuck,
     createRootProvider,
-    createRootReducer,
 } from "src";
 import { ActionTypes } from "src/utils/actionTypes";
 
@@ -24,12 +24,9 @@ describe("e2e", (): void => {
         reducers: { init },
     });
 
-    const rootReducer = createRootReducer(counterDuck, initDuck);
+    const rootDuck = createRootDuck(counterDuck, initDuck);
 
-    const Context = createContext(
-        rootReducer,
-        rootReducer({}, createAction(ActionTypes.PROBE_UNKNOWN_ACTION)()),
-    );
+    const Context = createContext(rootDuck.reducer, rootDuck.initialState);
 
     const Provider = createRootProvider(Context);
 
