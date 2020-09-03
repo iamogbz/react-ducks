@@ -5,11 +5,18 @@ export function createReducer<
 >(
     initialState: State,
     actionTypeToReducer: ReducerMapping<State, ActionType, PayloadType>,
+    namespacedActionTypeMapping: Record<ActionType, ActionType>,
     defaultReducer?: Reducer<State, ActionType, PayloadType>,
 ): Reducer<State, ActionType, PayloadType> {
-    return (state = initialState, action?): State =>
-        ((action && actionTypeToReducer[action.type]) ?? defaultReducer)?.(
-            state,
-            action,
-        ) ?? state;
+    return (state = initialState, action?): State => {
+        const actionType =
+            (action && namespacedActionTypeMapping[action.type]) ??
+            action?.type;
+        return (
+            ((action && actionTypeToReducer[actionType]) ?? defaultReducer)?.(
+                state,
+                action,
+            ) ?? state
+        );
+    };
 }

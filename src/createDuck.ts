@@ -19,12 +19,20 @@ export function createDuck<State>({
     reducers: ReducerMapping<State>;
     selectors?: Record<string, Selector<State>>;
 }): Duck<State> {
-    const actions = Object.keys(reducers).reduce((axns, actionType) => {
-        axns[actionType] = createAction(getNS(name, actionType));
-        return axns;
-    }, {} as Duck<State>["actions"]);
+    const actionTypes = Object.keys(reducers);
+    const actions: Duck<State>["actions"] = {};
+    const namespacedActionTypeMapping: Record<string, string> = {};
+    for (const actionType of actionTypes) {
+        const namespacedActionType = getNS(name, actionType);
+        actions[actionType] = createAction(actionType);
+        namespacedActionTypeMapping[namespacedActionType] = actionType;
+    }
 
-    const reducer = createReducer(initialState, reducers);
+    const reducer = createReducer(
+        initialState,
+        reducers,
+        namespacedActionTypeMapping,
+    );
 
     return {
         actions,

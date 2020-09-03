@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`e2e Renders with root provider and updates on action dispatch 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span>
+        2
+      </span>
+      <button>
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`e2e Renders without root provider 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span>
+        0
+      </span>
+      <button
+        disabled=""
+      >
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;

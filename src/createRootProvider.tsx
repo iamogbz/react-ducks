@@ -17,19 +17,21 @@ export function createRootProvider<State>(
             defaultValue.state,
         );
 
-        React.useEffect(
-            () => reducerDispatch(createAction(ActionTypes.INIT)()),
-            [],
-        );
+        React.useEffect(function initialiseReducer() {
+            reducerDispatch(createAction(ActionTypes.INIT)());
+        }, []);
 
         const dispatch = React.useCallback<ContextValue<State>["dispatch"]>(
-            (action) => (reducerDispatch(action), action),
-            [],
+            function wrappedDispatch(action) {
+                reducerDispatch(action);
+                return action;
+            },
+            [reducerDispatch],
         );
 
         const value = React.useMemo(
             () => ({ ...defaultValue, dispatch, state }),
-            [defaultValue],
+            [defaultValue, dispatch, state],
         );
 
         return <Context.Provider value={value}>{children}</Context.Provider>;
