@@ -69,6 +69,13 @@ ReactDOM.render(
 );
 ```
 
+## Example
+
+As a proof of concept converted the sandbox app from the react-redux basic tutorial
+
+- With redux [example][react-redux-tutorial]
+- Without redux [code][react-duck-no-redux]
+
 ## Next
 
 - Implement slice selectors and `useSelector` hook
@@ -78,4 +85,6 @@ ReactDOM.render(
 
 - Use `immer` to create immutable reducers, [see guide][immer-intro].
 
+[react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
+[react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
