@@ -1,26 +1,21 @@
 {
-    "name": "boilerplate",
+    "name": "react-duck",
     "version": "0.0.1",
-    "description": "NodeJS Boilerplate with precommit test and linting configured",
+    "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
     "repository": {
         "type": "git",
-        "url": "https://github.com/iamogbz/node-js-boilerplate"
+        "url": "https://github.com/iamogbz/react-duck"
     },
     "bugs": {
-        "url": "https://github.com/iamogbz/node-js-boilerplate/issues"
+        "url": "https://github.com/iamogbz/react-duck/issues"
     },
-    "homepage": "https://github.com/iamogbz/node-js-boilerplate#readme",
+    "homepage": "https://github.com/iamogbz/react-duck#readme",
     "keywords": [
-        "node",
-        "nodejs",
-        "typescript",
-        "boilerplate",
-        "testing",
-        "linting",
-        "ci",
-        "package",
-        "npm"
+        "react",
+        "redux",
+        "react-context",
+        "ducks"
     ],
     "engines": {
         "node": ">=8",

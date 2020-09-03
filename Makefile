@@ -1,5 +1,5 @@
 upstream:
-	@git remote add upstream https://github.com/iamogbz/node-js-boilerplate
+	@git remote add upstream https://github.com/iamogbz/react-duck
 	@git push origin master
 	@git push --all
 	@echo "upstream: remote successfully configured"

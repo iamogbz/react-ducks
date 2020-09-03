@@ -1,22 +1,13 @@
-# NodeJS Boilerplate
+# React Duck
 
-[![Dependabot badge](https://badgen.net/dependabot/iamogbz/node-js-boilerplate/?icon=dependabot)](https://app.dependabot.com)
-[![Dependencies](https://david-dm.org/iamogbz/node-js-boilerplate.svg)](https://github.com/iamogbz/node-js-boilerplate)
-[![Build Status](https://github.com/iamogbz/node-js-boilerplate/workflows/Build/badge.svg)](https://github.com/iamogbz/node-js-boilerplate/actions)
-[![Coverage Status](https://coveralls.io/repos/github/iamogbz/node-js-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/iamogbz/node-js-boilerplate?branch=master)
+[![Dependabot badge](https://badgen.net/dependabot/iamogbz/react-duck/?icon=dependabot)](https://app.dependabot.com)
+[![Dependencies](https://david-dm.org/iamogbz/react-duck.svg)](https://github.com/iamogbz/react-duck)
+[![Build Status](https://github.com/iamogbz/react-duck/workflows/Build/badge.svg)](https://github.com/iamogbz/react-duck/actions)
+[![Coverage Status](https://coveralls.io/repos/github/iamogbz/react-duck/badge.svg?branch=master)](https://coveralls.io/github/iamogbz/react-duck?branch=master)
 
-Simple node js package with linting, testing and building preconfigured
+Implement ducks in react following the redux pattern but using React Context.
 
-## Shell Commands
+## Usage
 
-```sh
-npm run test      # run jest tests
-```
-
-```sh
-npm run commit    # run commitizen
-```
-
-```sh
-npm run build     # typescript build
+```js
 ```
