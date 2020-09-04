@@ -77,10 +77,11 @@ index 0a0a0a0..1b1b1b1 100644
 --- a/index.jsx
 +++ b/index.jsx
 const rootElement = document.getElementById("root");
-- const Provider = createRootProvider(Context);
-ReactDOM.render(
--     <Provider>
-+     <Provider Context={Context}>
+-const Provider = createRootProvider(Context);
+ ReactDOM.render(
+-    <Provider>
++    <Provider Context={Context}>
+         <App />
 ```
 
 ## Example
