@@ -2,7 +2,7 @@ type ContextDispatch<T extends string = string, P = unknown> = (
     action: Action<T, P>,
 ) => Action<T, P>;
 
-// this is equivalent to a redux store
+// this is similar to a redux store
 type ContextValue<S, T extends string = string, P = unknown> = {
     dispatch: ContextDispatch<T, P>;
     reducer: Reducer<S>;
