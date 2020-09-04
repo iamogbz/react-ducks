@@ -10,5 +10,5 @@ type ContextValue<S, T extends string = string, P = unknown> = {
 };
 
 type Context<S, T extends string = string, P = unknown> = React.Context<
-    ContextValue<S>
+    ContextValue<S, T, P>
 >;
