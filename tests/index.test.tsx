@@ -1,13 +1,11 @@
 import * as React from "react";
 import { act, cleanup, render } from "@testing-library/react";
 import {
-    createAction,
     createContext,
     createDuck,
     createRootDuck,
     createRootProvider,
 } from "src";
-import { ActionTypes } from "src/utils/actionTypes";
 
 describe("e2e", (): void => {
     const increment = jest.fn((state: number): number => state + 1);
