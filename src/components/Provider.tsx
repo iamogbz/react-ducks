@@ -25,11 +25,10 @@ export function Provider<State>({
         [reducerDispatch],
     );
 
-    const value = React.useMemo(() => ({ ...defaultValue, dispatch, state }), [
-        defaultValue,
-        dispatch,
-        state,
-    ]);
+    const value = React.useMemo(
+        (): ContextValue<State> => ({ ...defaultValue, dispatch, state }),
+        [defaultValue, dispatch, state],
+    );
 
     return <Context.Provider value={value}>{children}</Context.Provider>;
 }
