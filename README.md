@@ -22,7 +22,7 @@ export default createDuck({
 });
 ```
 
-Create the root duck from all ducks
+Create the root/global duck as a combination of all other ducks.
 
 ```js
 // duck/index.js
