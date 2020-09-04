@@ -13,10 +13,6 @@ export function Provider<State>({
         defaultValue.state,
     );
 
-    React.useEffect(function initialiseReducer() {
-        reducerDispatch(createAction(ActionTypes.INIT)());
-    }, []);
-
     const dispatch = React.useCallback<ContextValue<State>["dispatch"]>(
         function wrappedDispatch(action) {
             reducerDispatch(action);
@@ -25,9 +21,21 @@ export function Provider<State>({
         [reducerDispatch],
     );
 
-    const value = React.useMemo(
-        (): ContextValue<State> => ({ ...defaultValue, dispatch, state }),
-        [defaultValue, dispatch, state],
+    const enhanced = React.useMemo<ContextValue<State>>(
+        () => defaultValue.enhancer({ ...defaultValue, dispatch }),
+        [defaultValue, dispatch],
+    );
+
+    React.useEffect(
+        function initialiseContext() {
+            enhanced.dispatch(createAction(ActionTypes.INIT)());
+        },
+        [enhanced],
+    );
+
+    const value = React.useMemo<ContextValue<State>>(
+        () => ({ ...enhanced, state }),
+        [enhanced, state],
     );
 
     return <Context.Provider value={value}>{children}</Context.Provider>;

@@ -1,10 +1,15 @@
 import * as React from "react";
 import { SymbolObservable } from "./utils/symbolObservable";
 
-function createUnimplemented(methodName: string): () => never {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return (...args: unknown[]): never => {
-        throw new Error(`Unimplemented method: ${methodName}`);
+const idFn = <A>(a: A): A => a;
+
+function createUnimplemented(objectName?: string) {
+    return function unimplemented(methodName: string): () => never {
+        const prefix = objectName ? `${objectName}.` : "";
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return (...args: unknown[]): never => {
+            throw new Error(`Unimplemented method: ${prefix}${methodName}`);
+        };
     };
 }
 
@@ -12,16 +17,18 @@ export function createContext<State>(
     rootReducer: Reducer<State>,
     preloadedState: State,
     displayName?: string,
+    enhancer: ContextEnhancer<State> = idFn,
 ): Context<State> {
-    const context = `Context(${displayName ?? ""}).of`;
+    const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
     const Context = React.createContext<ContextValue<State>>({
-        dispatch: (a) => a,
-        from: createUnimplemented(`${context}.from`),
-        of: createUnimplemented(`${context}.of`),
+        dispatch: idFn,
+        enhancer,
+        from: unimplemented("from"),
+        of: unimplemented("of"),
         reducer: rootReducer,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         replaceReducer: <NewState>(r: Reducer<NewState>): Context<NewState> =>
-            createUnimplemented(`${context}.replaceReducer`)(),
+            unimplemented("replaceReducer")(),
         state: preloadedState,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         subscribe: (o: Observer) => ({
