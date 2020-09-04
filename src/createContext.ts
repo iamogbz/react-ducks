@@ -23,19 +23,12 @@ export function createContext<State>(
     const Context = React.createContext<ContextValue<State>>({
         dispatch: idFn,
         enhancer,
-        from: unimplemented("from"),
-        of: unimplemented("of"),
         reducer: rootReducer,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         replaceReducer: <NewState>(r: Reducer<NewState>): Context<NewState> =>
             unimplemented("replaceReducer")(),
         state: preloadedState,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        subscribe: (o: Observer) => ({
-            unsubscribe: (): void => undefined,
-            closed: true,
-        }),
-        [SymbolObservable]: () => undefined,
+        [SymbolObservable]: unimplemented(SymbolObservable.toString()),
     });
     if (displayName) {
         Context.displayName = displayName;
