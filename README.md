@@ -25,7 +25,7 @@ export default createDuck({
 Create the root duck from all ducks
 
 ```js
-// duck.js
+// duck/index.js
 export default createRootDuck(counterDuck, otherDuck);
 ```
 
