@@ -17,16 +17,11 @@ export function createContext<State>(
     rootReducer: Reducer<State>,
     preloadedState: State,
     displayName?: string,
-    enhancer: ContextEnhancer<State> = idFn,
 ): Context<State> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
     const Context = React.createContext<ContextValue<State>>({
         dispatch: idFn,
-        enhancer,
         reducer: rootReducer,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        replaceReducer: <NewState>(r: Reducer<NewState>): Context<NewState> =>
-            unimplemented("replaceReducer")(),
         state: preloadedState,
         [SymbolObservable]: unimplemented(SymbolObservable.toString()),
     });

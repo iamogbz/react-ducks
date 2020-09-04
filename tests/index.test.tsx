@@ -24,12 +24,10 @@ describe("e2e", (): void => {
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
 
-    const enhancer = jest.fn((a) => a);
     const Context = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
         "TestContext",
-        enhancer,
     );
 
     const Provider = createRootProvider(Context);
@@ -53,7 +51,6 @@ describe("e2e", (): void => {
     afterEach(() => {
         increment.mockClear();
         init.mockClear();
-        enhancer.mockClear();
         cleanup();
     });
 
@@ -76,7 +73,6 @@ describe("e2e", (): void => {
         expect(increment).toHaveBeenCalled();
         await act(() => result.findByText("increment").then((e) => e.click()));
         expect(result.baseElement).toMatchSnapshot();
-        expect(enhancer).toHaveBeenCalledTimes(1);
         expect(init).toHaveBeenCalledTimes(1);
     });
 });
