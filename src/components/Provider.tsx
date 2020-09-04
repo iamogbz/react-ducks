@@ -18,7 +18,7 @@ export function Provider<State>({
             reducerDispatch(action);
             return action;
         },
-        [reducerDispatch],
+        [],
     );
 
     const enhanced = React.useMemo<ContextValue<State>>(
