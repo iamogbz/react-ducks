@@ -56,6 +56,28 @@ export default function App(props) {
 }
 ```
 
+**Note**: this is equivalent to the class component described below.
+
+```jsx
+// app.jsx
+export default class App extends React.PureComponent {
+    render() {
+        const { state } = this.context;
+        return (
+            <div>
+                Count: <span>{state[counterDuck.name]}</span>
+                <button onClick={this.increment} />
+            </div>
+        );
+    }
+
+    increment = () => {
+        this.context.dispatch(counterDuck.actions.increment());
+    }
+}
+App.contextType = Context;
+```
+
 Wrap the application in the root provider to handle state changes.
 
 ```js
@@ -70,7 +92,7 @@ ReactDOM.render(
 );
 ```
 
-Note: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
+**Note**: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
 
 ```git
 diff --git a/index.jsx b/index.jsx
