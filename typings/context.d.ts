@@ -7,3 +7,5 @@ type ContextValue<S, T extends string = string, P = unknown> = {
     reducer: Reducer<S>;
     state: S;
 };
+
+type Context<S> = React.Context<ContextValue<S>>;
