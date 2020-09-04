@@ -5,10 +5,7 @@ import { createAction } from "../createAction";
 export function Provider<State>({
     children,
     Context,
-}: {
-    children?: React.ReactNode;
-    Context: React.Context<ContextValue<State>>;
-}): React.ReactElement {
+}: React.PropsWithChildren<{ Context: Context<State> }>): React.ReactElement {
     const defaultValue = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(
