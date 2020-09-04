@@ -116,8 +116,8 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 
 ## Next
 
-- Implement slice selectors and `useSelector` hook
-- Implement asynchronous middleware support
+- Implement slice selectors and `useSelector` hook, [reference][react-redux-useselector]
+- Implement asynchronous middleware context support, [reference][redux-applymiddleware]
 
 ## Suggestions
 
@@ -125,4 +125,6 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
+[react-redux-useselector]: https://react-redux.js.org/api/hooks#useselector
+[redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
