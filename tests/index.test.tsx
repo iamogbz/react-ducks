@@ -24,16 +24,22 @@ describe("e2e", (): void => {
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
 
-    const Context = createContext(rootDuck.reducer, rootDuck.initialState);
+    const Context = createContext(
+        rootDuck.reducer,
+        rootDuck.initialState,
+        "TestContext",
+    );
 
     const Provider = createRootProvider(Context);
 
     function Example(): React.ReactElement {
         const { state, dispatch } = React.useContext(Context);
-        React.useEffect(() => void dispatch(initDuck.actions.init()), []);
-        const increment = React.useCallback(function increment() {
+        React.useEffect(() => {
+            dispatch(initDuck.actions.init());
+        }, [dispatch]);
+        const increment = React.useCallback(() => {
             dispatch(counterDuck.actions.increment());
-        }, []);
+        }, [dispatch]);
         return (
             <div>
                 Count: <span>{state[counterDuck.name]}</span>
@@ -69,5 +75,6 @@ describe("e2e", (): void => {
         expect(increment).toHaveBeenCalled();
         await act(() => result.findByText("increment").then((e) => e.click()));
         expect(result.baseElement).toMatchSnapshot();
+        expect(init).toHaveBeenCalledTimes(1);
     });
 });

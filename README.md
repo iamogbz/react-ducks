@@ -15,11 +15,11 @@ Create the ducks for each slice of application logic.
 ```js
 // duck/counter.js
 export default createDuck({
-    name: "counter",
-    initialState: 0,
-    reducers: {
-        increment: (state) => state + 1,
-    },
+  name: "counter",
+  initialState: 0,
+  reducers: {
+    increment: (state) => state + 1,
+  },
 });
 ```
 
@@ -42,17 +42,40 @@ Use the state and actions in your component.
 ```jsx
 // app.jsx
 export default function App(props) {
-    const { state, dispatch } = React.useContext(Context);
-    const increment = React.useCallback(
-        () => dispatch(counterDuck.actions.increment()),
-        [dispatch],
-    );
+  const { state, dispatch } = React.useContext(Context);
+  const increment = React.useCallback(
+    () => dispatch(counterDuck.actions.increment()),
+    [dispatch]
+  );
+  return (
+    <div>
+      Count: <span>{state[counterDuck.name]}</span>
+      <button onClick={increment} />
+    </div>
+  );
+}
+```
+
+**Note**: this is equivalent to the class component described below.
+
+```jsx
+// app.jsx
+export default class App extends React.PureComponent {
+  static contextType = Context;
+
+  render() {
+    const { state } = this.context;
     return (
-        <div>
-            Count: <span>{state[counterDuck.name]}</span>
-            <button onClick={increment} />
-        </div>
+      <div>
+        Count: <span>{state[counterDuck.name]}</span>
+        <button onClick={this.increment} />
+      </div>
     );
+  }
+
+  increment = () => {
+    this.context.dispatch(counterDuck.actions.increment());
+  };
 }
 ```
 
@@ -63,14 +86,14 @@ Wrap the application in the root provider to handle state changes.
 const rootElement = document.getElementById("root");
 const Provider = createRootProvider(Context);
 ReactDOM.render(
-    <Provider>
-        <App />
-    </Provider>,
-    rootElement,
+  <Provider>
+    <App />
+  </Provider>,
+  rootElement
 );
 ```
 
-Note: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
+**Note**: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
 
 ```git
 diff --git a/index.jsx b/index.jsx
@@ -94,13 +117,17 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 
 ## Next
 
-- Implement slice selectors and `useSelector` hook
-- Implement asynchronous middleware support
+- Implement slice selectors and `useSelector` hook, [reference][react-redux-useselector]
+- Implement asynchronous middleware context support, [reference][redux-applymiddleware]
+- Implement observable pattern for context value, [reference][proposal-observable]
 
 ## Suggestions
 
 - Use `immer` to create immutable reducers, [see guide][immer-intro].
 
-[react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
-[react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
+[proposal-observable]: https://github.com/tc39/proposal-observable
+[react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
+[react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
+[react-redux-useselector]: https://react-redux.js.org/api/hooks#useselector
+[redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware

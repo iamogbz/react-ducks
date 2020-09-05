@@ -28,7 +28,7 @@
         "typings"
     ],
     "scripts": {
-        "lint": "eslint . --ext .js,.ts",
+        "lint": "eslint . --max-warnings=0 --ext .js,.jsx,.ts,.tsx",
         "build": "rm -rf ./dist && tsc --project tsconfig.prod.json",
         "build-watch": "tsc --watch",
         "test": "jest",
@@ -48,8 +48,9 @@
     "jest": {
         "preset": "ts-jest",
         "moduleDirectories": [
-            ".",
-            "./node_modules"
+            "./node_modules",
+            "<rootDir>/node_modules",
+            "."
         ],
         "testPathIgnorePatterns": [
             "./artifacts/",
@@ -91,6 +92,7 @@
         "@commitlint/config-conventional": "^9.1.2",
         "@commitlint/travis-cli": "^9.1.2",
         "@testing-library/react": "^11.0.2",
+        "@testing-library/react-hooks": "^3.4.1",
         "@types/jest": "^26.0.13",
         "@types/node": "^14.6.4",
         "@types/react": "^16.9.49",
@@ -110,6 +112,7 @@
         "eslint-plugin-jsx-a11y": "^6.3.1",
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.20.6",
+        "eslint-plugin-react-hooks": "^4.1.0",
         "husky": "^4.2.5",
         "jest": "^25.5.4",
         "lint-staged": "^10.3.0",
@@ -117,6 +120,7 @@
         "prettier-eslint": "^11.0.0",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
+        "react-test-renderer": "^16.13.1",
         "rxjs": "^6.6.2",
         "semantic-release": "^17.1.1",
         "stylelint": "^13.7.0",

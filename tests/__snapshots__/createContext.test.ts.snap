@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createContext has unimplemented observable symbol 1`] = `
+Object {
+  "dispatch": [Function],
+  "reducer": [Function],
+  "state": Object {},
+  Symbol(@@observable): [Function],
+}
+`;

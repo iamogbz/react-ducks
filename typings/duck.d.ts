@@ -6,14 +6,15 @@ type Action<
     payload?: P;
 };
 
-type ActionCreator<T extends string = string, P = unknown> = (
+type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
     payload?: P,
-) => React.ReducerAction<React.Reducer<unknown, Action<T, P>>>;
+) => React.ReducerAction<Reducer<S, T, P>>;
 
-type ActionCreatorMapping<T extends string = string, P = unknown> = Record<
-    string,
-    ActionCreator<T, P>
->;
+type ActionCreatorMapping<
+    T extends string = string,
+    P = unknown,
+    S = unknown
+> = Record<string, ActionCreator<T, P, S>>;
 
 type Reducer<S, T extends string = string, P = unknown> = React.Reducer<
     S /* All possible state types */,
