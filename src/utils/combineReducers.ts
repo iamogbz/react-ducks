@@ -1,17 +1,15 @@
-type State = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-export function combineReducers<State>(
-    initialState: Record<string, State>,
-    reducerMapping: ReducerMapping<State>,
-): Reducer<Record<string, State>> {
+export function combineReducers<S, T extends string, P>(
+    initialState: Record<string, S>,
+    reducerMapping: ReducerMapping<S, T, P>,
+): Reducer<Record<string, S>, T, P> {
     const reducers = Object.entries(reducerMapping);
     return function (
-        state: Record<string, State> = initialState,
+        state: Record<string, S> = initialState,
         action,
-    ): Record<string, State> {
+    ): Record<string, S> {
         return reducers.reduce((acc, [name, reducer]) => {
             acc[name] = reducer(state[name], action);
             return acc;
-        }, {} as Record<string, State>);
+        }, {} as Record<string, S>);
     };
 }

@@ -108,6 +108,8 @@ const rootElement = document.getElementById("root");
          <App />
 ```
 
+A side benefit to scoping the context state to the provider is allowing multiple entire apps to be run concurrently.
+
 ## Example
 
 As a proof of concept converted the sandbox app from the react-redux basic tutorial

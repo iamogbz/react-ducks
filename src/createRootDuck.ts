@@ -1,40 +1,49 @@
 import { combineReducers } from "./utils/combineReducers";
 
-type State = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+export function createRootDuck<
+    D extends Duck<S, N, T, P, R, Q>,
+    S = D extends infer _D ? (_D extends Duck<infer _S> ? _S : never) : never,
+    N extends string = D extends infer _D
+        ? _D extends Duck<S, infer _N>
+            ? _N
+            : never
+        : never,
+    T extends string = D extends infer _D
+        ? _D extends Duck<S, N, infer _T>
+            ? _T
+            : never
+        : never,
+    P = D extends infer _D
+        ? _D extends Duck<S, N, T, infer _P>
+            ? _P
+            : never
+        : never,
+    R = D extends infer _D
+        ? _D extends Duck<S, N, T, P, infer _R>
+            ? _R
+            : never
+        : never,
+    Q extends string = D extends infer _D
+        ? _D extends Duck<S, N, T, P, R, infer _Q>
+            ? _Q
+            : never
+        : never
+>(...ducks: D[]): RootDuck<S, N, T, P, R, Q> {
+    const rootDuck = {
+        actions: {},
+        initialState: {},
+        names: new Set(ducks.map((d) => d.name)),
+        selectors: {},
+    } as RootDuck<S, N, T, P, R, Q>;
+    const reducerMapping: ReducerMapping<S, T, P> = {};
 
-export function createRootDuck(...ducks: Duck<State>[]): RootDuck<State> {
-    const {
-        actions,
-        initialState,
-        names,
-        reducerMapping,
-        selectors,
-    } = ducks.reduce(
-        (acc, duck) => {
-            acc.names.add(duck.name);
-            acc.actions[duck.name] = duck.actions;
-            acc.selectors[duck.name] = duck.selectors;
-            acc.reducerMapping[duck.name] = duck.reducer;
-            acc.initialState[duck.name] = duck.initialState;
-            return acc;
-        },
-        {
-            actions: {},
-            initialState: {},
-            names: new Set(),
-            reducerMapping: {},
-            selectors: {},
-        } as {
-            reducerMapping: ReducerMapping<State>;
-        } & RootDuck<State>,
-    );
-    const reducer = combineReducers(initialState, reducerMapping);
-
-    return {
-        actions,
-        initialState,
-        names,
-        reducer,
-        selectors,
-    };
+    for (const duck of ducks) {
+        const duckName = duck.name;
+        rootDuck.actions[duckName] = duck.actions;
+        rootDuck.initialState[duckName] = duck.initialState;
+        rootDuck.selectors[duckName] = duck.selectors;
+        reducerMapping[duckName] = duck.reducer;
+    }
+    rootDuck.reducer = combineReducers(rootDuck.initialState, reducerMapping);
+    return rootDuck;
 }
