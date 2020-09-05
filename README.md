@@ -15,11 +15,11 @@ Create the ducks for each slice of application logic.
 ```js
 // duck/counter.js
 export default createDuck({
-    name: "counter",
-    initialState: 0,
-    reducers: {
-        increment: (state) => state + 1,
-    },
+  name: "counter",
+  initialState: 0,
+  reducers: {
+    increment: (state) => state + 1,
+  },
 });
 ```
 
@@ -42,17 +42,17 @@ Use the state and actions in your component.
 ```jsx
 // app.jsx
 export default function App(props) {
-    const { state, dispatch } = React.useContext(Context);
-    const increment = React.useCallback(
-        () => dispatch(counterDuck.actions.increment()),
-        [dispatch],
-    );
-    return (
-        <div>
-            Count: <span>{state[counterDuck.name]}</span>
-            <button onClick={increment} />
-        </div>
-    );
+  const { state, dispatch } = React.useContext(Context);
+  const increment = React.useCallback(
+    () => dispatch(counterDuck.actions.increment()),
+    [dispatch]
+  );
+  return (
+    <div>
+      Count: <span>{state[counterDuck.name]}</span>
+      <button onClick={increment} />
+    </div>
+  );
 }
 ```
 
@@ -61,21 +61,22 @@ export default function App(props) {
 ```jsx
 // app.jsx
 export default class App extends React.PureComponent {
-    render() {
-        const { state } = this.context;
-        return (
-            <div>
-                Count: <span>{state[counterDuck.name]}</span>
-                <button onClick={this.increment} />
-            </div>
-        );
-    }
+  static contextType = Context;
 
-    increment = () => {
-        this.context.dispatch(counterDuck.actions.increment());
-    }
+  render() {
+    const { state } = this.context;
+    return (
+      <div>
+        Count: <span>{state[counterDuck.name]}</span>
+        <button onClick={this.increment} />
+      </div>
+    );
+  }
+
+  increment = () => {
+    this.context.dispatch(counterDuck.actions.increment());
+  };
 }
-App.contextType = Context;
 ```
 
 Wrap the application in the root provider to handle state changes.
@@ -85,10 +86,10 @@ Wrap the application in the root provider to handle state changes.
 const rootElement = document.getElementById("root");
 const Provider = createRootProvider(Context);
 ReactDOM.render(
-    <Provider>
-        <App />
-    </Provider>,
-    rootElement,
+  <Provider>
+    <App />
+  </Provider>,
+  rootElement
 );
 ```
 

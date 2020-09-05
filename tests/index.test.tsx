@@ -34,10 +34,12 @@ describe("e2e", (): void => {
 
     function Example(): React.ReactElement {
         const { state, dispatch } = React.useContext(Context);
-        React.useEffect(() => void dispatch(initDuck.actions.init()), []);
-        const increment = React.useCallback(function increment() {
+        React.useEffect(() => {
+            dispatch(initDuck.actions.init());
+        }, [dispatch]);
+        const increment = React.useCallback(() => {
             dispatch(counterDuck.actions.increment());
-        }, []);
+        }, [dispatch]);
         return (
             <div>
                 Count: <span>{state[counterDuck.name]}</span>
