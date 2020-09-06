@@ -13,10 +13,10 @@ export function createReducer<
             (action && namespacedActionTypeMapping?.[action.type]) ??
             action?.type;
         return (
-            ((action && actionTypeToReducer[actionType]) ?? defaultReducer)?.(
-                state,
-                action,
-            ) ?? state
+            (
+                (action && actionTypeToReducer[actionType]) ??
+                defaultReducer
+            )?.(state, { ...action, type: actionType as ActionType }) ?? state
         );
     };
 }
