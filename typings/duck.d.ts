@@ -1,41 +1,47 @@
 type Action<
-    T extends string /* All possible action types */,
-    P /* All possible payload types */
+    T extends string = string /* All possible action types */,
+    P = unknown /* All possible payload types */
 > = {
     type: T;
     payload?: P;
 };
 
-type ActionCreator<T extends string, P, S> = (
+type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
     payload?: P,
 ) => React.ReducerAction<Reducer<S, T, P>>;
 
-type ActionCreatorMapping<T extends string, P, S> = Record<
-    string,
-    ActionCreator<T, P, S>
->;
+type ActionCreatorMapping<
+    T extends string = string,
+    P = unknown,
+    S = unknown
+> = Record<string, ActionCreator<T, P, S>>;
 
-type Reducer<S, T extends string, P> = React.Reducer<
-    S /* All possible state types */,
-    Action<T, P>
->;
+type Reducer<
+    S = unknown,
+    T extends string = string,
+    P = unknown
+> = React.Reducer<S /* All possible state types */, Action<T, P>>;
 
-type ReducerMapping<S, T extends string, P> = Record<string, Reducer<S, T, P>>;
+type ReducerMapping<
+    S = unknown,
+    T extends string = string,
+    P = unknown
+> = Record<string, Reducer<S, T, P>>;
 
 type Selector<
-    S,
-    R /* All possible selector return types */,
-    T extends string,
-    P
+    S = unknown,
+    R = unknown /* All possible selector return types */,
+    T extends string = string,
+    P = unknown
 > = (state: React.ReducerState<Reducer<S, Action<T, P>>>) => R;
 
 type SelectorMapping<
-    S,
-    R,
-    T extends string,
-    P,
-    Q extends string /* All possible selector names*/
-> = Record<string, Selector<S, R, T, P>>;
+    S = unknown,
+    R = unknown,
+    T extends string = string,
+    P = unknown,
+    Q extends string = string /* All possible selector names*/
+> = Record<Q, Selector<S, R, T, P>>;
 
 type Duck<
     S = unknown,

@@ -49,5 +49,5 @@ export function createDuck<
         name,
         reducer,
         selectors,
-    };
+    } as Duck<S, N, T, P, R, Q>;
 }
