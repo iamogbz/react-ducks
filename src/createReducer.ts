@@ -2,18 +2,14 @@ export function createReducer<
     S,
     P,
     T extends U | V /* All action types the final reducer supports */,
-    K extends ReducerMapping<S, U, P> /* Action types to reducer mapping */,
+    K extends ActionReducerMapping<
+        S,
+        U,
+        P
+    > /* Action types to reducer mapping */,
     L extends Record<V, U> /* Namespaced action types to original mapping */,
-    U extends string = K extends infer _U /* All orignal action types */
-        ? _U extends ReducerMapping<S, infer __U, P>
-            ? __U
-            : never
-        : never,
-    V extends string = L extends infer _V /* All namespaced action types */
-        ? _V extends Record<infer __V, U>
-            ? __V
-            : never
-        : never
+    U extends string,
+    V extends string
 >(
     initialState: S,
     actionTypeToReducer: K,

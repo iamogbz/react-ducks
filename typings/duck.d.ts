@@ -13,8 +13,9 @@ type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
 type ActionCreatorMapping<
     T extends string = string,
     P = unknown,
-    S = unknown
-> = Record<string, ActionCreator<T, P, S>>;
+    S = unknown,
+    C extends string = T /* Action creator mapping keys */
+> = Record<C, ActionCreator<T, P, S>>;
 
 type Reducer<
     S = unknown,
@@ -22,11 +23,11 @@ type Reducer<
     P = unknown
 > = React.Reducer<S /* All possible state types */, Action<T, P>>;
 
-type ReducerMapping<
+type ActionReducerMapping<
     S = unknown,
     T extends string = string,
     P = unknown
-> = Record<string, Reducer<S, T, P>>;
+> = Record<T, Reducer<S, T, P>>;
 
 type Selector<
     S = unknown,
@@ -46,17 +47,26 @@ type SelectorMapping<
 type Duck<
     S = unknown,
     N extends string = string /* Duck name */,
-    T extends string = string,
+    T extends U | V = string,
     P = unknown,
     R = unknown,
-    Q extends string = string
+    Q extends string = string,
+    U extends string = string,
+    V extends string = string
 > = {
-    actions: ActionCreatorMapping<T, P>;
+    actions: ActionCreatorMapping<U, P>;
     initialState: S;
     name: N;
     reducer: Reducer<S, T, P>;
     selectors?: SelectorMapping<S, R, T, P, Q>;
 };
+
+type DuckReducerMapping<
+    S = unknown,
+    N extends string = string,
+    T extends string = string,
+    P = unknown
+> = Record<N, Reducer<S, T, P>>;
 
 type RootDuck<
     S = unknown,

@@ -35,11 +35,14 @@ export function createRootDuck<
         names: new Set(ducks.map((d) => d.name)),
         selectors: {},
     } as RootDuck<S, N, T, P, R, Q>;
-    const reducerMapping: ReducerMapping<S, T, P> = {};
-
+    const reducerMapping = {} as DuckReducerMapping<S, N, T, P>;
     for (const duck of ducks) {
         const duckName = duck.name;
-        rootDuck.actions[duckName] = duck.actions;
+        rootDuck.actions[duckName] = duck.actions as ActionCreatorMapping<
+            T,
+            P,
+            S
+        >;
         rootDuck.initialState[duckName] = duck.initialState;
         rootDuck.selectors[duckName] = duck.selectors;
         reducerMapping[duckName] = duck.reducer;
