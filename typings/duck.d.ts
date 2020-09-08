@@ -71,12 +71,14 @@ type DuckReducerMapping<
 type RootDuck<
     S = unknown,
     N extends string = string /* All possible duck names */,
-    T extends string = string,
+    T extends U | V = string,
     P = unknown,
     R = unknown,
-    Q extends string = string
+    Q extends string = string,
+    U extends string = string,
+    V extends string = string
 > = {
-    actions: Record<N, ActionCreatorMapping<T, P, S>>;
+    actions: Record<N, ActionCreatorMapping<U, P, S>>;
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;

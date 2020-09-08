@@ -1,3 +1,6 @@
+const isActionType = (a: Action, mapping?: Record<string, unknown>): boolean =>
+    Boolean(Object.prototype.hasOwnProperty.call(mapping, a.type));
+
 export function createReducer<
     S,
     P,
@@ -16,20 +19,10 @@ export function createReducer<
     namespacedActionTypeMapping?: L,
     defaultReducer?: Reducer<S, T, P>,
 ): Reducer<S, T, P> {
-    function isReducerActionType(a: Action<string, P>): a is Action<U, P> {
-        return Boolean(
-            Object.prototype.hasOwnProperty.call(actionTypeToReducer, a.type),
-        );
-    }
-
-    function isNamespacedActionType(a: Action<string, P>): a is Action<V, P> {
-        return Boolean(
-            Object.prototype.hasOwnProperty.call(
-                namespacedActionTypeMapping,
-                a.type,
-            ),
-        );
-    }
+    const isReducerActionType = (a: Action<string, P>): a is Action<U, P> =>
+        isActionType(a, actionTypeToReducer);
+    const isNamespacedActionType = (a: Action<string, P>): a is Action<V, P> =>
+        isActionType(a, namespacedActionTypeMapping);
 
     return (state = initialState, action?): S => {
         if (action !== undefined && isReducerActionType(action)) {

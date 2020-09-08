@@ -9,10 +9,11 @@ import {
 
 describe("e2e", (): void => {
     const increment = jest.fn((state: number): number => state + 1);
+    const decrement = jest.fn((state: number): number => state - 1);
     const counterDuck = createDuck({
         name: "counter",
         initialState: 0,
-        reducers: { increment },
+        reducers: { decrement, increment },
     });
 
     const init = jest.fn((): boolean => true);
