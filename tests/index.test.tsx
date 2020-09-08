@@ -6,10 +6,11 @@ import {
     createRootDuck,
     createRootProvider,
 } from "src";
+import { ActionTypes } from "src/utils/actionTypes";
 
 describe("e2e", (): void => {
     const increment = jest.fn((state: number): number => state + 1);
-    const decrement = jest.fn((state: number): number => state - 1);
+    const decrement = (state: number): number => state - 1;
     const counterDuck = createDuck({
         name: "counter",
         initialState: 0,
@@ -20,7 +21,7 @@ describe("e2e", (): void => {
     const initDuck = createDuck({
         name: "init",
         initialState: false,
-        reducers: { init },
+        reducers: { [ActionTypes.INIT]: init },
     });
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
@@ -35,9 +36,6 @@ describe("e2e", (): void => {
 
     function Example(): React.ReactElement {
         const { state, dispatch } = React.useContext(Context);
-        React.useEffect(() => {
-            dispatch(initDuck.actions.init());
-        }, [dispatch]);
         const increment = React.useCallback(() => {
             dispatch(counterDuck.actions.increment());
         }, [dispatch]);

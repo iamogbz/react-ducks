@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
+    "publishConfig": { "registry": "https://npm.pkg.github.com/" },
     "repository": {
         "type": "git",
         "url": "https://github.com/iamogbz/react-duck"
