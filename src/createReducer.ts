@@ -1,22 +1,43 @@
+const isActionType = (a: Action, mapping?: Record<string, unknown>): boolean =>
+    Boolean(Object.prototype.hasOwnProperty.call(mapping, a.type));
+
 export function createReducer<
-    State,
-    ActionType extends string = string,
-    PayloadType = unknown
+    S,
+    P,
+    T extends U | V /* All action types the final reducer supports */,
+    K extends ActionReducerMapping<
+        S,
+        U,
+        P
+    > /* Action types to reducer mapping */,
+    L extends Record<V, U> /* Namespaced action types to original mapping */,
+    U extends string,
+    V extends string
 >(
-    initialState: State,
-    actionTypeToReducer: ReducerMapping<State, ActionType, PayloadType>,
-    namespacedActionTypeMapping?: Record<string, string>,
-    defaultReducer?: Reducer<State, ActionType, PayloadType>,
-): Reducer<State, ActionType, PayloadType> {
-    return (state = initialState, action?): State => {
-        const actionType =
-            (action && namespacedActionTypeMapping?.[action.type]) ??
-            action?.type;
-        return (
-            (
-                (action && actionTypeToReducer[actionType]) ??
-                defaultReducer
-            )?.(state, { ...action, type: actionType as ActionType }) ?? state
-        );
+    initialState: S,
+    actionTypeToReducer: K,
+    namespacedActionTypeMapping?: L,
+    defaultReducer?: Reducer<S, T, P>,
+): Reducer<S, T, P> {
+    const isReducerActionType = (a: Action<string, P>): a is Action<U, P> =>
+        isActionType(a, actionTypeToReducer);
+    const isNamespacedActionType = (a: Action<string, P>): a is Action<V, P> =>
+        isActionType(a, namespacedActionTypeMapping);
+
+    return (state = initialState, action?): S => {
+        if (action !== undefined && isReducerActionType(action)) {
+            return actionTypeToReducer[action.type](state, action);
+        } else if (
+            action !== undefined &&
+            namespacedActionTypeMapping !== undefined &&
+            isNamespacedActionType(action)
+        ) {
+            const actionType = namespacedActionTypeMapping[action.type];
+            return actionTypeToReducer[actionType](state, {
+                ...action,
+                type: actionType,
+            });
+        }
+        return defaultReducer?.(state, action) ?? state;
     };
 }

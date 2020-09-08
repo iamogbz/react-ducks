@@ -1,26 +1,23 @@
 import * as React from "react";
 import { SymbolObservable } from "./utils/symbolObservable";
 
-const idFn = <A>(a: A): A => a;
-
-function createUnimplemented(objectName?: string) {
-    return function unimplemented(methodName: string): () => never {
-        const prefix = objectName ? `${objectName}.` : "";
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return (...args: unknown[]): never => {
+function createUnimplemented(objectName?: string): (m: string) => () => never {
+    const prefix = objectName ? `${objectName}.` : "";
+    return function unimplemented(methodName) {
+        return (): never => {
             throw new Error(`Unimplemented method: ${prefix}${methodName}`);
         };
     };
 }
 
-export function createContext<State>(
-    rootReducer: Reducer<State>,
-    preloadedState: State,
+export function createContext<S, T extends string, P>(
+    rootReducer: Reducer<S, T, P>,
+    preloadedState: S,
     displayName?: string,
-): Context<State> {
+): Context<S, T, P> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
-    const Context = React.createContext<ContextValue<State>>({
-        dispatch: idFn,
+    const Context = React.createContext<ContextValue<S, T, P>>({
+        dispatch: (a) => a,
         reducer: rootReducer,
         state: preloadedState,
         [SymbolObservable]: unimplemented(SymbolObservable.toString()),
