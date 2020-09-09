@@ -3,6 +3,7 @@
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "declaration": true,
+        "downlevelIteration": true,
         "jsx": "react",
         "module": "commonjs",
         "moduleResolution": "node",

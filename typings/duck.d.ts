@@ -47,14 +47,13 @@ type SelectorMapping<
 type Duck<
     S = unknown,
     N extends string = string /* Duck name */,
-    T extends U | V = string,
+    T extends string = string,
     P = unknown,
     R = unknown,
     Q extends string = string,
-    U extends string = string,
-    V extends string = string
+    U extends string = string
 > = {
-    actions: ActionCreatorMapping<U, P>;
+    actions: ActionCreatorMapping<T, P, S, U>;
     initialState: S;
     name: N;
     reducer: Reducer<S, T, P>;
@@ -75,10 +74,9 @@ type RootDuck<
     P = unknown,
     R = unknown,
     Q extends string = string,
-    U extends string = string,
-    V extends string = string
+    U extends string = string
 > = {
-    actions: Record<N, ActionCreatorMapping<U, P, S>>;
+    actions: Record<N, ActionCreatorMapping<T, P, S, U>>;
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;

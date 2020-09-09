@@ -21,7 +21,8 @@ describe("e2e", (): void => {
     const initDuck = createDuck({
         name: "init",
         initialState: false,
-        reducers: { [ActionTypes.INIT]: init },
+        reducers: { init },
+        actionMapping: { [ActionTypes.INIT]: "init" },
     });
 
     const rootDuck = createRootDuck(counterDuck, initDuck);

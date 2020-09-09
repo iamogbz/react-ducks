@@ -1,7 +1,7 @@
 import { combineReducers } from "./utils/combineReducers";
 
 export function createRootDuck<
-    D extends Duck<S, N, T, P, R, Q, U, V>[],
+    D extends Duck<S, N, T, P, R, Q, U>[],
     S = any, // eslint-disable-line @typescript-eslint/no-explicit-any
     N extends string = string,
     U extends string = string,
@@ -10,13 +10,13 @@ export function createRootDuck<
     P = any, // eslint-disable-line @typescript-eslint/no-explicit-any
     R = any, // eslint-disable-line @typescript-eslint/no-explicit-any
     Q extends string = string
->(...ducks: D): RootDuck<S, N, T, P, R, Q, U, V> {
+>(...ducks: D): RootDuck<S, N, T, P, R, Q, U> {
     const rootDuck = {
         actions: {},
         initialState: {},
         names: new Set(ducks.map((d) => d.name)),
         selectors: {},
-    } as RootDuck<S, N, T, P, R, Q, U, V>;
+    } as RootDuck<S, N, T, P, R, Q, U>;
     const reducerMapping = {} as DuckReducerMapping<S, N, T, P>;
     for (const duck of ducks) {
         const duckName = duck.name;

@@ -20,6 +20,7 @@ export default createDuck({
   reducers: {
     increment: (state) => state + 1,
   },
+  actionMapping: { otherActionType: "increment" },
 });
 ```
 
