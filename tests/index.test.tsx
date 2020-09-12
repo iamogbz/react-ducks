@@ -36,7 +36,7 @@ describe("e2e", (): void => {
     const Provider = createRootProvider(Context);
 
     function Example(): React.ReactElement {
-        const { state, dispatch } = React.useContext(Context);
+        const { dispatch, state } = React.useContext(Context);
         const increment = React.useCallback(() => {
             dispatch(counterDuck.actions.increment());
         }, [dispatch]);

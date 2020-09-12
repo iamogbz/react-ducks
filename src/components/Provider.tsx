@@ -19,7 +19,7 @@ export function Provider<S, T extends string, P>({
     );
 
     const enhanced = React.useMemo<ContextValue<S, T, P>>(
-        () => ({ ...root, dispatch }),
+        () => root.enhance({ ...root, dispatch }),
         [root, dispatch],
     );
 
