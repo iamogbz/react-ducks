@@ -1,6 +1,7 @@
 import * as React from "react";
-import { ActionTypes } from "../utils/actionTypes";
-import { createAction } from "../createAction";
+import { useGetter } from "src/hooks/useGetter";
+import { ActionTypes } from "src/utils/actionTypes";
+import { createAction } from "src/createAction";
 
 export function Provider<S, T extends string, P>({
     children,
@@ -9,10 +10,7 @@ export function Provider<S, T extends string, P>({
     const root = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
-    const stateRef = React.useRef(state);
-    const getState = React.useCallback(function getState() {
-        return stateRef.current;
-    }, []);
+    const getState = useGetter(state);
 
     const dispatch = React.useCallback<ContextValue<S, T, P>["dispatch"]>(
         function wrappedDispatch(action) {
@@ -22,10 +20,11 @@ export function Provider<S, T extends string, P>({
         [reducerDispatch],
     );
 
-    const enhanced = React.useMemo<ContextValue<S, T, P>>(
-        () => root.enhance({ ...root, dispatch, getState }),
-        [root, dispatch, getState],
-    );
+    const enhanced = React.useMemo<ContextValue<S, T, P>>(() => {
+        const { enhance, ...value } = root;
+        Object.assign(value, { dispatch, getState });
+        return enhance?.(value) ?? value;
+    }, [dispatch, getState, root]);
 
     React.useEffect(
         function initialiseContext() {

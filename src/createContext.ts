@@ -10,17 +10,16 @@ function createUnimplemented(objectName?: string): (m: string) => () => never {
     };
 }
 
-const idFn = <A>(a: A): A => a;
-
 export function createContext<S, T extends string, P>(
     rootReducer: Reducer<S, T, P>,
     preloadedState: S,
     displayName?: string,
+    enhance?: ContextEnhance<S, T, P>,
 ): Context<S, T, P> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
     const Context = React.createContext<ContextValue<S, T, P>>({
-        dispatch: idFn,
-        enhance: idFn,
+        dispatch: (a) => a,
+        enhance,
         getState: () => preloadedState,
         reducer: rootReducer,
         state: preloadedState,
