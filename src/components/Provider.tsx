@@ -9,6 +9,10 @@ export function Provider<S, T extends string, P>({
     const root = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
+    const stateRef = React.useRef(state);
+    const getState = React.useCallback(function getState() {
+        return stateRef.current;
+    }, []);
 
     const dispatch = React.useCallback<ContextValue<S, T, P>["dispatch"]>(
         function wrappedDispatch(action) {
@@ -19,8 +23,8 @@ export function Provider<S, T extends string, P>({
     );
 
     const enhanced = React.useMemo<ContextValue<S, T, P>>(
-        () => root.enhance({ ...root, dispatch }),
-        [root, dispatch],
+        () => root.enhance({ ...root, dispatch, getState }),
+        [root, dispatch, getState],
     );
 
     React.useEffect(

@@ -21,6 +21,7 @@ export function createContext<S, T extends string, P>(
     const Context = React.createContext<ContextValue<S, T, P>>({
         dispatch: idFn,
         enhance: idFn,
+        getState: () => preloadedState,
         reducer: rootReducer,
         state: preloadedState,
         [SymbolObservable]: unimplemented(SymbolObservable.toString()),
