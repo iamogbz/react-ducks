@@ -48,7 +48,19 @@ describe("e2e", (): void => {
                 <Example />
             </Provider>,
         );
+        await Promise.resolve();
         expect(spyLog).toHaveBeenCalledTimes(2);
+        expect(spyLog.mock.calls[0]).toEqual([
+            "action to dispatch",
+            {
+                payload: undefined,
+                type: expect.stringContaining("@@context/INIT"),
+            },
+        ]);
+        expect(spyLog.mock.calls[1]).toEqual([
+            "state after dispatch",
+            { counter: 0, init: true },
+        ]);
         spyLog.mockRestore();
     });
 });

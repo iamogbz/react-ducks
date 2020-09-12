@@ -52,15 +52,17 @@ export function createMocks(): {
         );
     }
 
-    const logger: Middleware<Record<string, unknown>, string, unknown> = () => (
-        next,
-    ) => (action): typeof action => {
+    const logger: Middleware<Record<string, unknown>, string, unknown> = ({
+        getState,
+    }) => (next) => (action): typeof action => {
         // eslint-disable-next-line no-console
-        console.log("will dispatch", action);
+        console.log("action to dispatch", action);
         // Call the next dispatch method in the middleware chain.
         const returnValue = next(action);
-        // eslint-disable-next-line no-console
-        console.log("will return", returnValue);
+        Promise.resolve().then(() => {
+            // eslint-disable-next-line no-console
+            console.log("state after dispatch", getState());
+        });
         // This will likely be the action itself, unless
         // a middleware further in chain changed it.
         return returnValue;
