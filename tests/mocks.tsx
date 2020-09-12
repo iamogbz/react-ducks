@@ -68,8 +68,8 @@ export function createMocks(): {
     const EnhancedContext = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        "EnhancedContext",
         applyMiddleware(logger),
+        "EnhancedContext",
     );
 
     return {

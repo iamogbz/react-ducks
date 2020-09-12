@@ -21,9 +21,9 @@ export function Provider<S, T extends string, P>({
     );
 
     const enhanced = React.useMemo<ContextValue<S, T, P>>(() => {
-        const { enhance, ...value } = root;
+        const { enhancer, ...value } = root;
         Object.assign(value, { dispatch, getState });
-        return enhance?.(value) ?? value;
+        return enhancer?.(value) ?? value;
     }, [dispatch, getState, root]);
 
     React.useEffect(

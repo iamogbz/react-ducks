@@ -121,7 +121,6 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 ## Next
 
 - Implement slice selectors and `useSelector` hook, [reference][react-redux-useselector]
-- Implement asynchronous middleware context support, [reference][redux-applymiddleware]
 - Implement observable pattern for context value, [reference][proposal-observable]
 
 ## Suggestions

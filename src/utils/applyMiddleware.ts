@@ -4,7 +4,7 @@ import { compose } from "./compose";
 export function applyMiddleware<S, T extends string, P>(
     ...middlewares: Middleware<S, T, P>[]
 ): ContextEnhance<S, T, P> {
-    return function enhance(
+    return function enhancer(
         context: ContextValue<S, T, P>,
     ): ContextValue<S, T, P> {
         const dispatchStub: ContextDispatch<T, P> = () => {
