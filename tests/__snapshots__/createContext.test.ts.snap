@@ -3,6 +3,8 @@
 exports[`createContext has unimplemented observable symbol 1`] = `
 Object {
   "dispatch": [Function],
+  "enhancer": undefined,
+  "getState": [Function],
   "reducer": [Function],
   "state": Object {},
   Symbol(@@observable): [Function],

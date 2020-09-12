@@ -13,11 +13,14 @@ function createUnimplemented(objectName?: string): (m: string) => () => never {
 export function createContext<S, T extends string, P>(
     rootReducer: Reducer<S, T, P>,
     preloadedState: S,
+    enhancer?: ContextEnhance<S, T, P>,
     displayName?: string,
 ): Context<S, T, P> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
     const Context = React.createContext<ContextValue<S, T, P>>({
         dispatch: (a) => a,
+        enhancer,
+        getState: () => preloadedState,
         reducer: rootReducer,
         state: preloadedState,
         [SymbolObservable]: unimplemented(SymbolObservable.toString()),

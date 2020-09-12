@@ -35,8 +35,15 @@ Create the global context.
 
 ```js
 // context.js
-export default createContext(rootDuck.reducer, rootDuck.initialState);
+export default createContext(
+  rootDuck.reducer,
+  rootDuck.initialState,
+  "ContextName",
+  enhancer
+);
 ```
+
+**Note:** The enhancer may be optionally specified to enhance the context with third-party capabilities such as middleware, time travel, persistence, etc. The only context enhancer that ships with Ducks is [applyMiddleware](#applyMiddlewaremiddlewares).
 
 Use the state and actions in your component.
 
@@ -111,6 +118,34 @@ const rootElement = document.getElementById("root");
 
 A side benefit to scoping the context state to the provider is allowing multiple entire apps to be run concurrently.
 
+### applyMiddleware(...middlewares)
+
+This takes a variable list of middlewares to be applied
+
+#### Example: Custom Logger Middleware
+
+```js
+// context.js
+function logger({ getState }) {
+  return (next) => (action) => {
+    console.log("will dispatch", action);
+    // Call the next dispatch method in the middleware chain.
+    const returnValue = next(action);
+    Promise.resolve().then(() => {
+      // The state is updated by `React.useReducer` in the next tick
+      console.log("state after dispatch", getState());
+    });
+    // This will likely be the action itself, unless
+    // a middleware further in chain changed it.
+    return returnValue;
+  };
+}
+
+export default createContext(..., applyMiddleware(logger));
+```
+
+See [redux applyMiddleware][redux-applymiddleware] for more documentation.
+
 ## Example
 
 As a proof of concept converted the sandbox app from the react-redux basic tutorial
@@ -121,7 +156,6 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 ## Next
 
 - Implement slice selectors and `useSelector` hook, [reference][react-redux-useselector]
-- Implement asynchronous middleware context support, [reference][redux-applymiddleware]
 - Implement observable pattern for context value, [reference][proposal-observable]
 
 ## Suggestions

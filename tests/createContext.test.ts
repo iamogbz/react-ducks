@@ -10,7 +10,7 @@ describe("createContext", () => {
     });
 
     it("creates context with displayname", () => {
-        const Context = createContext((s) => s, {}, "TextContext");
+        const Context = createContext((s) => s, {}, undefined, "TextContext");
         expect(Context.displayName).toEqual("TextContext");
     });
 
