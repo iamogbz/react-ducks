@@ -7,16 +7,17 @@ export function applyMiddleware<S, T extends string, P>(
     return function enhancer(
         context: ContextValue<S, T, P>,
     ): ContextValue<S, T, P> {
-        const dispatchStub: ContextDispatch<T, P> = () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        function dispatchStub(...args: unknown[]): never {
             throw new Error(
                 "Dispatching while constructing your middleware is not allowed. " +
                     "Other middleware would not be applied to this dispatch.",
             );
-        };
+        }
 
         const middlewareAPI: MiddlewareAPI<S, T, P> = {
             getState: context.getState,
-            dispatch: (action, ...args) => dispatchStub(action, ...args),
+            dispatch: dispatchStub,
         };
         const chain = middlewares.map((middleware) =>
             middleware(middlewareAPI),

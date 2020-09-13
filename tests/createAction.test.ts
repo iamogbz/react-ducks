@@ -9,7 +9,7 @@ describe("createAction", () => {
             payload,
             error: true,
         }));
-        expect(actionCreator(payload)).toEqual({
+        expect(actionCreator(payload)).toStrictEqual({
             error: true,
             payload,
             type: type,

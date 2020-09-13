@@ -26,8 +26,9 @@ type Reducer<
 type ActionReducerMapping<
     S = unknown,
     T extends string = string,
-    P = unknown
-> = Record<T, Reducer<S, T, P>>;
+    P = unknown,
+    C extends string = T
+> = Record<C, Reducer<S, T, P>>;
 
 type Selector<
     S = unknown,

@@ -9,7 +9,7 @@ export function combineReducers<S, N extends string, T extends string, P>(
         state: Record<N, S> = initialState,
         action,
     ): Record<string, S> {
-        return reducers.reduce((acc, [name, reducer]) => {
+        return reducers.reduce(function reduce(acc, [name, reducer]) {
             acc[name] = reducer(state[name], action);
             return acc;
         }, {} as Record<N, S>);

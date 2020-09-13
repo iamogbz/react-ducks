@@ -20,11 +20,14 @@ export function Provider<S, T extends string, P>({
         [reducerDispatch],
     );
 
-    const enhanced = React.useMemo<ContextValue<S, T, P>>(() => {
-        const { enhancer, ...value } = root;
-        Object.assign(value, { dispatch, getState });
-        return enhancer?.(value) ?? value;
-    }, [dispatch, getState, root]);
+    const enhanced = React.useMemo<ContextValue<S, T, P>>(
+        function enhance() {
+            const { enhancer, ...value } = root;
+            Object.assign(value, { dispatch, getState });
+            return enhancer?.(value) ?? value;
+        },
+        [dispatch, getState, root],
+    );
 
     React.useEffect(
         function initialiseContext() {
@@ -34,7 +37,9 @@ export function Provider<S, T extends string, P>({
     );
 
     const value = React.useMemo<ContextValue<S, T, P>>(
-        () => ({ ...enhanced, state }),
+        function getValue() {
+            return { ...enhanced, state };
+        },
         [enhanced, state],
     );
 

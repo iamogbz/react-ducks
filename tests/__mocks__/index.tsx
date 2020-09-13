@@ -5,34 +5,57 @@ import {
     createDuck,
     createRootDuck,
     createRootProvider,
+    useDispatch,
+    useSelector,
 } from "src";
-import { useDispatch } from "src/hooks/useDispatch";
-import { useSelector } from "src/hooks/useSelector";
 import { ActionTypes } from "src/utils/actionTypes";
 
 export function createMocks(): {
     EnhancedContext: Context<Record<string, unknown>>;
+    ErrorContext: Context<Record<string, unknown>>;
     Example: React.FunctionComponent;
     RootProvider: React.FunctionComponent;
     increment: jest.MockedFunction<(s: number) => number>;
     init: jest.MockedFunction<() => boolean>;
 } {
-    const increment = jest.fn((state): number => state + 1);
+    const dummyMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = () => (next) => (action): typeof action => next(action);
+
+    const DECREMENT = "decrement";
+    const INCREMENT = "increment";
     const decrement = (state: number): number => state - 1;
+    const increment = jest.fn((state): number => state + 1);
+    const counterReducer: (s: number, a?: Action<string>) => number = (
+        state,
+        action,
+    ) => {
+        switch (action?.type) {
+            case DECREMENT:
+                return decrement(state);
+            case INCREMENT:
+                return increment(state);
+            default:
+                return state;
+        }
+    };
     const counterDuck = createDuck({
         name: "counter",
         initialState: 0,
-        reducers: { decrement, increment },
+        reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
         selectors: { get: (state): number => state },
     });
 
+    const INIT = "init";
     const init = jest.fn((): boolean => true);
     const initDuck = createDuck({
         name: "init",
         initialState: false,
-        reducers: { init },
+        reducers: { [INIT]: init },
         selectors: { get: (state): boolean => state },
-        actionMapping: { [ActionTypes.INIT]: "init" },
+        actionMapping: { [ActionTypes.INIT]: INIT },
     });
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
@@ -40,7 +63,7 @@ export function createMocks(): {
     const Context = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        undefined,
+        applyMiddleware(dummyMiddleware),
         "GlobalContext",
         true,
     );
@@ -79,12 +102,29 @@ export function createMocks(): {
     const EnhancedContext = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        applyMiddleware(logger),
+        applyMiddleware(dummyMiddleware, logger),
         "EnhancedContext",
+    );
+
+    const badMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = ({ dispatch }) => {
+        dispatch({ type: "SOME_ACTION" });
+        return () => (action): typeof action => action;
+    };
+    const emptyRootDuck = createRootDuck();
+    const ErrorContext = createContext(
+        emptyRootDuck.reducer,
+        emptyRootDuck.initialState,
+        applyMiddleware(dummyMiddleware, badMiddleware),
+        "ErrorContext",
     );
 
     return {
         EnhancedContext,
+        ErrorContext,
         Example,
         RootProvider,
         increment,

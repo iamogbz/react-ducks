@@ -2,10 +2,11 @@
     "parser": "@typescript-eslint/parser",
     "extends": [
         "plugin:@typescript-eslint/recommended",
-        "prettier/@typescript-eslint",
+        "plugin:jest/all",
         "plugin:prettier/recommended",
         "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "prettier/@typescript-eslint"
     ],
     "env": {
         "browser": true,
@@ -42,9 +43,8 @@
         "sort-imports": [2,  {
             "ignoreDeclarationSort": true
         }],
-        "react/jsx-first-prop-new-line": [2, "multiline"],
-        "react/jsx-indent": [2, 4],
-        "react/jsx-indent-props": [2, 4],
+        "jest/no-hooks": 0,
+        "jest/prefer-expect-assertions": 0,
         "prettier/prettier": [2, {
             "bracketSpacing": true,
             "jsxBracketSameLine": false,
@@ -52,7 +52,10 @@
             "singleQuote": false,
             "tabWidth": 4,
             "trailingComma": "all"
-        }]
+        }],
+        "react/jsx-first-prop-new-line": [2, "multiline"],
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4]
     },
     "settings": {
         "import/resolver": {

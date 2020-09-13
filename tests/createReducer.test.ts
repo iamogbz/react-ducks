@@ -9,12 +9,12 @@ describe("createReducer", () => {
         const initialState = { yes: false };
         const reducer = createReducer(initialState, {
             [actionType]: (state) => ({ ...state, yes: true }),
-        });
+        } as Record<string, Reducer<typeof initialState, string>>);
         const state1 = reducer(initialState, unknownAction);
-        expect(state1).toEqual(initialState);
+        expect(state1).toStrictEqual(initialState);
 
         const state2 = reducer(state1, createAction(actionType)());
-        expect(state2).not.toEqual(state1);
+        expect(state2).not.toStrictEqual(state1);
         expect(state2.yes).toBe(true);
     });
 
@@ -25,11 +25,11 @@ describe("createReducer", () => {
             initialState,
             {
                 [actionType]: (state) => ({ ...state, yes: "something" }),
-            },
+            } as Record<string, Reducer<typeof initialState, string>>,
             (state) => ({ ...state, yes: "nani!!!" }),
         );
         const state1 = reducer(initialState, unknownAction);
-        expect(state1.yes).toEqual("nani!!!");
+        expect(state1.yes).toBe("nani!!!");
 
         const state2 = reducer(state1, createAction(actionType)());
         expect(state2.yes).toBe("something");

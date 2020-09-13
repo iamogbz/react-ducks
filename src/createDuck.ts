@@ -9,20 +9,6 @@ function getNS<N extends string, T extends string, V extends string>(
     return `${name}/${actionType}` as V;
 }
 
-function reverseMap<A extends string, B extends string>(
-    map?: Record<A, B>,
-): Record<B, Set<A>> {
-    if (!map) return {} as Record<B, Set<A>>;
-    const reversedMap = {} as Record<B, Set<A>>;
-    for (const [mappedActionType, actionType] of getEntries(map)) {
-        if (!reversedMap[actionType]) {
-            reversedMap[actionType] = new Set<A>();
-        }
-        reversedMap[actionType].add(mappedActionType);
-    }
-    return reversedMap;
-}
-
 export function createDuck<
     S,
     P,
@@ -40,29 +26,30 @@ export function createDuck<
 }: {
     name: N;
     initialState: S;
-    reducers: ActionReducerMapping<S, U, P>;
+    reducers: ActionReducerMapping<S, U, P>; // Reducers = { CreatorName: Reducer(State, ActionType, PayloadTypes) }
     selectors?: SelectorMapping<S, R, T, P, Q>;
-    actionMapping?: Record<T, U>;
+    actionMapping?: Record<T, U>; // ActionMapping = { MappedActionType: ActionType }
 }): Duck<S, N, T, P, R, Q, U> {
-    const mappedActionTypes = reverseMap(actionMapping);
+    const mappedActionTypes = { ...actionMapping } as Record<T, U>;
     const actions = {} as ActionCreatorMapping<T, P, S, U>;
-    const namedspacedReducers = {} as ActionReducerMapping<S, T, P>;
-    for (const [actionType, reducer] of getEntries(reducers)) {
+    for (const [actionType] of getEntries(reducers)) {
         const namespacedActionType = getNS<N, U, T>(name, actionType);
         actions[actionType] = createAction(namespacedActionType);
-        const mappedReducer = (reducer as unknown) as Reducer<S, T, P>;
-        namedspacedReducers[namespacedActionType] = mappedReducer;
-        if (mappedActionTypes[actionType]) {
-            for (const mappedActionType of mappedActionTypes[actionType]) {
-                namedspacedReducers[mappedActionType] = mappedReducer;
-            }
-        }
+        mappedActionTypes[namespacedActionType] = actionType;
     }
 
-    const reducer: Reducer<S, T, P> = createReducer(
-        initialState,
-        namedspacedReducers,
-    );
+    const actionReducer = createReducer<S, P, U>(initialState, reducers);
+    const isMappedActionType = (a?: Action<string, P>): a is Action<T, P> =>
+        a !== undefined &&
+        Object.prototype.hasOwnProperty.call(mappedActionTypes, a.type);
+    function reducer(state: S, action: Action<T, P> | Action<U, P>): S {
+        return actionReducer(state, {
+            ...action,
+            type: isMappedActionType(action)
+                ? mappedActionTypes[action.type]
+                : action.type,
+        });
+    }
 
     return {
         actions,

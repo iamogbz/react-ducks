@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`e2e Renders with root provider and updates on action dispatch 1`] = `
+exports[`e2e renders with root provider and updates on action dispatch 1`] = `
 <body>
   <div>
     <div>
@@ -16,7 +16,7 @@ exports[`e2e Renders with root provider and updates on action dispatch 1`] = `
 </body>
 `;
 
-exports[`e2e Renders without root provider 1`] = `
+exports[`e2e renders without root provider 1`] = `
 <body>
   <div>
     <div>
