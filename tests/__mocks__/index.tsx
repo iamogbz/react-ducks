@@ -17,22 +17,38 @@ export function createMocks(): {
     increment: jest.MockedFunction<(s: number) => number>;
     init: jest.MockedFunction<() => boolean>;
 } {
-    const increment = jest.fn((state): number => state + 1);
+    const DECREMENT = "decrement";
+    const INCREMENT = "increment";
     const decrement = (state: number): number => state - 1;
+    const increment = jest.fn((state): number => state + 1);
+    const counterReducer: (s: number, a?: Action<string>) => number = (
+        state,
+        action,
+    ) => {
+        switch (action?.type) {
+            case DECREMENT:
+                return decrement(state);
+            case INCREMENT:
+                return increment(state);
+            default:
+                return state;
+        }
+    };
     const counterDuck = createDuck({
         name: "counter",
         initialState: 0,
-        reducers: { decrement, increment },
+        reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
         selectors: { get: (state): number => state },
     });
 
+    const INIT = "init";
     const init = jest.fn((): boolean => true);
     const initDuck = createDuck({
         name: "init",
         initialState: false,
-        reducers: { init },
+        reducers: { [INIT]: init },
         selectors: { get: (state): boolean => state },
-        actionMapping: { [ActionTypes.INIT]: "init" },
+        actionMapping: { [ActionTypes.INIT]: INIT },
     });
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
