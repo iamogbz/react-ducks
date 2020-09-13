@@ -6,6 +6,7 @@ import { createMocks } from "./__mocks__";
 describe("e2e", (): void => {
     const {
         EnhancedContext,
+        ErrorContext,
         Example,
         RootProvider,
         increment,
@@ -48,25 +49,43 @@ describe("e2e", (): void => {
     });
 
     it("Renders with enhanced context", async () => {
-        const spyLog = jest.spyOn(console, "log");
+        const spyConsoleLog = jest
+            .spyOn(console, "log")
+            .mockImplementation(() => undefined);
         render(
             <Provider Context={EnhancedContext}>
                 <Example />
             </Provider>,
         );
         await Promise.resolve();
-        expect(spyLog).toHaveBeenCalledTimes(2);
-        expect(spyLog.mock.calls[0]).toEqual([
+        expect(spyConsoleLog).toHaveBeenCalledTimes(2);
+        expect(spyConsoleLog.mock.calls[0]).toEqual([
             "action to dispatch",
             {
                 payload: undefined,
                 type: expect.stringContaining("@@context/INIT"),
             },
         ]);
-        expect(spyLog.mock.calls[1]).toEqual([
+        expect(spyConsoleLog.mock.calls[1]).toEqual([
             "state after dispatch",
             { counter: 0, init: true },
         ]);
-        spyLog.mockRestore();
+        spyConsoleLog.mockRestore();
+    });
+
+    it("Fails to render if middleware dispatches while constructing", () => {
+        const spyConsoleError = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => undefined);
+        expect(() =>
+            render(
+                <Provider Context={ErrorContext}>
+                    <Example />
+                </Provider>,
+            ),
+        ).toThrow(
+            "Dispatching while constructing your middleware is not allowed",
+        );
+        spyConsoleError.mockRestore();
     });
 });

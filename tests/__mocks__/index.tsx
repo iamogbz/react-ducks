@@ -12,6 +12,7 @@ import { ActionTypes } from "src/utils/actionTypes";
 
 export function createMocks(): {
     EnhancedContext: Context<Record<string, unknown>>;
+    ErrorContext: Context<Record<string, unknown>>;
     Example: React.FunctionComponent;
     RootProvider: React.FunctionComponent;
     increment: jest.MockedFunction<(s: number) => number>;
@@ -99,8 +100,24 @@ export function createMocks(): {
         "EnhancedContext",
     );
 
+    const badMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = ({ dispatch }) => {
+        dispatch({ type: "SOME_ACTION" });
+        return () => (action): typeof action => action;
+    };
+    const ErrorContext = createContext(
+        rootDuck.reducer,
+        rootDuck.initialState,
+        applyMiddleware(badMiddleware),
+        "ErrorContext",
+    );
+
     return {
         EnhancedContext,
+        ErrorContext,
         Example,
         RootProvider,
         increment,

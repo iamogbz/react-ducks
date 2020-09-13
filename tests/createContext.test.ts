@@ -14,6 +14,14 @@ describe("createContext", () => {
         expect(Context.displayName).toEqual("TextContext");
     });
 
+    it("has default dispatch and getState", () => {
+        const initialState = {};
+        const Context = createContext((s) => s, initialState);
+        const { result } = renderHook(() => React.useContext(Context));
+        expect(result.current.dispatch).not.toThrow();
+        expect(result.current.getState()).toEqual(initialState);
+    });
+
     it("has unimplemented observable symbol", () => {
         const Context = createContext((s) => s, {});
         const { result } = renderHook(() => React.useContext(Context));

@@ -17,7 +17,7 @@ export function applyMiddleware<S, T extends string, P>(
 
         const middlewareAPI: MiddlewareAPI<S, T, P> = {
             getState: context.getState,
-            dispatch: (action, ...args) => dispatchStub(action, ...args),
+            dispatch: dispatchStub,
         };
         const chain = middlewares.map((middleware) =>
             middleware(middlewareAPI),
