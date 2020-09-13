@@ -57,7 +57,7 @@ export function createMocks(): {
     const Context = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        undefined,
+        applyMiddleware(),
         "GlobalContext",
         true,
     );
@@ -108,10 +108,11 @@ export function createMocks(): {
         dispatch({ type: "SOME_ACTION" });
         return () => (action): typeof action => action;
     };
+    const emptyRootDuck = createRootDuck();
     const ErrorContext = createContext(
-        rootDuck.reducer,
-        rootDuck.initialState,
-        applyMiddleware(badMiddleware),
+        emptyRootDuck.reducer,
+        emptyRootDuck.initialState,
+        applyMiddleware(logger, badMiddleware),
         "ErrorContext",
     );
 

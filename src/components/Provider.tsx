@@ -37,7 +37,9 @@ export function Provider<S, T extends string, P>({
     );
 
     const value = React.useMemo<ContextValue<S, T, P>>(
-        () => ({ ...enhanced, state }),
+        function getValue() {
+            return { ...enhanced, state };
+        },
         [enhanced, state],
     );
 
