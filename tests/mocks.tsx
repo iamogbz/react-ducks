@@ -6,6 +6,7 @@ import {
     createRootDuck,
     createRootProvider,
 } from "src";
+import { useDispatch } from "src/hooks/useDispatch";
 import { useSelector } from "src/hooks/useSelector";
 import { ActionTypes } from "src/utils/actionTypes";
 
@@ -47,10 +48,7 @@ export function createMocks(): {
     const RootProvider = createRootProvider(Context);
 
     function Example(): React.ReactElement {
-        const { dispatch } = React.useContext(Context);
-        const increment = React.useCallback(() => {
-            dispatch(counterDuck.actions.increment());
-        }, [dispatch]);
+        const increment = useDispatch(counterDuck.actions.increment);
         const init = useSelector(rootDuck.selectors.init?.get);
         const count = useSelector(rootDuck.selectors.counter?.get, Context);
         return (

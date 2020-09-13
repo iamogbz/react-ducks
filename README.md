@@ -39,11 +39,14 @@ export default createContext(
   rootDuck.reducer,
   rootDuck.initialState,
   "ContextName",
-  enhancer
+  enhancer,
+  useAsGlobalContext
 );
 ```
 
-**Note:** The enhancer may be optionally specified to enhance the context with third-party capabilities such as middleware, time travel, persistence, etc. The only context enhancer that ships with Ducks is [applyMiddleware](#applyMiddlewaremiddlewares).
+**Note**: The `enhancer` may be optionally specified to enhance the context with third-party capabilities such as middleware, time travel, persistence, etc. The only context enhancer that ships with Ducks is [applyMiddleware](#applyMiddlewaremiddlewares).
+
+**Note**: The `useAsGlobalContext` i.e. `global` option; allows for setting a default context that is used by the [`useDispatch`](#useDispatchactionCreatorContext) and [`useSelector`](#useSelectorselectorContext) hooks when no `Context` is supplied. This is useful when creating the context that will be used with the root provider.
 
 Use the state and actions in your component.
 
@@ -51,20 +54,31 @@ Use the state and actions in your component.
 // app.jsx
 export default function App(props) {
   const { state, dispatch } = React.useContext(Context);
+  const count = state[counterDuck.name];
   const increment = React.useCallback(
     () => dispatch(counterDuck.actions.increment()),
     [dispatch]
   );
   return (
     <div>
-      Count: <span>{state[counterDuck.name]}</span>
+      Count: <span>{count}</span>
       <button onClick={increment} />
     </div>
   );
 }
 ```
 
-**Note**: this is equivalent to the class component described below.
+**Note**: The use of `React.useContext` can be replaced with a combination of [`useDispatch`](#useDispatchactionCreatorContext) and [`useSelector`](#useSelectorselectorContext) hooks.
+
+```jsx
+// app.jsx
+...
+  const count = useSelector(state => state[counterDuck.name], Context);
+  const increment = useDispatch(counterDuck.actions.increment, Context);
+...
+```
+
+**Note**: This is equivalent to the class component described below.
 
 ```jsx
 // app.jsx
@@ -155,7 +169,6 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 
 ## Next
 
-- Implement slice selectors and `useSelector` hook, [reference][react-redux-useselector]
 - Implement observable pattern for context value, [reference][proposal-observable]
 
 ## Suggestions
@@ -166,5 +179,4 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 [proposal-observable]: https://github.com/tc39/proposal-observable
 [react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
-[react-redux-useselector]: https://react-redux.js.org/api/hooks#useselector
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
