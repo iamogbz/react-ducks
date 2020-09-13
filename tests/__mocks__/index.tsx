@@ -5,9 +5,9 @@ import {
     createDuck,
     createRootDuck,
     createRootProvider,
+    useDispatch,
+    useSelector,
 } from "src";
-import { useDispatch } from "src/hooks/useDispatch";
-import { useSelector } from "src/hooks/useSelector";
 import { ActionTypes } from "src/utils/actionTypes";
 
 export function createMocks(): {
@@ -18,6 +18,12 @@ export function createMocks(): {
     increment: jest.MockedFunction<(s: number) => number>;
     init: jest.MockedFunction<() => boolean>;
 } {
+    const dummyMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = () => (next) => (action): typeof action => next(action);
+
     const DECREMENT = "decrement";
     const INCREMENT = "increment";
     const decrement = (state: number): number => state - 1;
@@ -57,7 +63,7 @@ export function createMocks(): {
     const Context = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        applyMiddleware(),
+        applyMiddleware(dummyMiddleware),
         "GlobalContext",
         true,
     );
@@ -77,12 +83,6 @@ export function createMocks(): {
             </div>
         );
     }
-
-    const dummyMiddleware: Middleware<
-        Record<string, unknown>,
-        string,
-        unknown
-    > = () => (next) => (action): typeof action => next(action);
 
     const logger: Middleware<Record<string, unknown>, string, unknown> = ({
         getState,

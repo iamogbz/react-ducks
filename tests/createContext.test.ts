@@ -1,6 +1,6 @@
 import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import { createContext } from "src";
+import { applyMiddleware, createContext } from "src";
 import { SymbolObservable } from "src/utils/symbolObservable";
 
 describe("createContext", () => {
@@ -19,7 +19,20 @@ describe("createContext", () => {
         const Context = createContext((s) => s, initialState);
         const { result } = renderHook(() => React.useContext(Context));
         expect(result.current.dispatch).not.toThrow();
+        expect(result.current.enhancer).toBeUndefined();
         expect(result.current.getState()).toStrictEqual(initialState);
+    });
+
+    it("provides and can use empty enhancer from applyMiddleware", () => {
+        const initialState = {};
+        const Context = createContext(
+            (s) => s,
+            initialState,
+            applyMiddleware(),
+        );
+        const { result } = renderHook(() => React.useContext(Context));
+        const { enhancer, ...value } = result.current;
+        expect(enhancer?.(value)).toMatchObject(value);
     });
 
     it("has unimplemented observable symbol", () => {

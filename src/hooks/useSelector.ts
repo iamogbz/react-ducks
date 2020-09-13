@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GlobalContext } from "../components/Context";
+import { GlobalContext } from "..";
 
 export function useSelector<S, R, T extends string, P>(
     selector: Selector<S, R, T, P> | undefined,
