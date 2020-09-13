@@ -6,6 +6,8 @@ import {
     createRootDuck,
     createRootProvider,
 } from "src";
+import { useDispatch } from "src/hooks/useDispatch";
+import { useSelector } from "src/hooks/useSelector";
 import { ActionTypes } from "src/utils/actionTypes";
 
 export function createMocks(): {
@@ -15,12 +17,13 @@ export function createMocks(): {
     increment: jest.MockedFunction<(s: number) => number>;
     init: jest.MockedFunction<() => boolean>;
 } {
-    const increment = jest.fn((state: number): number => state + 1);
+    const increment = jest.fn((state): number => state + 1);
     const decrement = (state: number): number => state - 1;
     const counterDuck = createDuck({
         name: "counter",
         initialState: 0,
         reducers: { decrement, increment },
+        selectors: { get: (state): number => state },
     });
 
     const init = jest.fn((): boolean => true);
@@ -28,24 +31,30 @@ export function createMocks(): {
         name: "init",
         initialState: false,
         reducers: { init },
+        selectors: { get: (state): boolean => state },
         actionMapping: { [ActionTypes.INIT]: "init" },
     });
 
     const rootDuck = createRootDuck(counterDuck, initDuck);
 
-    const Context = createContext(rootDuck.reducer, rootDuck.initialState);
+    const Context = createContext(
+        rootDuck.reducer,
+        rootDuck.initialState,
+        undefined,
+        "GlobalContext",
+        true,
+    );
 
     const RootProvider = createRootProvider(Context);
 
     function Example(): React.ReactElement {
-        const { dispatch, state } = React.useContext(Context);
-        const increment = React.useCallback(() => {
-            dispatch(counterDuck.actions.increment());
-        }, [dispatch]);
+        const increment = useDispatch(counterDuck.actions.increment);
+        const init = useSelector(rootDuck.selectors.init?.get);
+        const count = useSelector(rootDuck.selectors.counter?.get, Context);
         return (
             <div>
-                Count: <span>{state[counterDuck.name]}</span>
-                <button disabled={!state[initDuck.name]} onClick={increment}>
+                Count: <span>{count}</span>
+                <button disabled={!init} onClick={increment}>
                     increment
                 </button>
             </div>

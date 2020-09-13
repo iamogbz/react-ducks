@@ -1,4 +1,5 @@
 import { combineReducers } from "./utils/combineReducers";
+import { combineSelectors } from "./utils/combineSelectors";
 
 export function createRootDuck<
     D extends Duck<S, N, T, P, R, Q, U>[],
@@ -22,7 +23,10 @@ export function createRootDuck<
         const duckName = duck.name;
         rootDuck.actions[duckName] = duck.actions;
         rootDuck.initialState[duckName] = duck.initialState;
-        rootDuck.selectors[duckName] = duck.selectors;
+        rootDuck.selectors[duckName] = combineSelectors(
+            duckName,
+            duck.selectors,
+        );
         reducerMapping[duckName] = duck.reducer;
     }
     rootDuck.reducer = combineReducers(rootDuck.initialState, reducerMapping);
