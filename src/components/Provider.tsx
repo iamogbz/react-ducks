@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ActionTypes } from "src/utils/actionTypes";
-import { createAction } from "src/createAction";
-import { useGetter } from "src/hooks/useGetter";
+import { ActionTypes } from "../utils/actionTypes";
+import { createAction } from "../createAction";
+import { useGetter } from "../hooks/useGetter";
 
 export function Provider<S, T extends string, P>({
     children,

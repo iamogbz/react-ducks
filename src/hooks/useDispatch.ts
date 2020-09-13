@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GlobalContext } from "src/components/Context";
+import { GlobalContext } from "../components/Context";
 
 export function useDispatch<S, T extends string, P>(
     actionCreator: ActionCreator<T, P>,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { act, cleanup, render } from "@testing-library/react";
 import { Provider, createContext } from "src";
-import { createMocks } from "./mocks";
+import { createMocks } from "./__mocks__";
 
 describe("e2e", (): void => {
     const {
