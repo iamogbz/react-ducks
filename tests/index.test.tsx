@@ -1,6 +1,6 @@
 import * as React from "react";
 import { act, cleanup, render } from "@testing-library/react";
-import { Provider } from "src";
+import { Provider, createContext } from "src";
 import { createMocks } from "./mocks";
 
 describe("e2e", (): void => {
@@ -17,6 +17,12 @@ describe("e2e", (): void => {
         init.mockClear();
         jest.clearAllMocks();
         cleanup();
+    });
+
+    it("Does not allow setting the global context multiple times", () => {
+        expect(() => {
+            createContext((s) => s, null, undefined, "NewGlobalContext", true);
+        }).toThrow("Global context can only be set once");
     });
 
     it("Renders without root provider", async () => {
