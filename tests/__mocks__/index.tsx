@@ -78,6 +78,12 @@ export function createMocks(): {
         );
     }
 
+    const dummyMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = () => (next) => (action): typeof action => next(action);
+
     const logger: Middleware<Record<string, unknown>, string, unknown> = ({
         getState,
     }) => (next) => (action): typeof action => {
@@ -96,7 +102,7 @@ export function createMocks(): {
     const EnhancedContext = createContext(
         rootDuck.reducer,
         rootDuck.initialState,
-        applyMiddleware(logger),
+        applyMiddleware(dummyMiddleware, logger),
         "EnhancedContext",
     );
 
@@ -112,7 +118,7 @@ export function createMocks(): {
     const ErrorContext = createContext(
         emptyRootDuck.reducer,
         emptyRootDuck.initialState,
-        applyMiddleware(logger, badMiddleware),
+        applyMiddleware(dummyMiddleware, badMiddleware),
         "ErrorContext",
     );
 
