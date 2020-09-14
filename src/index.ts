@@ -3,6 +3,7 @@ export { Provider } from "./components/Provider";
 export { applyMiddleware } from "./utils/applyMiddleware";
 export { createAction } from "./createAction";
 export { createContext } from "./createContext";
+export { createConnect } from "./createConnect";
 export { createDuck } from "./createDuck";
 export { createReducer } from "./createReducer";
 export { createRootDuck } from "./createRootDuck";

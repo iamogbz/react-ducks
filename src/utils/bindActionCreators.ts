@@ -3,7 +3,7 @@
 export function bindActionCreator<T extends string, P>(
     actionCreator: ActionCreator<T, P>,
     dispatch: ContextDispatch<T, P>,
-): ActionDispatcher<P> {
+): ActionDispatcher<T, P> {
     return function dispatchAction(...args: P[]): void {
         dispatch(actionCreator(...args));
     };
@@ -17,12 +17,12 @@ export function bindActionCreator<T extends string, P>(
 export function bindActionCreators<T extends string, P>(
     actionCreator: ActionCreator<T, P>,
     dispatch: ContextDispatch<T, P>,
-): ActionDispatcher<P>;
+): ActionDispatcher<T, P>;
 
 export function bindActionCreators<T extends string, P>(
     actionCreator: ActionCreator<T, P>,
     dispatch: ContextDispatch<T, P>,
-): ActionDispatcher<P>;
+): ActionDispatcher<T, P>;
 
 export function bindActionCreators<T extends string, P, S>(
     actionCreators: ActionCreatorMapping<T, P, S>,

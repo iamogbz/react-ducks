@@ -1,7 +1,10 @@
-type MapStateToProps<S = unknown, I = unknown, J = I> = (
-    state: S,
-    ownProps?: I,
-) => J;
+type MapStateToProps<S = unknown, I = unknown, J = I> = Selector<
+    S,
+    J,
+    string,
+    unknown,
+    [I]
+>;
 
 type MapDispatchToProps<
     T extends string,
@@ -39,4 +42,6 @@ type ConnectOptions<
     pure?: boolean;
 };
 
-type ReactComponent<I> = React.FunctionComponent<I> | React.ComponentClass<I>;
+type ReactComponent<I = unknown> =
+    | React.FunctionComponent<I>
+    | React.ComponentClass<I>;

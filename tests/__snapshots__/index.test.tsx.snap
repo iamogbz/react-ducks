@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`e2e renders with root provider and updates on action dispatch 1`] = `
+exports[`e2e createConnect correctly connects action creators to props 1`] = `
 <body>
   <div>
     <div>
@@ -16,7 +16,55 @@ exports[`e2e renders with root provider and updates on action dispatch 1`] = `
 </body>
 `;
 
-exports[`e2e renders without root provider 1`] = `
+exports[`e2e createConnect correctly connects state and dispatch to props 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span>
+        2
+      </span>
+      <button>
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`e2e createConnect correctly uses mergeProps function 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span>
+        Replaces count with a static value
+      </span>
+      <button>
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`e2e createContext renders with root provider and updates on action dispatch 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span>
+        2
+      </span>
+      <button>
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`e2e createContext renders without root provider 1`] = `
 <body>
   <div>
     <div>
