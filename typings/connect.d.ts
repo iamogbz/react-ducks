@@ -33,10 +33,10 @@ type ConnectOptions<
     K extends Record = Record, // Mapped state props
     J extends Record = I & K & ActionDispatcherMapping<T, P> // Merged props i.e. own & state & mapped dispatch props
 > = {
-    areMergedPropsEqual?: (next: J, prev: J) => boolean;
-    areOwnPropsEqual?: (next: I, prev: I) => boolean;
-    areStatePropsEqual?: (next: K, prev: K) => boolean;
-    areStatesEqual?: (next: S, prev: S) => boolean;
+    // areMergedPropsEqual?: (next: J, prev: J) => boolean;
+    // areOwnPropsEqual?: (next: I, prev: I) => boolean;
+    // areStatePropsEqual?: (next: K, prev: K) => boolean;
+    // areStatesEqual?: (next: S, prev: S) => boolean;
     context?: Context<S, T, P>;
     forwardRef?: boolean;
     pure?: boolean;
