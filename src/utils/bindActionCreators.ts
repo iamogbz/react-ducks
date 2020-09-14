@@ -14,23 +14,23 @@ export function bindActionCreator<T extends string, P>(
  * same keys, but with every function wrapped into a `dispatch` call so they
  * may be invoked directly.
  */
-export default function bindActionCreators<T extends string, P>(
+export function bindActionCreators<T extends string, P>(
     actionCreator: ActionCreator<T, P>,
     dispatch: ContextDispatch<T, P>,
 ): ActionDispatcher<P>;
 
-export default function bindActionCreators<T extends string, P>(
+export function bindActionCreators<T extends string, P>(
     actionCreator: ActionCreator<T, P>,
     dispatch: ContextDispatch<T, P>,
 ): ActionDispatcher<P>;
 
-export default function bindActionCreators<T extends string, P, S>(
+export function bindActionCreators<T extends string, P, S>(
     actionCreators: ActionCreatorMapping<T, P, S>,
     dispatch: ContextDispatch<T, P>,
 ): ActionDispatcherMapping<T, P>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function bindActionCreators(
+export function bindActionCreators(
     actionCreators: ActionCreator | ActionCreatorMapping,
     dispatch: ContextDispatch,
 ) {
