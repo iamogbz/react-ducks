@@ -4,7 +4,7 @@ type Action<
 > = {
     type: T;
     payload?: P;
-};
+} & Record<string, unknown>;
 
 type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
     payload?: P,
@@ -16,6 +16,14 @@ type ActionCreatorMapping<
     S = unknown,
     C extends string = T /* Action creator mapping keys */
 > = Record<C, ActionCreator<T, P, S>>;
+
+type ActionDispatcher<P = unknown> = (...args: P[]) => void;
+
+type ActionDispatcherMapping<
+    T extends string = string,
+    P = unknown,
+    D extends string = T /* Action dispatcher mapping keys */
+> = Record<D, ActionDispatcher<P>>;
 
 type Reducer<
     S = unknown,

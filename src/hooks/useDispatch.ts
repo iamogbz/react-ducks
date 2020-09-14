@@ -1,4 +1,5 @@
 import * as React from "react";
+import { bindActionCreator } from "../utils/bindActionCreators";
 import { GlobalContext } from "..";
 
 export function useDispatch<S, T extends string, P>(
@@ -7,10 +8,9 @@ export function useDispatch<S, T extends string, P>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): (...args: any[]) => void {
     const { dispatch } = React.useContext(Context ?? GlobalContext);
-    return React.useCallback(
-        function dispatchAction(...args) {
-            dispatch(actionCreator(...args));
-        },
-        [actionCreator, dispatch],
-    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return React.useCallback(bindActionCreator(actionCreator, dispatch), [
+        actionCreator,
+        dispatch,
+    ]);
 }

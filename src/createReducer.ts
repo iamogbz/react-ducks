@@ -4,11 +4,7 @@ export function createReducer<
     T extends string /* All action types the final reducer supports */
 >(
     initialState: S,
-    actionTypeToReducer: ActionReducerMapping<
-        S,
-        T,
-        P
-    > /* Action types to reducer mapping */,
+    actionTypeToReducer: ActionReducerMapping<S, T, P>,
     defaultReducer?: Reducer<S, T, P>,
 ): Reducer<S, T, P> {
     const isReducerActionType = (a?: Action<string, P>): a is Action<T, P> =>
