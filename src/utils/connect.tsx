@@ -48,27 +48,26 @@ export function connect<
 ): (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     component: ReactComponent<any>,
-) =>
-    | React.FunctionComponent<I>
-    | React.ForwardRefExoticComponent<
-          React.PropsWithoutRef<I> & React.RefAttributes<unknown>
-      > {
+) => WrapperComponent<typeof component> {
     const mapDispatchToPropsFn = isFunction<MapDispatchToProps<T, P, I>>(
         mapDispatchToProps,
     )
         ? mapDispatchToProps
         : asMapDispatchToPropsFn(mapDispatchToProps);
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    return function wrapWithConnect(componentToWrap: ReactComponent<J>) {
-        const WrappedComponent = (options?.pure
-            ? React.memo(componentToWrap)
-            : componentToWrap) as ReactComponent<J>;
+    return function wrap(
+        WrappedComponent: ReactComponent<J>,
+    ): WrapperComponent<typeof WrappedComponent> {
+        const FinalComponent = (options?.pure
+            ? React.memo(WrappedComponent)
+            : WrappedComponent) as typeof WrappedComponent;
         const wrappedComponentName =
-            componentToWrap.displayName || componentToWrap.name || "Component";
+            WrappedComponent.displayName ||
+            WrappedComponent.name ||
+            "Component";
         const displayName = `Connect(${wrappedComponentName})`;
 
-        function WrapperComponent<R = unknown>(
+        function WrapperFunction<R = unknown>(
             props: I,
             ref?: React.Ref<R>,
         ): React.ReactElement {
@@ -97,16 +96,15 @@ export function connect<
                     options?.forwardRef ? { ...mergedProps, ref } : mergedProps,
                 [mergedProps, ref],
             );
-            return <WrappedComponent {...finalProps} />;
+            return <FinalComponent {...finalProps} />;
         }
+        WrapperFunction.displayName = displayName;
 
-        WrapperComponent.WrappedComponent = WrappedComponent;
-        WrapperComponent.displayName = displayName;
+        const WrapperComponent = options?.forwardRef
+            ? React.forwardRef(WrapperFunction)
+            : WrapperFunction;
 
-        if (options?.forwardRef) {
-            return React.forwardRef(WrapperComponent);
-        }
-
-        return WrapperComponent;
+        Object.assign(WrapperComponent, { WrappedComponent });
+        return WrapperComponent as WrapperComponent<typeof WrappedComponent>;
     };
 }

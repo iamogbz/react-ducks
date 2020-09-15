@@ -45,3 +45,10 @@ type ConnectOptions<
 type ReactComponent<I = unknown> =
     | React.FunctionComponent<I>
     | React.ComponentClass<I>;
+
+type WrapperComponent<W> = (
+    | React.FunctionComponent<I>
+    | React.ForwardRefExoticComponent<
+          React.PropsWithoutRef<I> & React.RefAttributes<unknown>
+      >
+) & { WrappedComponent: W; displayName: string };

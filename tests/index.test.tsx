@@ -147,12 +147,15 @@ describe("integration", (): void => {
         }
 
         it("works with no connection arguments supplied", () => {
-            const ConnectedComponent = connect()(DumbComponent);
+            const ConnectedComponent = connect()((props) => (
+                <DumbComponent {...props} />
+            ));
             const result = render(
                 <RootProvider>
                     <ConnectedComponent />
                 </RootProvider>,
             );
+            expect(ConnectedComponent.displayName).toBe("Connect(Component)");
             expect(result.baseElement).toMatchSnapshot();
         });
 
@@ -162,6 +165,7 @@ describe("integration", (): void => {
                 (dispatch: ContextDispatch) =>
                     bindActionCreators(mapDispatchToProps, dispatch),
             )(DumbComponent);
+            expect(ConnectedComponent.WrappedComponent).toBe(DumbComponent);
             const result = render(
                 <RootProvider>
                     <ConnectedComponent />
@@ -233,6 +237,7 @@ describe("integration", (): void => {
                     staticMergeProps,
                     { pure },
                 )(MockComponent);
+                expect(ConnectedComponent.WrappedComponent).toBe(MockComponent);
                 const result = render(
                     <RootProvider>
                         <ConnectedComponent />
@@ -260,6 +265,7 @@ describe("integration", (): void => {
                 undefined,
                 { forwardRef: true },
             )(ClassComponent);
+            expect(ConnectedComponent.WrappedComponent).toBe(ClassComponent);
             const ref = React.createRef<React.ReactElement>();
             render(
                 <RootProvider>
