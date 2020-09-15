@@ -17,7 +17,6 @@ export function createContextWithValue<S, T extends string, P>(
     return React.createContext<ContextValue<S, T, P>>({
         dispatch: (a) => a,
         getState: () => value.state,
-        reducer: (s) => s,
         ...value,
     } as ContextValue<S, T, P>);
 }
