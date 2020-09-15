@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GlobalContext } from "src/components/Context";
+import { GlobalContext } from "../components/Context";
 import { bindActionCreators } from "./bindActionCreators";
 
 function defaultMergeProps<T extends string, P, I, K, J>(
