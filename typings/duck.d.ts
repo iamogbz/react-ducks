@@ -15,7 +15,7 @@ type ActionCreatorMapping<
     P = unknown,
     S = unknown,
     C extends string = T /* Action creator mapping keys */
-> = Record<C, ActionCreator<T, P, S>>;
+> = Record<C, Nullable<ActionCreator<T, P, S>>>;
 
 type ActionDispatcher<T extends string, P = unknown> = (...args: P[]) => void;
 
@@ -90,5 +90,5 @@ type RootDuck<
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;
-    selectors: Record<N, SelectorMapping<S, R, T, P, Q> | undefined>;
+    selectors: Record<N, Nullable<SelectorMapping<S, R, T, P, Q>>>;
 };

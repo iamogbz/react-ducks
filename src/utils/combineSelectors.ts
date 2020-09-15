@@ -8,7 +8,7 @@ export function combineSelectors<
 >(
     duckName: N,
     selectors?: SelectorMapping<S, R, T, P, Q>,
-): SelectorMapping<S, R, T, P, Q> | undefined {
+): Nullable<SelectorMapping<S, R, T, P, Q>> {
     if (!selectors) return;
     const duckSelectors = {} as SelectorMapping<S, R, T, P, Q>;
     for (const s of Object.keys(selectors) as Q[]) {

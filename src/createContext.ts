@@ -11,6 +11,17 @@ function createUnimplemented(objectName?: string): (m: string) => () => never {
     };
 }
 
+export function createContextWithValue<S, T extends string, P>(
+    value: Partial<ContextValue<S, T, P>>,
+): Context<S, T, P> {
+    return React.createContext<ContextValue<S, T, P>>({
+        dispatch: (a) => a,
+        getState: () => value.state,
+        reducer: (s) => s,
+        ...value,
+    } as ContextValue<S, T, P>);
+}
+
 export function createContext<S, T extends string, P>(
     rootReducer: Reducer<S, T, P>,
     preloadedState: S,
@@ -19,10 +30,8 @@ export function createContext<S, T extends string, P>(
     global = false,
 ): Context<S, T, P> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
-    const Context = React.createContext<ContextValue<S, T, P>>({
-        dispatch: (a) => a,
+    const Context = createContextWithValue({
         enhancer,
-        getState: () => preloadedState,
         reducer: rootReducer,
         state: preloadedState,
         [SymbolObservable]: unimplemented(SymbolObservable.toString()),

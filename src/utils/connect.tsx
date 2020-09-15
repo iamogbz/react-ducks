@@ -16,7 +16,7 @@ function isFunction<F>(maybeFunction: F | unknown): maybeFunction is F {
 
 function asMapDispatchToPropsFn<S, T extends string, P, I>(
     actionCreators?: ActionCreatorMapping<T, P, S>,
-): MapDispatchToProps<T, P, I> | undefined {
+): Nullable<MapDispatchToProps<T, P, I>> {
     return (
         actionCreators &&
         function mapDispatchToProps(

@@ -110,6 +110,7 @@ describe("e2e", (): void => {
         });
         const mapDispatchToProps = {
             increment: rootDuck.actions.counter.increment,
+            init: null,
         };
         const staticMergeProps = <A, B, C, D>(
             stateProps: A,
@@ -211,7 +212,12 @@ describe("e2e", (): void => {
                 const MockComponent = jest.fn(DumbComponent);
                 const ConnectedComponent = connectGlobal(
                     mapStateToProps,
-                    mapDispatchToProps,
+                    (dispatch) => ({
+                        increment: bindActionCreators(
+                            rootDuck.actions.counter.increment,
+                            dispatch,
+                        ),
+                    }),
                     staticMergeProps,
                     { pure },
                 )(MockComponent);
