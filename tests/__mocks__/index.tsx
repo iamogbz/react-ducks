@@ -10,14 +10,8 @@ import {
 } from "src";
 import { ActionTypes } from "src/utils/actionTypes";
 
-export function createMocks(): {
-    EnhancedContext: Context<Record<string, unknown>>;
-    ErrorContext: Context<Record<string, unknown>>;
-    Example: React.FunctionComponent;
-    RootProvider: React.FunctionComponent;
-    increment: jest.MockedFunction<(s: number) => number>;
-    init: jest.MockedFunction<() => boolean>;
-} {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function createMocks() {
     const dummyMiddleware: Middleware<
         Record<string, unknown>,
         string,
@@ -58,7 +52,13 @@ export function createMocks(): {
         actionMapping: { [ActionTypes.INIT]: INIT },
     });
 
-    const rootDuck = createRootDuck(counterDuck, initDuck);
+    const dummyDuck = createDuck({
+        name: "dummy",
+        initialState: null,
+        reducers: {},
+    });
+
+    const rootDuck = createRootDuck(counterDuck, initDuck, dummyDuck);
 
     const Context = createContext(
         rootDuck.reducer,
@@ -129,5 +129,6 @@ export function createMocks(): {
         RootProvider,
         increment,
         init,
+        rootDuck,
     };
 }

@@ -1,16 +1,20 @@
 import * as React from "react";
+import { bindActionCreator } from "../utils/bindActionCreators";
 import { GlobalContext } from "..";
 
 export function useDispatch<S, T extends string, P>(
-    actionCreator: ActionCreator<T, P>,
+    actionCreator: Nullable<ActionCreator<T, P>>,
     Context?: Context<S, T, P>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): (...args: any[]) => void {
+): (...args: P[]) => void {
     const { dispatch } = React.useContext(Context ?? GlobalContext);
-    return React.useCallback(
-        function dispatchAction(...args) {
-            dispatch(actionCreator(...args));
-        },
+    const boundActionCreator = React.useMemo(
+        () => bindActionCreator(actionCreator, dispatch),
         [actionCreator, dispatch],
     );
+    if (!boundActionCreator) {
+        throw new Error(
+            `Unable to bind action creator "${actionCreator}" to disptch`,
+        );
+    }
+    return React.useCallback(boundActionCreator, [boundActionCreator]);
 }

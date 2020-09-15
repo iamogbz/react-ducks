@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
+    "license": "Unlicense",
     "repository": {
         "type": "git",
         "url": "https://github.com/iamogbz/react-duck"
@@ -28,13 +29,15 @@
         "typings"
     ],
     "scripts": {
-        "lint": "eslint . --max-warnings=0 --ext .js,.jsx,.ts,.tsx",
-        "build": "rm -rf ./dist && tsc --project tsconfig.prod.json",
-        "build-watch": "tsc --watch",
-        "test": "jest",
-        "typecheck": "tsc --noEmit",
+        "build": "npm run clean && tsc --project tsconfig.prod.json",
+        "build-watch": "npm run clean && tsc --watch",
+        "clean": "rm -rf ./dist",
         "commit": "git-cz",
-        "release": "semantic-release"
+        "dedupe": "npm dedupe",
+        "lint": "eslint . --max-warnings=0 --ext .js,.jsx,.ts,.tsx",
+        "release": "semantic-release",
+        "test": "jest",
+        "typecheck": "tsc --noEmit"
     },
     "release": {
         "plugins": [
@@ -81,12 +84,10 @@
         }
     },
     "peerDependencies": {
-        "react": "^16.13.0"
+        "react": "^16.13.0",
+        "hoist-non-react-statics": "^3.3.0"
     },
     "devDependencies": {
-        "@babel/cli": "^7.11.6",
-        "@babel/core": "^7.11.6",
-        "@babel/preset-typescript": "^7.10.4",
         "@commitlint/cli": "^11.0.0",
         "@commitlint/config-conventional": "^11.0.0",
         "@commitlint/travis-cli": "^11.0.0",
@@ -95,12 +96,10 @@
         "@types/jest": "^26.0.13",
         "@types/node": "^14.10.1",
         "@types/react": "^16.9.49",
+        "@types/react-is": "^16.7.1",
         "@typescript-eslint/eslint-plugin": "^2.34.0",
         "@typescript-eslint/parser": "^2.34.0",
         "acorn": "^8.0.1",
-        "babel-eslint": "^10.1.0",
-        "babel-loader": "^8.1.0",
-        "babel-plugin-transform-class-properties": "^6.24.1",
         "commitizen": "^4.2.1",
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^6.8.0",
@@ -120,6 +119,7 @@
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-test-renderer": "^16.13.1",
+        "reselect": "^4.0.0",
         "rxjs": "^6.6.3",
         "semantic-release": "^17.1.1",
         "stylelint": "^13.7.1",

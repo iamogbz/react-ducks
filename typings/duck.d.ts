@@ -4,7 +4,7 @@ type Action<
 > = {
     type: T;
     payload?: P;
-};
+} & Record<string, unknown>;
 
 type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
     payload?: P,
@@ -15,7 +15,15 @@ type ActionCreatorMapping<
     P = unknown,
     S = unknown,
     C extends string = T /* Action creator mapping keys */
-> = Record<C, ActionCreator<T, P, S>>;
+> = Record<C, Nullable<ActionCreator<T, P, S>>>;
+
+type ActionDispatcher<T extends string, P = unknown> = (...args: P[]) => void;
+
+type ActionDispatcherMapping<
+    T extends string = string,
+    P = unknown,
+    D extends string = T /* Action dispatcher mapping keys */
+> = Record<D, ActionDispatcher<T, P>>;
 
 type Reducer<
     S = unknown,
@@ -34,8 +42,9 @@ type Selector<
     S = unknown,
     R = unknown /* All possible selector return types */,
     T extends string = string,
-    P = unknown
-> = (state: React.ReducerState<Reducer<S, Action<T, P>>>) => R;
+    P = unknown,
+    E extends unknown[] = unknown[]
+> = (state: React.ReducerState<Reducer<S, Action<T, P>>>, ...args: E) => R;
 
 type SelectorMapping<
     S = unknown,
@@ -81,5 +90,5 @@ type RootDuck<
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;
-    selectors: Record<N, SelectorMapping<S, R, T, P, Q> | undefined>;
+    selectors: Record<N, Nullable<SelectorMapping<S, R, T, P, Q>>>;
 };

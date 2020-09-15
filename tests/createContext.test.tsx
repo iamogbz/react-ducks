@@ -1,6 +1,7 @@
 import * as React from "react";
+import { act, render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
-import { applyMiddleware, createContext } from "src";
+import { Provider, applyMiddleware, createContext } from "src";
 import { SymbolObservable } from "src/utils/symbolObservable";
 
 describe("createContext", () => {
@@ -21,6 +22,31 @@ describe("createContext", () => {
         expect(result.current.dispatch).not.toThrow();
         expect(result.current.enhancer).toBeUndefined();
         expect(result.current.getState()).toStrictEqual(initialState);
+    });
+
+    it("passes context value to consumer", () => {
+        const initialState = {};
+        const reducer = jest.fn((s) => s);
+        const Context = createContext(reducer, initialState);
+        const { result } = renderHook(() => React.useContext(Context));
+        const contextValue = result.current;
+        const spyConsume = jest.fn(() => null);
+        render(
+            <Provider Context={Context}>
+                <Context.Consumer>{spyConsume}</Context.Consumer>
+            </Provider>,
+        );
+        expect(spyConsume).toHaveBeenCalledTimes(1);
+        const [consumeValue] = (spyConsume.mock.calls[0] as unknown) as [
+            ContextValue,
+        ];
+        expect(consumeValue.enhancer).toBeUndefined();
+        expect(consumeValue.getState()).toStrictEqual(contextValue.state);
+        expect(reducer).toHaveBeenCalledTimes(1);
+        const action = { type: "ACTION_TYPE" };
+        act(() => void consumeValue.dispatch(action));
+        expect(reducer).toHaveBeenCalledTimes(2);
+        expect(reducer).toHaveBeenLastCalledWith(consumeValue.state, action);
     });
 
     it("provides and can use empty enhancer from applyMiddleware", () => {

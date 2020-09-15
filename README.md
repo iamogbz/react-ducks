@@ -117,24 +117,20 @@ ReactDOM.render(
 
 **Note**: `createRootProvider` is just a helper and can be replaced, with the functional difference highlighted below.
 
-```git
-diff --git a/index.jsx b/index.jsx
-index 0a0a0a0..1b1b1b1 100644
---- a/index.jsx
-+++ b/index.jsx
+```js
+// index.jsx
 const rootElement = document.getElementById("root");
--const Provider = createRootProvider(Context);
- ReactDOM.render(
--    <Provider>
-+    <Provider Context={Context}>
-         <App />
+ReactDOM.render(
+  <Provider Context={Context}>
+    <App />
+...
 ```
 
 A side benefit to scoping the context state to the provider is allowing multiple entire apps to be run concurrently.
 
 ### applyMiddleware(...middlewares)
 
-This takes a variable list of middlewares to be applied
+This takes a variable list of middlewares to be applied.
 
 #### Example: Custom Logger Middleware
 
@@ -160,9 +156,43 @@ export default createContext(..., applyMiddleware(logger));
 
 See [redux applyMiddleware][redux-applymiddleware] for more documentation.
 
-## Example
+### createConnect(Context?)
 
-As a proof of concept converted the sandbox app from the react-redux basic tutorial
+This a helper creates a function that can be used to smartly connect a component to your context value.
+
+```js
+// connect.js
+export default connect = createConnect(Context);
+```
+
+**Note**: if the `Context` argument is not supplied, the `GlobalContext` is used.
+
+**Note**: `createConnect` is just a helper and can be replaced with a direct import and use of `connect`.
+
+#### Example Usage
+
+```jsx
+// app.jsx
+function App(props) {
+  return (
+    <div>
+      Count: <span>{props.count}</span>
+      <button onClick={props.increment} />
+    </div>
+  );
+}
+
+export default connect(
+  (state) => ({ count: state[counterDuck.name] }),
+  (dispatch) => bindActionCreators(dispatch, counterDuck.actions)
+)(App);
+```
+
+See [redux connect][react-redux-connect] for more options.
+
+## Demo
+
+As a proof of concept see the converted sandbox app from the react-redux basic tutorial below.
 
 - With redux [example][react-redux-tutorial]
 - Without redux [code][react-duck-no-redux]
@@ -173,10 +203,11 @@ As a proof of concept converted the sandbox app from the react-redux basic tutor
 
 ## Suggestions
 
-- Use `immer` to create immutable reducers, [see guide][immer-intro].
+- Use `immer` to create immutable reducers, [see guide][immer-intro]
 
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable
 [react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
+[react-redux-connect]: https://react-redux.js.org/api/connect
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
