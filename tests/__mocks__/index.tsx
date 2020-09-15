@@ -52,7 +52,13 @@ export function createMocks() {
         actionMapping: { [ActionTypes.INIT]: INIT },
     });
 
-    const rootDuck = createRootDuck(counterDuck, initDuck);
+    const dummyDuck = createDuck({
+        name: "dummy",
+        initialState: null,
+        reducers: {},
+    });
+
+    const rootDuck = createRootDuck(counterDuck, initDuck, dummyDuck);
 
     const Context = createContext(
         rootDuck.reducer,

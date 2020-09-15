@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`e2e createConnect correctly connects action creators to props 1`] = `
+exports[`integration createConnect correctly connects action creators to props 1`] = `
 <body>
   <div>
     <div>
@@ -16,7 +16,7 @@ exports[`e2e createConnect correctly connects action creators to props 1`] = `
 </body>
 `;
 
-exports[`e2e createConnect correctly connects state and dispatch to props 1`] = `
+exports[`integration createConnect correctly connects state and dispatch to props 1`] = `
 <body>
   <div>
     <div>
@@ -32,7 +32,7 @@ exports[`e2e createConnect correctly connects state and dispatch to props 1`] = 
 </body>
 `;
 
-exports[`e2e createConnect correctly uses mergeProps function 1`] = `
+exports[`integration createConnect correctly uses mergeProps function 1`] = `
 <body>
   <div>
     <div>
@@ -48,7 +48,23 @@ exports[`e2e createConnect correctly uses mergeProps function 1`] = `
 </body>
 `;
 
-exports[`e2e createContext renders with root provider and updates on action dispatch 1`] = `
+exports[`integration createConnect works with no connection arguments supplied 1`] = `
+<body>
+  <div>
+    <div>
+      Count: 
+      <span />
+      <button
+        disabled=""
+      >
+        increment
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`integration createContext renders with root provider and updates on action dispatch 1`] = `
 <body>
   <div>
     <div>
@@ -64,7 +80,7 @@ exports[`e2e createContext renders with root provider and updates on action disp
 </body>
 `;
 
-exports[`e2e createContext renders without root provider 1`] = `
+exports[`integration createContext renders without root provider 1`] = `
 <body>
   <div>
     <div>

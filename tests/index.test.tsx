@@ -3,10 +3,11 @@ import { createStructuredSelector } from "reselect";
 import { act, cleanup, render } from "@testing-library/react";
 import { Provider, createConnect, createContext } from "src";
 import { bindActionCreators } from "src/utils/bindActionCreators";
+import { connect } from "src/utils/connect";
 // eslint-disable-next-line jest/no-mocks-import
 import { createMocks } from "./__mocks__";
 
-describe("e2e", (): void => {
+describe("integration", (): void => {
     const {
         EnhancedContext,
         ErrorContext,
@@ -145,10 +146,21 @@ describe("e2e", (): void => {
             );
         }
 
+        it("works with no connection arguments supplied", () => {
+            const ConnectedComponent = connect()(DumbComponent);
+            const result = render(
+                <RootProvider>
+                    <ConnectedComponent />
+                </RootProvider>,
+            );
+            expect(result.baseElement).toMatchSnapshot();
+        });
+
         it("correctly connects state and dispatch to props", async () => {
-            const ConnectedComponent = connectGlobal(
+            const ConnectedComponent = connect(
                 mapStateToProps,
-                (dispatch) => bindActionCreators(mapDispatchToProps, dispatch),
+                (dispatch: ContextDispatch) =>
+                    bindActionCreators(mapDispatchToProps, dispatch),
             )(DumbComponent);
             const result = render(
                 <RootProvider>
