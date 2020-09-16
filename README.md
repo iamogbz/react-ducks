@@ -197,10 +197,6 @@ As a proof of concept see the converted sandbox app from the react-redux basic t
 - With redux [example][react-redux-tutorial]
 - Without redux [code][react-duck-no-redux]
 
-## Next
-
-- Implement observable pattern for context value, [reference][proposal-observable]
-
 ## Suggestions
 
 - Use `immer` to create immutable reducers, [see guide][immer-intro]
