@@ -1,6 +1,6 @@
 type ContextDispatch<T extends string = string, P = unknown> = (
     action: Action<T, P>,
-) => Action<T, P>;
+) => Promise<Action<T, P>>;
 
 type ContextEnhance<S = unknown, T extends string = string, P = unknown> = (
     value: ContextValue<S, T, P>,
@@ -11,7 +11,8 @@ type ContextValue<S = unknown, T extends string = string, P = unknown> = {
     enhancer?: ContextEnhance<S, T, P>;
     reducer: Reducer<S, T, P>;
     state: S;
-} & MiddlewareAPI<S, T, P>;
+} & MiddlewareAPI<S, T, P> &
+    Omit<Observable, "constructor" | "from" | "of">;
 
 type Context<
     S = unknown,

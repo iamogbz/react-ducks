@@ -30,9 +30,8 @@
         "no-console": 1,
         "no-param-reassign": ["error", { "props": false }],
         "no-trailing-spaces": 2,
-        "no-use-before-define": [2, {
-            "functions": false
-        }],
+        "no-unused-vars":"off",
+        "no-use-before-define": "off",
         "object-curly-newline": [2, {
             "multiline": true,
             "consistent": true
@@ -43,6 +42,7 @@
         "sort-imports": [2,  {
             "ignoreDeclarationSort": true
         }],
+        "sort-keys": "warn",
         "jest/no-hooks": 0,
         "jest/prefer-expect-assertions": 0,
         "prettier/prettier": [2, {

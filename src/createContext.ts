@@ -1,24 +1,24 @@
 import * as React from "react";
-import { SymbolObservable } from "./utils/symbolObservable";
+import "./utils/polyfillSymbol";
 import { setGlobalContext } from "./components/Context";
 
 function createUnimplemented(objectName?: string): (m: string) => () => never {
     const prefix = objectName ? `${objectName}.` : "";
     return function createUnimplemented(methodName) {
-        return function unimplemented(): never {
+        return function unimplemented() {
             throw new Error(`Unimplemented method: ${prefix}${methodName}`);
         };
     };
 }
 
 export function createContextWithValue<S, T extends string, P>(
-    value: Partial<ContextValue<S, T, P>>,
+    value: Include<ContextValue<S, T, P>, "reducer" | "state" | "subscribe">,
 ): Context<S, T, P> {
     return React.createContext<ContextValue<S, T, P>>({
-        dispatch: (a) => a,
+        dispatch: async (a) => a,
         getState: () => value.state,
         ...value,
-    } as ContextValue<S, T, P>);
+    });
 }
 
 export function createContext<S, T extends string, P>(
@@ -33,7 +33,7 @@ export function createContext<S, T extends string, P>(
         enhancer,
         reducer: rootReducer,
         state: preloadedState,
-        [SymbolObservable]: unimplemented(SymbolObservable.toString()),
+        subscribe: unimplemented("subscribe"),
     });
     if (displayName) {
         Context.displayName = displayName;

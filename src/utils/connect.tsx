@@ -1,6 +1,7 @@
 import * as React from "react";
 import { GlobalContext } from "../components/Context";
 import { bindActionCreators } from "./bindActionCreators";
+import { isFunction } from "./isFunction";
 
 function defaultMergeProps<T extends string, P, I, K, J>(
     stateProps?: K,
@@ -8,10 +9,6 @@ function defaultMergeProps<T extends string, P, I, K, J>(
     ownProps?: I,
 ): J {
     return ({ ...ownProps, ...stateProps, ...dispatchProps } as unknown) as J;
-}
-
-function isFunction<F>(maybeFunction: F | unknown): maybeFunction is F {
-    return typeof maybeFunction === "function";
 }
 
 function asMapDispatchToPropsFn<S, T extends string, P, I>(
@@ -44,10 +41,10 @@ export function connect<
         dispatchProps?: ActionDispatcherMapping<T, P>,
         ownProps?: I,
     ) => J,
-    options?: ConnectOptions<S, T, P, I, K, J>,
+    options?: ConnectOptions<S, T, P>,
 ): (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    component: ReactComponent<any>,
+    component: React.ComponentType<any>,
 ) => WrapperComponent<typeof component> {
     const mapDispatchToPropsFn = isFunction<MapDispatchToProps<T, P, I>>(
         mapDispatchToProps,
@@ -56,7 +53,7 @@ export function connect<
         : asMapDispatchToPropsFn(mapDispatchToProps);
 
     return function wrap(
-        WrappedComponent: ReactComponent<J>,
+        WrappedComponent: React.ComponentType<J>,
     ): WrapperComponent<typeof WrappedComponent> {
         const FinalComponent = (options?.pure
             ? React.memo(WrappedComponent)

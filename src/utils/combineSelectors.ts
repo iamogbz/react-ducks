@@ -12,7 +12,7 @@ export function combineSelectors<
     if (!selectors) return;
     const duckSelectors = {} as SelectorMapping<S, R, T, P, Q>;
     for (const s of Object.keys(selectors) as Q[]) {
-        duckSelectors[s] = (state: S): R =>
+        duckSelectors[s] = (state) =>
             selectors[s](((state as unknown) as Record<string, S>)[duckName]);
     }
     return duckSelectors;

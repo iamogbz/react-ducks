@@ -1,13 +1,19 @@
 import * as React from "react";
 import { createStructuredSelector } from "reselect";
 import { act, cleanup, render } from "@testing-library/react";
-import { Provider, createConnect, createContext } from "src";
+import {
+    GlobalContext,
+    Provider,
+    createConnect,
+    createContext,
+    useDispatch,
+    useSelector,
+} from "src";
 import { bindActionCreators } from "src/utils/bindActionCreators";
 import { connect } from "src/utils/connect";
-// eslint-disable-next-line jest/no-mocks-import
-import { createMocks } from "./__mocks__";
+import { createMocks } from "./index.mock";
 
-describe("integration", (): void => {
+describe("integration", () => {
     const {
         EnhancedContext,
         ErrorContext,
@@ -105,9 +111,8 @@ describe("integration", (): void => {
 
     describe("createConnect", () => {
         const mapStateToProps = createStructuredSelector({
-            count: rootDuck.selectors.counter?.get ?? ((): number => 0),
-            isInitialised:
-                rootDuck.selectors.init?.get ?? ((): boolean => false),
+            count: rootDuck.selectors.counter?.get ?? (() => 0),
+            isInitialised: rootDuck.selectors.init?.get ?? (() => false),
         });
         const mapDispatchToProps = {
             increment: rootDuck.actions.counter.increment,
@@ -130,7 +135,7 @@ describe("integration", (): void => {
         type Props = {
             count: number;
             isInitialised: boolean;
-            increment: ActionDispatcher<"counter/increment", never>;
+            increment: ActionDispatcher<never>;
         };
         function DumbComponent(props: Props): React.ReactElement {
             return (
@@ -255,7 +260,7 @@ describe("integration", (): void => {
 
         it("forwards ref to wrapped component", async () => {
             class ClassComponent extends React.PureComponent {
-                render(): React.ReactElement {
+                render() {
                     return <div></div>;
                 }
             }
@@ -281,7 +286,7 @@ describe("integration", (): void => {
                 .spyOn(console, "error")
                 .mockImplementationOnce(() => undefined);
             class ClassComponent extends React.PureComponent {
-                render(): React.ReactElement {
+                render() {
                     return <div></div>;
                 }
             }
@@ -306,6 +311,59 @@ describe("integration", (): void => {
                 ),
             );
             spyConsoleError.mockRestore();
+        });
+    });
+
+    describe("contextSubscribe", () => {
+        const listener = jest.fn();
+        function Sample() {
+            const value = React.useContext(GlobalContext);
+            React.useEffect(
+                function contextSubscribe() {
+                    value.subscribe(listener);
+                },
+                [value],
+            );
+            const increment = useDispatch(rootDuck.actions.counter.increment);
+            const init = useSelector(rootDuck.selectors.init?.get);
+            return (
+                <div>
+                    <button disabled={!init} onClick={increment}>
+                        increment
+                    </button>
+                </div>
+            );
+        }
+
+        afterEach(listener.mockClear);
+
+        it("subscribes successfully to context value changes", async () => {
+            const result = render(
+                <RootProvider>
+                    <Sample />
+                </RootProvider>,
+            );
+            expect(listener).toHaveBeenCalledTimes(2);
+            const button = await result.findByText("increment");
+            act(() => button.click());
+            expect(listener).toHaveBeenCalledTimes(3);
+            act(() => button.click());
+            expect(listener).toHaveBeenCalledTimes(4);
+            expect(listener).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    dispatch: expect.any(Function),
+                    getState: expect.any(Function),
+                    reducer: expect.any(Function),
+                    state: {
+                        counter: 2,
+                        dummy: null,
+                        init: true,
+                    },
+                    subscribe: expect.any(Function),
+                }),
+            );
+            const [[lastCallArg0]] = listener.mock.calls.slice(-1);
+            expect(lastCallArg0[Symbol.observable]()).toBe(lastCallArg0);
         });
     });
 });

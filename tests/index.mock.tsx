@@ -10,18 +10,18 @@ import {
 } from "src";
 import { ActionTypes } from "src/utils/actionTypes";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createMocks() {
     const dummyMiddleware: Middleware<
         Record<string, unknown>,
         string,
         unknown
-    > = () => (next) => (action): typeof action => next(action);
+    > = () => (next) => (action) => next(action);
 
     const DECREMENT = "decrement";
     const INCREMENT = "increment";
-    const decrement = (state: number): number => state - 1;
-    const increment = jest.fn((state): number => state + 1);
+    const decrement = (state: number) => state - 1;
+    const increment = jest.fn((state: number) => state + 1);
     const counterReducer: (s: number, a?: Action<string>) => number = (
         state,
         action,
@@ -36,25 +36,25 @@ export function createMocks() {
         }
     };
     const counterDuck = createDuck({
-        name: "counter",
         initialState: 0,
+        name: "counter",
         reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
-        selectors: { get: (state): number => state },
+        selectors: { get: (state) => state },
     });
 
     const INIT = "init";
-    const init = jest.fn((): boolean => true);
+    const init = jest.fn(() => true);
     const initDuck = createDuck({
-        name: "init",
-        initialState: false,
-        reducers: { [INIT]: init },
-        selectors: { get: (state): boolean => state },
         actionMapping: { [ActionTypes.INIT]: INIT },
+        initialState: false,
+        name: "init",
+        reducers: { [INIT]: init },
+        selectors: { get: (state) => state },
     });
 
     const dummyDuck = createDuck({
-        name: "dummy",
         initialState: null,
+        name: "dummy",
         reducers: {},
     });
 
@@ -70,7 +70,7 @@ export function createMocks() {
 
     const RootProvider = createRootProvider(Context);
 
-    function Example(): React.ReactElement {
+    function Example() {
         const increment = useDispatch(counterDuck.actions.increment);
         const init = useSelector(rootDuck.selectors.init?.get);
         const count = useSelector(rootDuck.selectors.counter?.get, Context);
@@ -86,15 +86,13 @@ export function createMocks() {
 
     const logger: Middleware<Record<string, unknown>, string, unknown> = ({
         getState,
-    }) => (next) => (action): typeof action => {
+    }) => (next) => async (action) => {
         // eslint-disable-next-line no-console
         console.log("action to dispatch", action);
         // Call the next dispatch method in the middleware chain.
-        const returnValue = next(action);
-        Promise.resolve().then(() => {
-            // eslint-disable-next-line no-console
-            console.log("state after dispatch", getState());
-        });
+        const returnValue = await next(action);
+        // eslint-disable-next-line no-console
+        console.log("state after dispatch", getState());
         // This will likely be the action itself, unless
         // a middleware further in chain changed it.
         return returnValue;
@@ -112,7 +110,7 @@ export function createMocks() {
         unknown
     > = ({ dispatch }) => {
         dispatch({ type: "SOME_ACTION" });
-        return () => (action): typeof action => action;
+        return () => async (action) => action;
     };
     const emptyRootDuck = createRootDuck();
     const ErrorContext = createContext(

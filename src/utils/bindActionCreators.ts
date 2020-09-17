@@ -3,7 +3,7 @@
 export function bindActionCreator<T extends string, P>(
     actionCreator: Nullable<ActionCreator<T, P>>,
     dispatch: ContextDispatch<T, P>,
-): Nullable<ActionDispatcher<T, P>> {
+): Nullable<ActionDispatcher<P>> {
     if (typeof actionCreator !== "function") return;
     return function dispatchAction(...args: P[]): void {
         dispatch(actionCreator(...args));
@@ -18,14 +18,14 @@ export function bindActionCreator<T extends string, P>(
 export function bindActionCreators<T extends string, P>(
     actionCreator: Nullable<ActionCreator<T, P>>,
     dispatch: ContextDispatch<T, P>,
-): ActionDispatcher<T, P>;
+): ActionDispatcher<P>;
 
 export function bindActionCreators<T extends string, P, S>(
     actionCreators: Nullable<ActionCreatorMapping<T, P, S>>,
     dispatch: ContextDispatch<T, P>,
 ): ActionDispatcherMapping<T, P>;
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function bindActionCreators(
     actionCreators: Nullable<ActionCreator | ActionCreatorMapping>,
     dispatch: ContextDispatch,

@@ -2,6 +2,7 @@ import * as React from "react";
 import { ActionTypes } from "../utils/actionTypes";
 import { createAction } from "../createAction";
 import { useGetter } from "../hooks/useGetter";
+import { useObservable } from "../hooks/useObservable";
 
 export function Provider<S, T extends string, P>({
     children,
@@ -12,8 +13,8 @@ export function Provider<S, T extends string, P>({
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
     const getState = useGetter(state);
 
-    const dispatch = React.useCallback<ContextValue<S, T, P>["dispatch"]>(
-        function wrappedDispatch(action) {
+    const dispatch = React.useCallback<ContextDispatch<T, P>>(
+        async function contextDispatch(action) {
             reducerDispatch(action);
             return action;
         },
@@ -43,5 +44,7 @@ export function Provider<S, T extends string, P>({
         [enhanced, state],
     );
 
-    return <Context.Provider value={value}>{children}</Context.Provider>;
+    const observable = useObservable(useGetter(value));
+
+    return <Context.Provider value={observable}>{children}</Context.Provider>;
 }
