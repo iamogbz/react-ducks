@@ -4,7 +4,7 @@ import { setGlobalContext } from "./components/Context";
 
 class ContextValue<S = unknown, T extends string = string, P = unknown>
     implements ContextValue<S, T, P> {
-    dispatch: ContextDispatch<T, P> = (a) => a;
+    dispatch: ContextDispatch<T, P> = async (a) => a;
     enhancer?: ContextEnhance<S, T, P>;
     getState = (): S => this.state;
     reducer: Reducer<S, T, P>;

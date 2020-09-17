@@ -12,8 +12,8 @@ export function Provider<S, T extends string, P>({
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
     const getState = useGetter(state);
 
-    const dispatch = React.useCallback<ContextValue<S, T, P>["dispatch"]>(
-        function wrappedDispatch(action) {
+    const dispatch = React.useCallback<ContextDispatch<T, P>>(
+        async function contextDispatch(action) {
             reducerDispatch(action);
             return action;
         },

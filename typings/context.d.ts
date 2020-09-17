@@ -1,16 +1,16 @@
 type ContextDispatch<T extends string = string, P = unknown> = (
     action: Action<T, P>,
-) => Action<T, P>;
+) => Promise<Action<T, P>>;
 
 type ContextEnhance<S = unknown, T extends string = string, P = unknown> = (
     value: ContextValue<S, T, P>,
 ) => ContextValue<S, T, P>;
 
 interface ContextValue<S = unknown, T extends string = string, P = unknown>
-    extends MiddlewareAPI<S, T, P> {
-    enhancer?: ContextEnhance<S, T, P>;
-    reducer: Reducer<S, T, P>;
-    state: S;
+    extends Readonly<MiddlewareAPI<S, T, P>> {
+    readonly enhancer?: ContextEnhance<S, T, P>;
+    readonly reducer: Reducer<S, T, P>;
+    readonly state: S;
 }
 
 type Context<

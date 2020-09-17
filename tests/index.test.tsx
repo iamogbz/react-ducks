@@ -5,7 +5,7 @@ import { Provider, createConnect, createContext } from "src";
 import { bindActionCreators } from "src/utils/bindActionCreators";
 import { connect } from "src/utils/connect";
 // eslint-disable-next-line jest/no-mocks-import
-import { createMocks } from "./__mocks__";
+import { createMocks } from "./index.mock";
 
 describe("integration", (): void => {
     const {

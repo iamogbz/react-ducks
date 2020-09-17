@@ -137,14 +137,14 @@ This takes a variable list of middlewares to be applied.
 ```js
 // context.js
 function logger({ getState }) {
-  return (next) => (action) => {
+  // Recommend making the returned dispatch method asynchronous.
+  return (next) => async (action) => {
     console.log("will dispatch", action);
     // Call the next dispatch method in the middleware chain.
-    const returnValue = next(action);
-    Promise.resolve().then(() => {
-      // The state is updated by `React.useReducer` in the next tick
-      console.log("state after dispatch", getState());
-    });
+    const returnValue = await next(action);
+    // Resolving the result of the next dispatch allows the referenced
+    // state to be updated by `React.useReducer` and available to get.
+    console.log("state after dispatch", getState());
     // This will likely be the action itself, unless
     // a middleware further in chain changed it.
     return returnValue;

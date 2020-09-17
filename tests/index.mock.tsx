@@ -16,7 +16,7 @@ export function createMocks() {
         Record<string, unknown>,
         string,
         unknown
-    > = () => (next) => (action): typeof action => next(action);
+    > = () => (next) => (action): Promise<typeof action> => next(action);
 
     const DECREMENT = "decrement";
     const INCREMENT = "increment";
@@ -86,15 +86,13 @@ export function createMocks() {
 
     const logger: Middleware<Record<string, unknown>, string, unknown> = ({
         getState,
-    }) => (next) => (action): typeof action => {
+    }) => (next) => async (action): Promise<typeof action> => {
         // eslint-disable-next-line no-console
         console.log("action to dispatch", action);
         // Call the next dispatch method in the middleware chain.
-        const returnValue = next(action);
-        Promise.resolve().then(() => {
-            // eslint-disable-next-line no-console
-            console.log("state after dispatch", getState());
-        });
+        const returnValue = await next(action);
+        // eslint-disable-next-line no-console
+        console.log("state after dispatch", getState());
         // This will likely be the action itself, unless
         // a middleware further in chain changed it.
         return returnValue;
@@ -112,7 +110,7 @@ export function createMocks() {
         unknown
     > = ({ dispatch }) => {
         dispatch({ type: "SOME_ACTION" });
-        return () => (action): typeof action => action;
+        return () => async (action): Promise<typeof action> => action;
     };
     const emptyRootDuck = createRootDuck();
     const ErrorContext = createContext(
