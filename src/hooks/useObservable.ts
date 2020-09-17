@@ -64,8 +64,13 @@ export function useObservable<V>(getter: () => V): V & Observable {
                 },
             };
 
-            add([listenerOrObserver, observer]);
-            observer.start(subscription);
+            try {
+                add([listenerOrObserver, observer]);
+                observer.start(subscription);
+            } catch (e) {
+                observer.error(e);
+                subscription.unsubscribe();
+            }
             return subscription;
         },
         [add, remove],

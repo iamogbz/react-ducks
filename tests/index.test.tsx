@@ -316,7 +316,7 @@ describe("integration", (): void => {
         });
     });
 
-    describe("useObservable", () => {
+    describe("contextSubscribe", () => {
         const listener = jest.fn();
         function Sample(): React.ReactElement {
             const value = React.useContext(GlobalContext);
