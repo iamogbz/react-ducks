@@ -6,12 +6,12 @@ type ContextEnhance<S = unknown, T extends string = string, P = unknown> = (
     value: ContextValue<S, T, P>,
 ) => ContextValue<S, T, P>;
 
-interface ContextValue<S = unknown, T extends string = string, P = unknown>
-    extends Readonly<MiddlewareAPI<S, T, P>> {
-    readonly enhancer?: ContextEnhance<S, T, P>;
-    readonly reducer: Reducer<S, T, P>;
-    readonly state: S;
-}
+// this is similar to a redux store
+type ContextValue<S = unknown, T extends string = string, P = unknown> = {
+    enhancer?: ContextEnhance<S, T, P>;
+    reducer: Reducer<S, T, P>;
+    state: S;
+} & MiddlewareAPI<S, T, P>;
 
 type Context<
     S = unknown,
