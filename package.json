@@ -54,12 +54,16 @@
             "<rootDir>/node_modules",
             "."
         ],
+        "coverageDirectory": "./artifacts/coverage",
+        "coveragePathIgnorePatterns": [
+            "<rootDir>/node_modules",
+            "<rootDir>/tests"
+        ],
         "testPathIgnorePatterns": [
             "./artifacts/",
             "./dist/",
             "./node_modules/"
-        ],
-        "coverageDirectory": "./artifacts/coverage"
+        ]
     },
     "commitlint": {
         "extends": [
