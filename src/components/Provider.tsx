@@ -46,14 +46,5 @@ export function Provider<S, T extends string, P>({
 
     const observable = useObservable(useGetter(value));
 
-    const observableValue = React.useMemo(
-        function getSubscriptable() {
-            return { ...value, ...observable };
-        },
-        [observable, value],
-    );
-
-    return (
-        <Context.Provider value={observableValue}>{children}</Context.Provider>
-    );
+    return <Context.Provider value={observable}>{children}</Context.Provider>;
 }

@@ -37,9 +37,11 @@ const asObserver = (
     start: NOOP,
 });
 
-export function useObservable<V>(getter: () => V): Observable {
+export function useObservable<V>(getter: () => V): V & Observable {
     type Key = Observer | OnNextFunction;
+
     const { value: observers, add, remove } = useCollection<Key, Observer>();
+
     const subscribe = React.useCallback(
         function subscribe(
             listenerOrObserver: Key,
@@ -69,21 +71,7 @@ export function useObservable<V>(getter: () => V): Observable {
         [add, remove],
     );
 
-    const value = getter();
-    const next = React.useCallback(
-        function next() {
-            observers.forEach((observer) => {
-                observer.next(value);
-            });
-        },
-        [observers, value],
-    );
-
-    // Only call observers next for a value change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(next, [value]);
-
-    return React.useMemo(
+    const observable = React.useMemo(
         function getObservable() {
             return {
                 subscribe,
@@ -94,4 +82,28 @@ export function useObservable<V>(getter: () => V): Observable {
         },
         [subscribe],
     );
+
+    const value = getter();
+
+    const nextValue = React.useMemo(
+        function getNextValue() {
+            return { ...value, ...observable };
+        },
+        [observable, value],
+    );
+
+    const next = React.useCallback(
+        function next() {
+            observers.forEach((observer) => {
+                observer.next(nextValue);
+            });
+        },
+        [observers, nextValue],
+    );
+
+    // Only call observers next for a value change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(next, [nextValue]);
+
+    return nextValue;
 }

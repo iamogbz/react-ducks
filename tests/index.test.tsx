@@ -364,6 +364,8 @@ describe("integration", (): void => {
                     subscribe: expect.any(Function),
                 }),
             );
+            const [[lastCallArg0]] = listener.mock.calls.slice(-1);
+            expect(lastCallArg0[Symbol.observable]()).toBe(lastCallArg0);
         });
     });
 });
