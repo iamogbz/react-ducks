@@ -11,10 +11,9 @@ import {
 } from "src";
 import { bindActionCreators } from "src/utils/bindActionCreators";
 import { connect } from "src/utils/connect";
-// eslint-disable-next-line jest/no-mocks-import
 import { createMocks } from "./index.mock";
 
-describe("integration", (): void => {
+describe("integration", () => {
     const {
         EnhancedContext,
         ErrorContext,
@@ -112,9 +111,8 @@ describe("integration", (): void => {
 
     describe("createConnect", () => {
         const mapStateToProps = createStructuredSelector({
-            count: rootDuck.selectors.counter?.get ?? ((): number => 0),
-            isInitialised:
-                rootDuck.selectors.init?.get ?? ((): boolean => false),
+            count: rootDuck.selectors.counter?.get ?? (() => 0),
+            isInitialised: rootDuck.selectors.init?.get ?? (() => false),
         });
         const mapDispatchToProps = {
             increment: rootDuck.actions.counter.increment,
@@ -262,7 +260,7 @@ describe("integration", (): void => {
 
         it("forwards ref to wrapped component", async () => {
             class ClassComponent extends React.PureComponent {
-                render(): React.ReactElement {
+                render() {
                     return <div></div>;
                 }
             }
@@ -288,7 +286,7 @@ describe("integration", (): void => {
                 .spyOn(console, "error")
                 .mockImplementationOnce(() => undefined);
             class ClassComponent extends React.PureComponent {
-                render(): React.ReactElement {
+                render() {
                     return <div></div>;
                 }
             }
@@ -318,7 +316,7 @@ describe("integration", (): void => {
 
     describe("contextSubscribe", () => {
         const listener = jest.fn();
-        function Sample(): React.ReactElement {
+        function Sample() {
             const value = React.useContext(GlobalContext);
             React.useEffect(
                 function contextSubscribe() {

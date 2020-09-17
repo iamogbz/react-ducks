@@ -34,6 +34,7 @@
         "clean": "rm -rf ./dist",
         "commit": "git-cz",
         "dedupe": "npm dedupe",
+        "e2e": "jest -c ./jest.e2e.config.json tests/index",
         "lint": "eslint . --max-warnings=0 --ext .js,.jsx,.ts,.tsx",
         "release": "semantic-release",
         "test": "jest",
@@ -57,7 +58,8 @@
         "coverageDirectory": "./artifacts/coverage",
         "coveragePathIgnorePatterns": [
             "<rootDir>/node_modules",
-            "<rootDir>/tests"
+            "<rootDir>/tests",
+            "<rootDir>/e2e"
         ],
         "testPathIgnorePatterns": [
             "./artifacts/",

@@ -5,8 +5,8 @@ import { useObservable } from "src/hooks/useObservable";
 
 describe("useDispatch", () => {
     const mockValue = {
-        dispatch: async (a: Action<string, string>): Promise<typeof a> => a,
-        reducer: (): null => null,
+        dispatch: async (a: Action<string, string>) => a,
+        reducer: () => null,
         state: null,
         subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
     };

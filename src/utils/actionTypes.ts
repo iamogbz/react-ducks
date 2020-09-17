@@ -1,6 +1,5 @@
-const randomString = (): string => Math.random().toString(36).substring(7);
-const ns = (s: TemplateStringsArray): string =>
-    `@@context/${s}/${randomString()}`;
+const randomString = () => Math.random().toString(36).substring(7);
+const ns = (s: TemplateStringsArray) => `@@context/${s}/${randomString()}`;
 
 export const ActionTypes = {
     INIT: ns`INIT`,

@@ -16,12 +16,12 @@ export function createMocks() {
         Record<string, unknown>,
         string,
         unknown
-    > = () => (next) => (action): Promise<typeof action> => next(action);
+    > = () => (next) => (action) => next(action);
 
     const DECREMENT = "decrement";
     const INCREMENT = "increment";
-    const decrement = (state: number): number => state - 1;
-    const increment = jest.fn((state): number => state + 1);
+    const decrement = (state: number) => state - 1;
+    const increment = jest.fn((state: number) => state + 1);
     const counterReducer: (s: number, a?: Action<string>) => number = (
         state,
         action,
@@ -39,17 +39,17 @@ export function createMocks() {
         initialState: 0,
         name: "counter",
         reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
-        selectors: { get: (state): number => state },
+        selectors: { get: (state) => state },
     });
 
     const INIT = "init";
-    const init = jest.fn((): boolean => true);
+    const init = jest.fn(() => true);
     const initDuck = createDuck({
         actionMapping: { [ActionTypes.INIT]: INIT },
         initialState: false,
         name: "init",
         reducers: { [INIT]: init },
-        selectors: { get: (state): boolean => state },
+        selectors: { get: (state) => state },
     });
 
     const dummyDuck = createDuck({
@@ -70,7 +70,7 @@ export function createMocks() {
 
     const RootProvider = createRootProvider(Context);
 
-    function Example(): React.ReactElement {
+    function Example() {
         const increment = useDispatch(counterDuck.actions.increment);
         const init = useSelector(rootDuck.selectors.init?.get);
         const count = useSelector(rootDuck.selectors.counter?.get, Context);
@@ -86,7 +86,7 @@ export function createMocks() {
 
     const logger: Middleware<Record<string, unknown>, string, unknown> = ({
         getState,
-    }) => (next) => async (action): Promise<typeof action> => {
+    }) => (next) => async (action) => {
         // eslint-disable-next-line no-console
         console.log("action to dispatch", action);
         // Call the next dispatch method in the middleware chain.
@@ -110,7 +110,7 @@ export function createMocks() {
         unknown
     > = ({ dispatch }) => {
         dispatch({ type: "SOME_ACTION" });
-        return () => async (action): Promise<typeof action> => action;
+        return () => async (action) => action;
     };
     const emptyRootDuck = createRootDuck();
     const ErrorContext = createContext(

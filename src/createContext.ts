@@ -5,7 +5,7 @@ import { setGlobalContext } from "./components/Context";
 function createUnimplemented(objectName?: string): (m: string) => () => never {
     const prefix = objectName ? `${objectName}.` : "";
     return function createUnimplemented(methodName) {
-        return function unimplemented(): never {
+        return function unimplemented() {
             throw new Error(`Unimplemented method: ${prefix}${methodName}`);
         };
     };

@@ -5,10 +5,7 @@ export function combineReducers<S, N extends string, T extends string, P>(
     reducerMapping: DuckReducerMapping<S, N, T, P>,
 ): Reducer<Record<N, S>, T, P> {
     const reducers = getEntries(reducerMapping);
-    return function (
-        state: Record<N, S> = initialState,
-        action,
-    ): Record<string, S> {
+    return function (state: Record<N, S> = initialState, action) {
         return reducers.reduce(function reduce(acc, [name, reducer]) {
             acc[name] = reducer(state[name], action);
             return acc;

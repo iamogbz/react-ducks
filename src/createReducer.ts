@@ -11,7 +11,7 @@ export function createReducer<
         a !== undefined &&
         Object.prototype.hasOwnProperty.call(actionTypeToReducer, a.type);
 
-    return function actionReducer(state = initialState, action?): S {
+    return function actionReducer(state = initialState, action?) {
         if (!isReducerActionType(action)) {
             return defaultReducer?.(state, action) ?? state;
         }

@@ -1,4 +1,4 @@
-function polyfillSymbol(name: string): void {
+function polyfillSymbol(name: string) {
     if (!Symbol[name]) {
         Object.defineProperty(Symbol, name, { value: Symbol(name) });
     }
