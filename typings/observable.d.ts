@@ -13,7 +13,11 @@ interface Observable {
     subscribe(observer: Observer): Subscription;
 
     // Subscribes to the sequence with callbacks
-    subscribe: SubscribeFunctions;
+    subscribe(
+        onNext: OnNextFunction,
+        onError?: OnErrorFunction,
+        onComplete?: OnCompleteFunction,
+    ): Subscription;
 
     // Returns itself
     [Symbol.observable](): Observable;
@@ -46,12 +50,6 @@ interface Subscription {
     // A boolean value indicating whether the subscription is closed
     closed: boolean;
 }
-
-type SubscribeFunctions = (
-    onNext: OnNextFunction,
-    onError?: OnErrorFunction,
-    onComplete?: OnCompleteFunction,
-) => Subscription;
 
 type SubscriberFunction = (
     observer: SubscriptionObserver,

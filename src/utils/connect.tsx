@@ -44,7 +44,7 @@ export function connect<
     options?: ConnectOptions<S, T, P>,
 ): (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    component: ReactComponent<any>,
+    component: React.ComponentType<any>,
 ) => WrapperComponent<typeof component> {
     const mapDispatchToPropsFn = isFunction<MapDispatchToProps<T, P, I>>(
         mapDispatchToProps,
@@ -53,7 +53,7 @@ export function connect<
         : asMapDispatchToPropsFn(mapDispatchToProps);
 
     return function wrap(
-        WrappedComponent: ReactComponent<J>,
+        WrappedComponent: React.ComponentType<J>,
     ): WrapperComponent<typeof WrappedComponent> {
         const FinalComponent = (options?.pure
             ? React.memo(WrappedComponent)

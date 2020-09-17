@@ -1,7 +1,14 @@
 import * as React from "react";
 import { createStructuredSelector } from "reselect";
 import { act, cleanup, render } from "@testing-library/react";
-import { Provider, createConnect, createContext } from "src";
+import {
+    GlobalContext,
+    Provider,
+    createConnect,
+    createContext,
+    useDispatch,
+    useSelector,
+} from "src";
 import { bindActionCreators } from "src/utils/bindActionCreators";
 import { connect } from "src/utils/connect";
 // eslint-disable-next-line jest/no-mocks-import
@@ -306,6 +313,57 @@ describe("integration", (): void => {
                 ),
             );
             spyConsoleError.mockRestore();
+        });
+    });
+
+    describe("useObservable", () => {
+        const listener = jest.fn();
+        function Sample(): React.ReactElement {
+            const value = React.useContext(GlobalContext);
+            React.useEffect(
+                function contextSubscribe() {
+                    value.subscribe(listener);
+                },
+                [value],
+            );
+            const increment = useDispatch(rootDuck.actions.counter.increment);
+            const init = useSelector(rootDuck.selectors.init?.get);
+            return (
+                <div>
+                    <button disabled={!init} onClick={increment}>
+                        increment
+                    </button>
+                </div>
+            );
+        }
+
+        afterEach(listener.mockClear);
+
+        it("subscribes successfully to context value changes", async () => {
+            const result = render(
+                <RootProvider>
+                    <Sample />
+                </RootProvider>,
+            );
+            expect(listener).toHaveBeenCalledTimes(2);
+            const button = await result.findByText("increment");
+            act(() => button.click());
+            expect(listener).toHaveBeenCalledTimes(3);
+            act(() => button.click());
+            expect(listener).toHaveBeenCalledTimes(4);
+            expect(listener).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    dispatch: expect.any(Function),
+                    getState: expect.any(Function),
+                    reducer: expect.any(Function),
+                    state: {
+                        counter: 2,
+                        dummy: null,
+                        init: true,
+                    },
+                    subscribe: expect.any(Function),
+                }),
+            );
         });
     });
 });

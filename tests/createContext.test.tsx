@@ -64,5 +64,6 @@ describe("createContext", () => {
         const Context = createContext((s) => s, {});
         const { result } = renderHook(() => React.useContext(Context));
         expect(result.current).toMatchSnapshot();
+        expect(result.current["subscribe"]).toThrow("Unimplemented method");
     });
 });

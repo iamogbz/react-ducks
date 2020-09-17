@@ -2,6 +2,7 @@ import * as React from "react";
 import { ActionTypes } from "../utils/actionTypes";
 import { createAction } from "../createAction";
 import { useGetter } from "../hooks/useGetter";
+import { useObservable } from "../hooks/useObservable";
 
 export function Provider<S, T extends string, P>({
     children,
@@ -43,5 +44,16 @@ export function Provider<S, T extends string, P>({
         [enhanced, state],
     );
 
-    return <Context.Provider value={value}>{children}</Context.Provider>;
+    const observable = useObservable(useGetter(value));
+
+    const observableValue = React.useMemo(
+        function getSubscriptable() {
+            return { ...value, ...observable };
+        },
+        [observable, value],
+    );
+
+    return (
+        <Context.Provider value={observableValue}>{children}</Context.Provider>
+    );
 }

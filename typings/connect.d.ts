@@ -42,10 +42,6 @@ type ConnectOptions<
     pure?: boolean;
 };
 
-type ReactComponent<I = unknown> =
-    | React.FunctionComponent<I>
-    | React.ComponentClass<I>;
-
 type WrapperComponent<W> = (
     | React.FunctionComponent<I>
     | React.ForwardRefExoticComponent<

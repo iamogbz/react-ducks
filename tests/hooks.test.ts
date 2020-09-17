@@ -7,6 +7,7 @@ describe("useDispatch", () => {
         dispatch: async (a: Action<string, string>): Promise<typeof a> => a,
         reducer: (): null => null,
         state: null,
+        subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
     };
 
     it("uses dispatch from Context", () => {
