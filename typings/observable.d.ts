@@ -6,43 +6,61 @@ interface SymbolConstructor {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Observable {
+    // eslint-disable-next-line @typescript-eslint/no-misused-new
+    constructor(subscriber: SubscriberFunction);
+
     // Subscribes to the sequence with an observer
-    subscribe: SubscriberFunction;
+    subscribe(observer: Observer): Subscription;
 
     // Subscribes to the sequence with callbacks
-    subscribe: SubscriberFunctions;
+    subscribe: SubscribeFunctions;
 
     // Returns itself
-    [Symbol.observable]?(): Observable;
+    [Symbol.observable](): Observable;
 
     // Converts items to an Observable
-    static of?(...items): Observable;
+    static of(...items): Observable;
 
     // Converts an observable or iterable to an Observable
-    static from?(observable): Observable;
+    static from(observable): Observable;
 }
 
-type SubscriberFunction = (
-    observer: SubscriptionObserver,
-) => UnsubscriberFunction | Subscription;
+interface Observer {
+    // Receives the subscription object when `subscribe` is called
+    start(subscription: Subscription);
 
-type SubscriberFunctions = (
-    onNext: OnNextFunction,
-    onError?: OnErrorFunction,
-    onComplete?: OnCompleteFunction,
-) => Subscription;
+    // Receives the next value in the sequence
+    next(value);
+
+    // Receives the sequence error
+    error(errorValue);
+
+    // Receives a completion notification
+    complete();
+}
 
 interface Subscription {
     // Cancels the subscription
-    unsubscribe: UnsubscriberFunction;
+    unsubscribe: UnsubscribeFunction;
 
     // A boolean value indicating whether the subscription is closed
     closed: boolean;
 }
 
+type SubscribeFunctions = (
+    onNext: OnNextFunction,
+    onError?: OnErrorFunction,
+    onComplete?: OnCompleteFunction,
+) => Subscription;
+
+type SubscriberFunction = (
+    observer: SubscriptionObserver,
+) => UnsubscribeFunction | Subscription;
+
 type OnNextFunction = (value) => void;
 type OnErrorFunction = (errorValue) => void;
 type OnCompleteFunction = () => void;
+type UnsubscribeFunction = () => void;
 
 interface SubscriptionObserver {
     // Sends the next value in the sequence
@@ -57,5 +75,3 @@ interface SubscriptionObserver {
     // A boolean value indicating whether the subscription is closed
     closed: boolean;
 }
-
-type UnsubscriberFunction = () => void;

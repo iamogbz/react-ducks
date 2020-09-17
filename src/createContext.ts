@@ -3,12 +3,12 @@ import "./utils/polyfillSymbol";
 import { setGlobalContext } from "./components/Context";
 
 export function createContextWithValue<S, T extends string, P>(
-    value: MustHave<ContextValue<S, T, P>, "reducer" | "state">,
+    value: Include<ContextValue<S, T, P>, "reducer" | "state">,
 ): Context<S, T, P> {
     return React.createContext<ContextValue<S, T, P>>({
         dispatch: async (a) => a,
         getState: () => value.state,
-        subscribe: () => (): void => undefined,
+        subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
         ...value,
     });
 }

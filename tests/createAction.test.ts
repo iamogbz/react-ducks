@@ -5,9 +5,9 @@ describe("createAction", () => {
         const type = "expectedType";
         const payload = "expectedPayload";
         const actionCreator = createAction(type, (payload) => ({
-            type: "shouldBeOverwritten",
-            payload,
             error: true,
+            payload,
+            type: "shouldBeOverwritten",
         }));
         expect(actionCreator(payload)).toStrictEqual({
             error: true,

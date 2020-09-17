@@ -5,8 +5,8 @@ import { createContextWithValue } from "src/createContext";
 describe("useDispatch", () => {
     const mockValue = {
         dispatch: async (a: Action<string, string>): Promise<typeof a> => a,
-        state: null,
         reducer: (): null => null,
+        state: null,
     };
 
     it("uses dispatch from Context", () => {
@@ -15,8 +15,8 @@ describe("useDispatch", () => {
         const ACTION_TYPE = "ACTION_TYPE" as const;
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const actionCreator = (payload?: string) => ({
-            type: ACTION_TYPE,
             payload,
+            type: ACTION_TYPE,
         });
         const { result } = renderHook(() =>
             useDispatch(actionCreator, context),
@@ -25,8 +25,8 @@ describe("useDispatch", () => {
         result.current(arg0);
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenCalledWith({
-            type: ACTION_TYPE,
             payload: arg0,
+            type: ACTION_TYPE,
         });
     });
 

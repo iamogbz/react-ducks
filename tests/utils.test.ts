@@ -3,7 +3,7 @@ import { bindActionCreators } from "src/utils/bindActionCreators";
 describe("bindActionCreators", () => {
     it("binds action creator function to dispatch", () => {
         const dispatch = jest.fn();
-        const action = { type: "ACTION_TYPE", payload: "Some payload" };
+        const action = { payload: "Some payload", type: "ACTION_TYPE" };
         const boundActionCreator = bindActionCreators(() => action, dispatch);
         expect(boundActionCreator()).toBeUndefined();
         expect(dispatch).toHaveBeenCalledTimes(1);
@@ -12,7 +12,7 @@ describe("bindActionCreators", () => {
 
     it("binds action creator mapping to dispatch", () => {
         const dispatch = jest.fn();
-        const action = { type: "ACTION_TYPE", payload: "Some payload" };
+        const action = { payload: "Some payload", type: "ACTION_TYPE" };
         const boundActionCreators = bindActionCreators(
             ({
                 action1: () => action,

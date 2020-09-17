@@ -42,6 +42,7 @@
         "sort-imports": [2,  {
             "ignoreDeclarationSort": true
         }],
+        "sort-keys": "warn",
         "jest/no-hooks": 0,
         "jest/prefer-expect-assertions": 0,
         "prettier/prettier": [2, {

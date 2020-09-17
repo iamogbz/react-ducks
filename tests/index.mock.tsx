@@ -36,8 +36,8 @@ export function createMocks() {
         }
     };
     const counterDuck = createDuck({
-        name: "counter",
         initialState: 0,
+        name: "counter",
         reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
         selectors: { get: (state): number => state },
     });
@@ -45,16 +45,16 @@ export function createMocks() {
     const INIT = "init";
     const init = jest.fn((): boolean => true);
     const initDuck = createDuck({
-        name: "init",
+        actionMapping: { [ActionTypes.INIT]: INIT },
         initialState: false,
+        name: "init",
         reducers: { [INIT]: init },
         selectors: { get: (state): boolean => state },
-        actionMapping: { [ActionTypes.INIT]: INIT },
     });
 
     const dummyDuck = createDuck({
-        name: "dummy",
         initialState: null,
+        name: "dummy",
         reducers: {},
     });
 
