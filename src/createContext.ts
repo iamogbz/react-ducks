@@ -12,13 +12,13 @@ function createUnimplemented(objectName?: string): (m: string) => () => never {
 }
 
 export function createContextWithValue<S, T extends string, P>(
-    value: Partial<ContextValue<S, T, P>>,
+    value: Optional<ContextValue<S, T, P>, "dispatch" | "getState">,
 ): Context<S, T, P> {
     return React.createContext<ContextValue<S, T, P>>({
-        dispatch: (a) => a,
+        dispatch: async (a) => a,
         getState: () => value.state,
         ...value,
-    } as ContextValue<S, T, P>);
+    });
 }
 
 export function createContext<S, T extends string, P>(

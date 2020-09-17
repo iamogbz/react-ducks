@@ -3,11 +3,15 @@ import { useDispatch } from "src";
 import { createContextWithValue } from "src/createContext";
 
 describe("useDispatch", () => {
+    const mockValue = {
+        dispatch: async (a: Action<string, string>): Promise<typeof a> => a,
+        state: null,
+        reducer: (): null => null,
+    };
+
     it("uses dispatch from Context", () => {
-        const dispatch = jest.fn();
-        const context = createContextWithValue<unknown, string, string>({
-            dispatch,
-        });
+        const dispatch = jest.fn(mockValue.dispatch);
+        const context = createContextWithValue({ ...mockValue, dispatch });
         const ACTION_TYPE = "ACTION_TYPE" as const;
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const actionCreator = (payload?: string) => ({
@@ -32,10 +36,7 @@ describe("useDispatch", () => {
         ${null}
         ${undefined}
     `("fails to use dispatch with actionCreator", ({ actionCreator }) => {
-        const dispatch = jest.fn();
-        const context = createContextWithValue<unknown, string, string>({
-            dispatch,
-        });
+        const context = createContextWithValue(mockValue);
         const { result } = renderHook(() =>
             useDispatch(actionCreator, context),
         );
