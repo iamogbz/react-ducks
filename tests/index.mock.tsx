@@ -10,7 +10,7 @@ import {
 } from "src";
 import { ActionTypes } from "src/utils/actionTypes";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createMocks() {
     const dummyMiddleware: Middleware<
         Record<string, unknown>,

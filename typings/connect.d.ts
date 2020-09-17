@@ -28,10 +28,10 @@ type MergeProps<
 type ConnectOptions<
     S = unknown,
     T extends string = string,
-    P = unknown,
-    I extends Record = Record, // Component own props
-    K extends Record = Record, // Mapped state props
-    J extends Record = I & K & ActionDispatcherMapping<T, P> // Merged props i.e. own & state & mapped dispatch props
+    P = unknown
+    // I extends Record = Record, // Component own props
+    // K extends Record = Record, // Mapped state props
+    // J extends Record = I & K & ActionDispatcherMapping<T, P> // Merged props i.e. own & state & mapped dispatch props
 > = {
     // areMergedPropsEqual?: (next: J, prev: J) => boolean;
     // areOwnPropsEqual?: (next: I, prev: I) => boolean;

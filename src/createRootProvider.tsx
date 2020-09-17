@@ -6,7 +6,7 @@ export function createRootProvider<S, T extends string, P>(
 ) {
     return function RootProvider({
         children,
-    }: React.PropsWithChildren<{}>): React.ReactElement {
+    }: React.PropsWithChildren<unknown>): React.ReactElement {
         return <Provider Context={Context}>{children}</Provider>;
     };
 }

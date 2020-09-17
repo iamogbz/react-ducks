@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // github.com/reduxjs/redux/blob/f1fc7ce/src/compose.ts
 type Func<T extends unknown[], R> = (...a: T) => R;
 

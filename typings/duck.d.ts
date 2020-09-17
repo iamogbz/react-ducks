@@ -17,7 +17,7 @@ type ActionCreatorMapping<
     C extends string = T /* Action creator mapping keys */
 > = Record<C, Nullable<ActionCreator<T, P, S>>>;
 
-type ActionDispatcher<T extends string, P = unknown> = (...args: P[]) => void;
+type ActionDispatcher<P = unknown> = (...args: P[]) => void;
 
 type ActionDispatcherMapping<
     T extends string = string,
@@ -80,11 +80,12 @@ type DuckReducerMapping<
 type RootDuck<
     S = unknown,
     N extends string = string /* All possible duck names */,
+    U extends string = string,
+    V extends string = string,
     T extends U | V = string,
     P = unknown,
     R = unknown,
-    Q extends string = string,
-    U extends string = string
+    Q extends string = string
 > = {
     actions: Record<N, ActionCreatorMapping<T, P, S, U>>;
     initialState: Record<N, S>;

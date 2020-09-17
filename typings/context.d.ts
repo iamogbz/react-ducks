@@ -11,7 +11,7 @@ type ContextValue<S = unknown, T extends string = string, P = unknown> = {
     enhancer?: ContextEnhance<S, T, P>;
     reducer: Reducer<S, T, P>;
     state: S;
-} & MiddlewareAPI<S, T, P>;
+} & (MiddlewareAPI<S, T, P> & Observable);
 
 type Context<
     S = unknown,

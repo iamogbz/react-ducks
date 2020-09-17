@@ -130,7 +130,7 @@ describe("integration", (): void => {
         type Props = {
             count: number;
             isInitialised: boolean;
-            increment: ActionDispatcher<"counter/increment", never>;
+            increment: ActionDispatcher<never>;
         };
         function DumbComponent(props: Props): React.ReactElement {
             return (

@@ -2,7 +2,6 @@ import * as React from "react";
 import { act, render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import { Provider, applyMiddleware, createContext } from "src";
-import { SymbolObservable } from "src/utils/symbolObservable";
 
 describe("createContext", () => {
     it("creates context without displayname", () => {
@@ -61,14 +60,9 @@ describe("createContext", () => {
         expect(enhancer?.(value)).toMatchObject(value);
     });
 
-    it("has unimplemented observable symbol", () => {
+    it("has expected default context value", () => {
         const Context = createContext((s) => s, {});
         const { result } = renderHook(() => React.useContext(Context));
         expect(result.current).toMatchSnapshot();
-        expect(
-            ((result.current as unknown) as Record<string, unknown>)[
-                (SymbolObservable as unknown) as string
-            ],
-        ).toThrow("Unimplemented method");
     });
 });
