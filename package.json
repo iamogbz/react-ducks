@@ -126,7 +126,7 @@
         "react-test-renderer": "^16.13.1",
         "reselect": "^4.0.0",
         "rxjs": "^6.6.3",
-        "semantic-release": "^17.1.1",
+        "semantic-release": "^17.1.2",
         "stylelint": "^13.7.1",
         "stylelint-config-standard": "^20.0.0",
         "stylelint-config-styled-components": "^0.1.1",
