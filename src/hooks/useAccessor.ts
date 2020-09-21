@@ -12,9 +12,13 @@ export function useAccessor<R>(
         ref.current = value;
     }, []);
 
-    if (value) setValue(value);
-    return [
-        getValue,
-        React.useMemo(() => (value ? undefined : setValue), [setValue, value]),
-    ];
+    // If a value was initially provided then no setter is returned
+    const maybeSetValue = React.useMemo(function getSetValue() {
+        return value === undefined ? setValue : undefined;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    // If a value was initially provided then keep the ref updated
+    if (!maybeSetValue) setValue(value);
+
+    return [getValue, maybeSetValue];
 }
