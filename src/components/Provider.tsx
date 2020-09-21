@@ -3,6 +3,7 @@ import { ActionTypes } from "../utils/actionTypes";
 import { createAction } from "../createAction";
 import { useGetter } from "../hooks/useGetter";
 import { useObservable } from "../hooks/useObservable";
+import { useOnce } from "../hooks/useOnce";
 
 export function Provider<S, T extends string, P>({
     children,
@@ -33,11 +34,10 @@ export function Provider<S, T extends string, P>({
 
     const observable = useObservable(useGetter(value));
 
-    React.useEffect(function enhanceAndIntialise() {
+    useOnce(function enhanceAndIntialise() {
         const enhanced = enhancer?.(observable) ?? observable;
         enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    });
 
     return <Context.Provider value={observable}>{children}</Context.Provider>;
 }

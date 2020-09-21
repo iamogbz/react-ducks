@@ -98,10 +98,8 @@ export function useObservable<V>(getter: () => V): V & Observable {
     );
 
     const next = React.useCallback(
-        function next() {
-            observers.forEach((observer) => {
-                observer.next(nextValue);
-            });
+        function observeNext() {
+            observers.forEach((observer) => observer.next(nextValue));
         },
         [observers, nextValue],
     );
