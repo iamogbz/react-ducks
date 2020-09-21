@@ -50,7 +50,7 @@ export function Provider<S, T extends string, P>({
     React.useEffect(
         function enhanceAndIntialise() {
             const enhanced = root.enhancer?.(observable) ?? observable;
-            setEnhanced?.(enhanced);
+            setEnhanced!(enhanced);
             enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

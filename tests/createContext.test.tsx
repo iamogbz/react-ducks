@@ -57,7 +57,7 @@ describe("createContext", () => {
         );
         const { result } = renderHook(() => React.useContext(Context));
         const { enhancer, ...value } = result.current;
-        expect(enhancer?.(value)).toMatchObject(value);
+        expect(enhancer!(value)).toMatchObject(value);
     });
 
     it("has expected default context value", () => {

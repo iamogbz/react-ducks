@@ -24,7 +24,6 @@ describe("useAccessor", () => {
         const [getter, setter] = result.current;
         expect(getter()).toBe("initial value");
         expect(setter).toBeUndefined();
-        setter?.("some value");
         expect(getter()).toBe("initial value");
         rerender("other value");
         expect(getter()).toBe("other value");
