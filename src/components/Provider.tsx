@@ -21,30 +21,23 @@ export function Provider<S, T extends string, P>({
         [reducerDispatch],
     );
 
-    const enhanced = React.useMemo<ContextValue<S, T, P>>(
-        function enhance() {
-            const { enhancer, ...value } = root;
-            Object.assign(value, { dispatch, getState });
-            return enhancer?.(value) ?? value;
+    const [value, enhancer] = React.useMemo<
+        [ContextValue<S, T, P>, ContextEnhance<S, T, P>?]
+    >(
+        function splitValueAndEnhancer() {
+            const { enhancer, ...unenhanced } = root;
+            return [{ ...unenhanced, dispatch, getState, state }, enhancer];
         },
-        [dispatch, getState, root],
-    );
-
-    React.useEffect(
-        function initialiseContext() {
-            enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
-        },
-        [enhanced],
-    );
-
-    const value = React.useMemo<ContextValue<S, T, P>>(
-        function getValue() {
-            return { ...enhanced, state };
-        },
-        [enhanced, state],
+        [dispatch, getState, root, state],
     );
 
     const observable = useObservable(useGetter(value));
+
+    React.useEffect(function enhanceAndIntialise() {
+        const enhanced = enhancer?.(observable) ?? observable;
+        enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return <Context.Provider value={observable}>{children}</Context.Provider>;
 }
