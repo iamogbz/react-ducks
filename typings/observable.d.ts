@@ -6,8 +6,7 @@ interface SymbolConstructor {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Observable {
-    // eslint-disable-next-line @typescript-eslint/no-misused-new
-    constructor(subscriber: SubscriberFunction);
+    new (subscriber: SubscriberFunction);
 
     // Subscribes to the sequence with an observer
     subscribe(observer: Observer): Subscription;

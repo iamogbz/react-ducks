@@ -5,8 +5,7 @@ export function applyMiddleware<S, T extends string, P>(
     ...middlewares: Middleware<S, T, P>[]
 ): ContextEnhance<S, T, P> {
     return function enhancer(context: ContextValue<S, T, P>) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        function dispatchStub(...args: unknown[]): never {
+        function dispatchStub(): never {
             throw new Error(
                 "Dispatching while constructing your middleware is not allowed. " +
                     "Other middleware would not be applied to this dispatch.",
