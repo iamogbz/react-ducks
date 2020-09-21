@@ -4,6 +4,8 @@ export function useAccessor<R>(
     value?: R,
 ): [() => R | undefined, ((v: R) => void) | undefined] {
     const ref = React.useRef(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const initialized = React.useMemo(() => value !== undefined, []);
 
     const getValue = React.useCallback(function getValue() {
         return ref.current;
@@ -12,13 +14,8 @@ export function useAccessor<R>(
         ref.current = value;
     }, []);
 
-    // If a value was initially provided then no setter is returned
-    const maybeSetValue = React.useMemo(function getSetValue() {
-        return value === undefined ? setValue : undefined;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
     // If a value was initially provided then keep the ref updated
-    if (!maybeSetValue) setValue(value);
-
-    return [getValue, maybeSetValue];
+    if (initialized) setValue(value);
+    // If a value was initially provided then no setter is returned
+    return [getValue, initialized ? undefined : setValue];
 }
