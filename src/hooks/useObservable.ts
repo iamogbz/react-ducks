@@ -37,7 +37,7 @@ const asObserver = (
     start: NOOP,
 });
 
-export function useObservable<V>(getter: () => V): V & Observable {
+export function useObservable<V>(value: V): [V & Observable, () => void] {
     type Key = Observer | OnNextFunction;
 
     const { value: observers, add, remove } = useCollection<Key, Observer>();
@@ -88,8 +88,6 @@ export function useObservable<V>(getter: () => V): V & Observable {
         [subscribe],
     );
 
-    const value = getter();
-
     const nextValue = React.useMemo(
         function getNextValue() {
             return { ...value, ...observable };
@@ -97,16 +95,12 @@ export function useObservable<V>(getter: () => V): V & Observable {
         [observable, value],
     );
 
-    const next = React.useCallback(
+    const observeNext = React.useCallback(
         function observeNext() {
             observers.forEach((observer) => observer.next(nextValue));
         },
         [observers, nextValue],
     );
 
-    // Only call observers next for a value change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(next, [nextValue]);
-
-    return nextValue;
+    return [nextValue, observeNext];
 }

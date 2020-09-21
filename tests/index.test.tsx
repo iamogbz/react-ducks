@@ -319,12 +319,12 @@ describe("integration", () => {
             result: RenderResult,
             listener: jest.Mock,
         ) {
-            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledTimes(2);
             const button = await result.findByText("increment");
             act(() => button.click());
-            expect(listener).toHaveBeenCalledTimes(2);
-            act(() => button.click());
             expect(listener).toHaveBeenCalledTimes(3);
+            act(() => button.click());
+            expect(listener).toHaveBeenCalledTimes(4);
             expect(listener).toHaveBeenLastCalledWith(
                 expect.objectContaining({
                     dispatch: expect.any(Function),
@@ -374,11 +374,12 @@ describe("integration", () => {
         });
 
         it("subscribes successfully to context value changes from enhancer", async () => {
-            expect.assertions(5);
+            expect.assertions(6);
             const listener = jest.fn();
+            const supplement = { extra: "value" };
             const enhancer = jest.fn(function enhancer(value) {
                 value.subscribe(listener);
-                return value;
+                return { ...value, ...supplement };
             });
             const Context = createContext(
                 rootDuck.reducer,
@@ -405,6 +406,9 @@ describe("integration", () => {
                 </Provider>,
             );
             await runAssertions(result, listener);
+            expect(listener).toHaveBeenLastCalledWith(
+                expect.objectContaining(supplement),
+            );
         });
     });
 });
