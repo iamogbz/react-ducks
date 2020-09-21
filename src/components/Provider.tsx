@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ActionTypes } from "../utils/actionTypes";
 import { createAction } from "../createAction";
-import { useGetter } from "../hooks/useGetter";
+import { useAccessor } from "../hooks/useAccessor";
 import { useObservable } from "../hooks/useObservable";
 
 export function Provider<S, T extends string, P>({
@@ -11,7 +11,7 @@ export function Provider<S, T extends string, P>({
     const root = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
-    const getState = useGetter(state);
+    const [getState] = useAccessor(state);
 
     const dispatch = React.useCallback<ContextDispatch<T, P>>(
         async function contextDispatch(action) {
@@ -21,30 +21,46 @@ export function Provider<S, T extends string, P>({
         [reducerDispatch],
     );
 
-    const enhanced = React.useMemo<ContextValue<S, T, P>>(
-        function enhance() {
-            const { enhancer, ...value } = root;
-            Object.assign(value, { dispatch, getState });
-            return enhancer?.(value) ?? value;
+    const unenhanced = React.useMemo<ContextValue<S, T, P>>(
+        function getUnenhanced() {
+            const { enhancer: _, ...value } = root;
+            return Object.assign(value, { dispatch, getState });
         },
         [dispatch, getState, root],
     );
 
-    React.useEffect(
-        function initialiseContext() {
-            enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
-        },
-        [enhanced],
-    );
+    // Get a reference that will be set once any supplied enhancer is run.
+    const [getEnhanced, setEnhanced] = useAccessor<ContextValue<S, T, P>>();
 
+    // This is the final value to be observed.
+    // The enhanced value will be given below.
     const value = React.useMemo<ContextValue<S, T, P>>(
         function getValue() {
-            return { ...enhanced, state };
+            return { ...unenhanced, ...getEnhanced(), state };
         },
-        [enhanced, state],
+        [getEnhanced, state, unenhanced],
+    );
+    // This is the observable context value that will be enhanced once.
+    const [observable, publish] = useObservable(value);
+
+    // This is called only on the initial render or if the enhancer changes.
+    // It sets the enhanced value that will supplement the unenhanced value
+    // on subsequent renders. It needs to be called after an observable is
+    // created from the value to allow the enhancer subscribe to the value.
+    React.useEffect(
+        function enhanceAndIntialise() {
+            const enhanced = root.enhancer?.(observable) ?? observable;
+            setEnhanced?.(enhanced);
+            enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [root.enhancer],
     );
 
-    const observable = useObservable(useGetter(value));
+    // Notify only on a change to the observed value. This is scheduled after
+    // the enhance effect to ensure the first render notifies all subscribers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(publish, [observable]);
 
     return <Context.Provider value={observable}>{children}</Context.Provider>;
 }

@@ -1,7 +1,35 @@
 import { act, renderHook } from "@testing-library/react-hooks";
 import { useDispatch } from "src";
 import { createContextWithValue } from "src/createContext";
+import { useAccessor } from "src/hooks/useAccessor";
 import { useObservable } from "src/hooks/useObservable";
+
+describe("useAccessor", () => {
+    const renderAccessorHook = <V>(initialValue?: V) =>
+        renderHook((value = initialValue) => useAccessor(value));
+
+    it("returns a getter and setter if no initial value provided", () => {
+        const { result, rerender } = renderAccessorHook();
+        const [getter, setter] = result.current;
+        expect(getter()).toBeUndefined();
+        expect(setter).toBeDefined();
+        setter?.("some value");
+        expect(getter()).toBe("some value");
+        rerender("other value");
+        expect(getter()).toBe("some value");
+    });
+
+    it("returns a getter only if an initial value is provided", () => {
+        const { result, rerender } = renderAccessorHook("initial value");
+        const [getter, setter] = result.current;
+        expect(getter()).toBe("initial value");
+        expect(setter).toBeUndefined();
+        setter?.("some value");
+        expect(getter()).toBe("initial value");
+        rerender("other value");
+        expect(getter()).toBe("other value");
+    });
+});
 
 describe("useDispatch", () => {
     const mockValue = {
@@ -47,23 +75,24 @@ describe("useDispatch", () => {
 });
 
 describe("useObservable", () => {
+    const renderObservableHook = <P>(initialProps: P) =>
+        renderHook((props = initialProps) => useObservable(props));
+
     it("returns an observable with a self reference", () => {
-        const getValue = jest.fn(() => ({ value: 9 }));
-        const { result } = renderHook(() => useObservable(getValue));
-        expect(result.current).toMatchObject({
+        const { result } = renderObservableHook({ value: 9 });
+        expect(result.current[0]).toMatchObject({
             [Symbol.observable]: expect.any(Function),
             subscribe: expect.any(Function),
             value: 9,
         });
-        expect(result.current[Symbol.observable]()).toBe(result.current);
+        expect(result.current[0][Symbol.observable]()).toBe(result.current[0]);
     });
 
     it("adds multiple subscriptions", () => {
-        const getValue = jest.fn(() => ({ value: 9 }));
-        const { result, rerender } = renderHook(() => useObservable(getValue));
+        const { result, rerender } = renderObservableHook({ value: 9 });
 
         const listener1 = jest.fn();
-        result.current.subscribe(listener1);
+        result.current[0].subscribe(listener1);
         expect(listener1).not.toHaveBeenCalled();
 
         const listener2 = jest.fn();
@@ -74,15 +103,15 @@ describe("useObservable", () => {
             next: listener2,
             start: listener2start,
         };
-        result.current.subscribe(observer2);
+        result.current[0].subscribe(observer2);
         expect(listener2start).toHaveBeenCalledWith({
             closed: false,
             unsubscribe: expect.any(Function),
         });
         expect(listener2).not.toHaveBeenCalled();
 
-        getValue.mockReturnValue({ value: 12 });
-        act(rerender);
+        act(() => rerender({ value: 12 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener1).toHaveBeenLastCalledWith(
             expect.objectContaining({ value: 12 }),
@@ -97,8 +126,8 @@ describe("useObservable", () => {
         arg0.subscribe(listener3);
         expect(listener3).not.toHaveBeenCalled();
 
-        getValue.mockReturnValue({ value: 15 });
-        act(rerender);
+        act(() => rerender({ value: 15 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(2);
         expect(listener2).toHaveBeenCalledTimes(2);
         expect(listener3).toHaveBeenCalledTimes(1);
@@ -108,28 +137,27 @@ describe("useObservable", () => {
     });
 
     it("does not add the same observer multiple times", () => {
-        const getValue = jest.fn(() => ({ value: 9 }));
-        const { result, rerender } = renderHook(() => useObservable(getValue));
+        const { result, rerender } = renderObservableHook({ value: 9 });
         const listener1 = jest.fn();
-        result.current.subscribe(listener1);
-        result.current.subscribe(listener1);
+        result.current[0].subscribe(listener1);
+        result.current[0].subscribe(listener1);
         expect(listener1).not.toHaveBeenCalled();
 
-        getValue.mockReturnValue({ value: 12 });
-        act(rerender);
+        act(() => rerender({ value: 12 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
-        getValue.mockReturnValue({ value: 15 });
+        act(() => rerender({ value: 15 }));
         act(rerender);
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(2);
     });
 
     it("does not remove the same observer multiple times", () => {
-        const getValue = jest.fn(() => ({ value: 9 }));
-        const { result, rerender } = renderHook(() => useObservable(getValue));
+        const { result, rerender } = renderObservableHook({ value: 9 });
 
         const listener1 = jest.fn();
         const listener1complete = jest.fn();
-        const subscriber1 = result.current.subscribe(
+        const subscriber1 = result.current[0].subscribe(
             listener1,
             undefined,
             listener1complete,
@@ -144,11 +172,11 @@ describe("useObservable", () => {
             next: listener2,
             start: () => undefined,
         };
-        const subscriber2 = result.current.subscribe(observer2);
+        const subscriber2 = result.current[0].subscribe(observer2);
         expect(listener2).not.toHaveBeenCalled();
 
-        getValue.mockReturnValue({ value: 12 });
-        act(rerender);
+        act(() => rerender({ value: 12 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener1).toHaveBeenLastCalledWith(
             expect.objectContaining({ value: 12 }),
@@ -164,8 +192,8 @@ describe("useObservable", () => {
         expect(subscriber2.closed).toBe(true);
         expect(listener1complete).not.toHaveBeenCalled();
         expect(listener2complete).toHaveBeenCalledTimes(1);
-        getValue.mockReturnValue({ value: 15 });
-        act(rerender);
+        act(() => rerender({ value: 15 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener2).not.toHaveBeenCalled();
 
@@ -175,19 +203,21 @@ describe("useObservable", () => {
         expect(listener2complete).toHaveBeenCalledTimes(1);
         expect(subscriber1.closed).toBe(true);
         expect(subscriber2.closed).toBe(true);
-        getValue.mockReturnValue({ value: 18 });
-        act(rerender);
+        act(() => rerender({ value: 18 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener2).not.toHaveBeenCalled();
     });
 
     it("sends error value to observers", () => {
-        const getValue = jest.fn(() => ({ value: 9 }));
-        const { result, rerender } = renderHook(() => useObservable(getValue));
+        const { result, rerender } = renderObservableHook({ value: 9 });
 
         const listener1 = jest.fn();
         const listener1error = jest.fn();
-        const subscriber1 = result.current.subscribe(listener1, listener1error);
+        const subscriber1 = result.current[0].subscribe(
+            listener1,
+            listener1error,
+        );
         expect(listener1).not.toHaveBeenCalled();
         expect(listener1error).not.toHaveBeenCalled();
         expect(subscriber1.closed).toBe(false);
@@ -203,7 +233,7 @@ describe("useObservable", () => {
                 throw new Error("Failed to start");
             },
         };
-        const subscriber2 = result.current.subscribe(observer2);
+        const subscriber2 = result.current[0].subscribe(observer2);
         expect(listener2).not.toHaveBeenCalled();
         expect(listener2error).toHaveBeenCalledTimes(1);
         expect(listener2error).toHaveBeenLastCalledWith(
@@ -212,8 +242,8 @@ describe("useObservable", () => {
         expect(listener2complete).toHaveBeenCalledTimes(1);
         expect(subscriber2.closed).toBe(true);
 
-        getValue.mockReturnValue({ value: 12 });
-        act(rerender);
+        act(() => rerender({ value: 12 }));
+        act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener2).not.toHaveBeenCalled();
     });

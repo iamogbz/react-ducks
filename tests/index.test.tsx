@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createStructuredSelector } from "reselect";
-import { act, cleanup, render } from "@testing-library/react";
+import { RenderResult, act, cleanup, render } from "@testing-library/react";
 import {
     GlobalContext,
     Provider,
@@ -315,34 +315,10 @@ describe("integration", () => {
     });
 
     describe("contextSubscribe", () => {
-        const listener = jest.fn();
-        function Sample() {
-            const value = React.useContext(GlobalContext);
-            React.useEffect(
-                function contextSubscribe() {
-                    value.subscribe(listener);
-                },
-                [value],
-            );
-            const increment = useDispatch(rootDuck.actions.counter.increment);
-            const init = useSelector(rootDuck.selectors.init?.get);
-            return (
-                <div>
-                    <button disabled={!init} onClick={increment}>
-                        increment
-                    </button>
-                </div>
-            );
-        }
-
-        afterEach(listener.mockClear);
-
-        it("subscribes successfully to context value changes", async () => {
-            const result = render(
-                <RootProvider>
-                    <Sample />
-                </RootProvider>,
-            );
+        async function runAssertions(
+            result: RenderResult,
+            listener: jest.Mock,
+        ) {
             expect(listener).toHaveBeenCalledTimes(2);
             const button = await result.findByText("increment");
             act(() => button.click());
@@ -364,6 +340,75 @@ describe("integration", () => {
             );
             const [[lastCallArg0]] = listener.mock.calls.slice(-1);
             expect(lastCallArg0[Symbol.observable]()).toBe(lastCallArg0);
+        }
+
+        it("subscribes successfully to context value changes from component", async () => {
+            expect.assertions(5);
+            const listener = jest.fn();
+            function Sample() {
+                const value = React.useContext(GlobalContext);
+                React.useEffect(
+                    function contextSubscribe() {
+                        value.subscribe(listener);
+                    },
+                    [value],
+                );
+                const increment = useDispatch(
+                    rootDuck.actions.counter.increment,
+                );
+                const init = useSelector(rootDuck.selectors.init?.get);
+                return (
+                    <div>
+                        <button disabled={!init} onClick={increment}>
+                            increment
+                        </button>
+                    </div>
+                );
+            }
+            const result = render(
+                <RootProvider>
+                    <Sample />
+                </RootProvider>,
+            );
+            await runAssertions(result, listener);
+        });
+
+        it("subscribes successfully to context value changes from enhancer", async () => {
+            expect.assertions(6);
+            const listener = jest.fn();
+            const supplement = { extra: "value" };
+            const enhancer = jest.fn(function enhancer(value) {
+                value.subscribe(listener);
+                return { ...value, ...supplement };
+            });
+            const Context = createContext(
+                rootDuck.reducer,
+                rootDuck.initialState,
+                enhancer,
+            );
+            function Sample() {
+                const increment = useDispatch(
+                    rootDuck.actions.counter.increment,
+                    Context,
+                );
+                const init = useSelector(rootDuck.selectors.init?.get, Context);
+                return (
+                    <div>
+                        <button disabled={!init} onClick={increment}>
+                            increment
+                        </button>
+                    </div>
+                );
+            }
+            const result = render(
+                <Provider Context={Context}>
+                    <Sample />
+                </Provider>,
+            );
+            await runAssertions(result, listener);
+            expect(listener).toHaveBeenLastCalledWith(
+                expect.objectContaining(supplement),
+            );
         });
     });
 });
