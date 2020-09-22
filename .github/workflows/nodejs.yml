@@ -51,6 +51,7 @@ jobs:
           parallel: true
 
   report:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls
