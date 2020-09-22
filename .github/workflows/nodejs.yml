@@ -8,45 +8,53 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [10.x, 12.x]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install
-      run: |
-        npm install
-    - name: Lint
-      run: |
-        npm run lint
-    - name: Test
-      env:
-        CI: true
-      run: |
-        npm test -- --ci --coverage
-    - name: Build
-      run: |
-        npm run build
-    - name: Integration
-      run: |
-        npm run e2e
-    - name: Deploy
-      if: matrix.node-version == '12.x' && github.ref == 'refs/heads/master'
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: |
-        npm run release
-    - name: Report
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: "./artifacts/coverage/lcov.info"
+      - uses: actions/checkout@v1
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install
+        run: |
+          npm install
+      - name: Lint
+        run: |
+          npm run lint
+      - name: Test
+        env:
+          CI: true
+        run: |
+          npm test -- --ci --coverage
+      - name: Build
+        run: |
+          npm run build
+      - name: Integration
+        run: |
+          npm run e2e
+      - name: Deploy
+        if: matrix.node-version == '12.x' && github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm run release
+      - name: Report
+        uses: coverallsapp/github-action@master
+        with:
+          flag-name: run-${{ matrix.node-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './artifacts/coverage/lcov.info'
+          parallel: true
+
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
