@@ -29,6 +29,7 @@ jobs:
           CI: true
         run: |
           npm test -- --ci --coverage
+          ls -l './artifacts/coverage'
       - name: Build
         run: |
           npm run build
