@@ -18,6 +18,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Install
         run: |
           npm install
@@ -29,7 +35,6 @@ jobs:
           CI: true
         run: |
           npm test -- --ci --coverage
-          ls -l './artifacts/coverage'
       - name: Build
         run: |
           npm run build
