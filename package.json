@@ -124,7 +124,7 @@
         "prettier-eslint": "^11.0.0",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
-        "react-test-renderer": "^16.13.1",
+        "react-test-renderer": "^16.14.0",
         "reselect": "^4.0.0",
         "rxjs": "^6.6.3",
         "semantic-release": "^17.2.1",
