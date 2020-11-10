@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { useDispatch } from "src";
+import { createAction, useDispatch } from "src";
 import { createContextWithValue } from "src/createContext";
 import { useAccessor } from "src/hooks/useAccessor";
 import { useObservable } from "src/hooks/useObservable";
@@ -42,11 +42,9 @@ describe("useDispatch", () => {
         const dispatch = jest.fn(mockValue.dispatch);
         const context = createContextWithValue({ ...mockValue, dispatch });
         const ACTION_TYPE = "ACTION_TYPE" as const;
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        const actionCreator = (payload?: string) => ({
+        const actionCreator = createAction(ACTION_TYPE, (payload?: string) => ({
             payload,
-            type: ACTION_TYPE,
-        });
+        }));
         const { result } = renderHook(() =>
             useDispatch(actionCreator, context),
         );
