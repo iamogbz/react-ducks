@@ -1,5 +1,4 @@
 import { combineReducers } from "./utils/combineReducers";
-import { combineSelectors } from "./utils/combineSelectors";
 
 export function createRootDuck<
     S = any, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -23,10 +22,7 @@ export function createRootDuck<
         const duckName = duck.name;
         rootDuck.actions[duckName] = duck.actions;
         rootDuck.initialState[duckName] = duck.initialState;
-        rootDuck.selectors[duckName] = combineSelectors(
-            duckName,
-            duck.selectors,
-        );
+        rootDuck.selectors[duckName] = duck.selectors;
         reducerMapping[duckName] = duck.reducer;
     }
     rootDuck.reducer = combineReducers(rootDuck.initialState, reducerMapping);
