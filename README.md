@@ -207,9 +207,18 @@ As a proof of concept see the converted sandbox app from the react-redux basic t
 - With redux [example][react-redux-tutorial]
 - Without redux [code][react-ducks-no-redux]
 
+## References
+
+Lots of inspiration from the following tools
+
+- [Redux Toolkit][redux-toolkit]
+- [React Redux][react-redux]
+
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable
 [react-ducks-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
 [react-redux-connect]: https://react-redux.js.org/api/connect
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
+[redux-toolkit]: https://redux-toolkit.js.org/api/createReducer
+[react-redux]: https://react-redux.js.org/api/connect
