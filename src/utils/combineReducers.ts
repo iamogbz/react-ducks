@@ -1,4 +1,4 @@
-import { getEntries } from "./getEntries";
+import { getEntries } from "./object";
 
 export function combineReducers<S, N extends string, T extends string, P>(
     initialState: Record<N, S>,

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createDuck creates duck with all properties 1`] = `
+Object {
+  "actionTypes": Array [
+    "mappedActionName",
+    "duckName/actionName",
+  ],
+  "actions": Object {
+    "actionName": [Function],
+  },
+  "initialState": Object {
+    "listOfIds": Array [
+      1,
+      2,
+      "3",
+    ],
+  },
+  "name": "duckName",
+  "reducer": [Function],
+  "selectors": Object {
+    "$": [Function],
+  },
+}
+`;

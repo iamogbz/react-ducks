@@ -66,6 +66,7 @@ type Duck<
     U extends string = string
 > = {
     actions: ActionCreatorMapping<T, P, S, U>;
+    actionTypes: T[];
     initialState: S;
     name: N;
     reducer: Reducer<S, T, P>;

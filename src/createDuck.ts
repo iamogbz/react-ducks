@@ -1,6 +1,6 @@
 import { createReducer } from "./createReducer";
 import { createAction } from "./createAction";
-import { getEntries } from "./utils/getEntries";
+import { getEntries, getKeys } from "./utils/object";
 
 function getNS<N extends string, T extends string, V extends string>(
     name: N,
@@ -52,6 +52,7 @@ export function createDuck<
     }
 
     return {
+        actionTypes: getKeys(mappedActionTypes),
         actions,
         initialState,
         name,
