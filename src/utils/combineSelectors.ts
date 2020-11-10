@@ -1,3 +1,5 @@
+import { getEntries } from "./getEntries";
+
 export function combineSelectors<
     S,
     T extends string,
@@ -8,12 +10,11 @@ export function combineSelectors<
 >(
     duckName: N,
     selectors?: SelectorMapping<S, R, T, P, Q>,
-): Nullable<SelectorMapping<S, R, T, P, Q>> {
+): Nullable<SelectorMapping<Record<N, S>, R, T, P, Q>> {
     if (!selectors) return;
-    const duckSelectors = {} as SelectorMapping<S, R, T, P, Q>;
-    for (const s of Object.keys(selectors) as Q[]) {
-        duckSelectors[s] = (state) =>
-            selectors[s](((state as unknown) as Record<string, S>)[duckName]);
+    const duckSelectors = {} as SelectorMapping<Record<N, S>, R, T, P, Q>;
+    for (const [q, s] of getEntries(selectors)) {
+        duckSelectors[q] = (state) => s(state[duckName]);
     }
     return duckSelectors;
 }

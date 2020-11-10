@@ -110,7 +110,13 @@ describe("integration", () => {
     });
 
     describe("createConnect", () => {
-        const mapStateToProps = createStructuredSelector({
+        const mapStateToProps: Selector<
+            Record<string, unknown>,
+            {
+                count: number;
+                isInitialised: boolean;
+            }
+        > = createStructuredSelector({
             count: rootDuck.selectors.counter?.$ ?? (() => 0),
             isInitialised: rootDuck.selectors.init?.$ ?? (() => false),
         });
@@ -129,7 +135,11 @@ describe("integration", () => {
                 ...dispatchProps,
                 count: "Replaces count with a static value",
             } as unknown) as D);
-        const connectGlobal = createConnect();
+        const connectGlobal = createConnect<
+            Record<string, unknown>,
+            string,
+            unknown
+        >();
         const connectEnhanced = createConnect(EnhancedContext);
 
         type Props = {

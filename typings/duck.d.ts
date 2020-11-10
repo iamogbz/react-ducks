@@ -93,5 +93,5 @@ type RootDuck<
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;
-    selectors: Record<N, Nullable<SelectorMapping<S, R, T, P, Q>>>;
+    selectors: Record<N, Nullable<SelectorMapping<Record<N, S>, R, T, P, Q>>>;
 };

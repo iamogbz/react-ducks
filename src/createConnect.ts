@@ -1,10 +1,10 @@
 import { connect } from "./utils/connect";
 
-export function createConnect<S, I, T extends string, P, K>(
+export function createConnect<S, T extends string, P>(
     Context?: Context<S, T, P>,
 ) {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    return function connectContext(
+    return function connectContext<I, K>(
         mapStateToProps?: MapStateToProps<S, I, K>,
         mapDispatchToProps?:
             | MapDispatchToProps<T, P, I>
