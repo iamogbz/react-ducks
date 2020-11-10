@@ -29,7 +29,8 @@ export default createDuck({
 **Note**: This adds selectors to the duck created with the default selector to get the state exported under `$`.
 
 ```js
-counterDuck.selectors.$(state); // this is equivalent to (counterState) => counterState
+counterDuck.selectors.$(state);
+// this is equivalent to (counterState) => counterState
 ```
 
 Create the root/global duck as a combination of all other ducks.
@@ -42,7 +43,8 @@ export default createRootDuck(counterDuck, otherDuck);
 **Note**: This wraps any selectors exported from the ducks inorder to get the state from the correct paths.
 
 ```js
-rootDuck.selectors.counter.$(state); // this is equivalent to (rootState) => rootState[counterDuck.name]
+rootDuck.selectors.counter.$(state);
+// this is equivalent to (rootState) => rootState[counterDuck.name]
 ```
 
 Create the global context.
