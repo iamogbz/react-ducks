@@ -6,9 +6,9 @@ type Action<
     payload?: P;
 } & Record<string, unknown>;
 
-type ActionCreator<T extends string = string, P = unknown, S = unknown> = (
+type ActionCreator<T extends string = string, P = unknown, S = unknown> = ((
     payload?: P,
-) => React.ReducerAction<Reducer<S, T, P>>;
+) => React.ReducerAction<Reducer<S, T, P>>) & { type: T };
 
 type ActionCreatorMapping<
     T extends string = string,
