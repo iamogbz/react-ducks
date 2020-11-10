@@ -1,17 +1,17 @@
 {
-    "name": "react-duck",
+    "name": "react-ducks",
     "version": "0.0.1",
     "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
     "license": "Unlicense",
     "repository": {
         "type": "git",
-        "url": "https://github.com/iamogbz/react-duck"
+        "url": "https://github.com/iamogbz/react-ducks"
     },
     "bugs": {
-        "url": "https://github.com/iamogbz/react-duck/issues"
+        "url": "https://github.com/iamogbz/react-ducks/issues"
     },
-    "homepage": "https://github.com/iamogbz/react-duck#readme",
+    "homepage": "https://github.com/iamogbz/react-ducks#readme",
     "keywords": [
         "react",
         "redux",

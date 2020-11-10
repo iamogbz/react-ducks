@@ -1,10 +1,10 @@
-# React Duck
+# React Ducks
 
-[![NPM badge](https://img.shields.io/npm/v/react-duck)](https://www.npmjs.com/package/react-duck)
-[![Dependabot badge](https://badgen.net/dependabot/iamogbz/react-duck/?icon=dependabot)](https://app.dependabot.com)
-[![Dependencies](https://david-dm.org/iamogbz/react-duck.svg)](https://github.com/iamogbz/react-duck)
-[![Build Status](https://github.com/iamogbz/react-duck/workflows/Build/badge.svg)](https://github.com/iamogbz/react-duck/actions)
-[![Coverage Status](https://coveralls.io/repos/github/iamogbz/react-duck/badge.svg?branch=master)](https://coveralls.io/github/iamogbz/react-duck?branch=master)
+[![NPM badge](https://img.shields.io/npm/v/react-ducks)](https://www.npmjs.com/package/react-ducks)
+[![Dependabot badge](https://badgen.net/dependabot/iamogbz/react-ducks/?icon=dependabot)](https://app.dependabot.com)
+[![Dependencies](https://david-dm.org/iamogbz/react-ducks.svg)](https://github.com/iamogbz/react-ducks)
+[![Build Status](https://github.com/iamogbz/react-ducks/workflows/Build/badge.svg)](https://github.com/iamogbz/react-ducks/actions)
+[![Coverage Status](https://coveralls.io/repos/github/iamogbz/react-ducks/badge.svg?branch=master)](https://coveralls.io/github/iamogbz/react-ducks?branch=master)
 
 Implement ducks in React following the redux pattern but using React Context.
 
@@ -195,7 +195,7 @@ See [redux connect][react-redux-connect] for more options.
 As a proof of concept see the converted sandbox app from the react-redux basic tutorial below.
 
 - With redux [example][react-redux-tutorial]
-- Without redux [code][react-duck-no-redux]
+- Without redux [code][react-ducks-no-redux]
 
 ## Suggestions
 
@@ -203,7 +203,7 @@ As a proof of concept see the converted sandbox app from the react-redux basic t
 
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable
-[react-duck-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
+[react-ducks-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
 [react-redux-connect]: https://react-redux.js.org/api/connect
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
