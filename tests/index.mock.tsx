@@ -39,7 +39,7 @@ export function createMocks() {
         initialState: 0,
         name: "counter",
         reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
-        selectors: { get: (s) => s },
+        selectors: { get: (s) => s["counter"] },
     });
 
     const INIT = "init";

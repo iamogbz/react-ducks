@@ -1,7 +1,6 @@
 import { createReducer } from "./createReducer";
 import { createAction } from "./createAction";
 import { getEntries } from "./utils/getEntries";
-import { combineSelectors } from "./utils/combineSelectors";
 
 function getNS<N extends string, T extends string, V extends string>(
     name: N,
@@ -28,7 +27,7 @@ export function createDuck<
     name: N;
     initialState: S;
     reducers: ActionReducerMapping<S, U, P>; // Reducers = { CreatorName: Reducer(State, ActionType, PayloadTypes) }
-    selectors?: SelectorMapping<S, R, T, P, Q>;
+    selectors?: SelectorMapping<Record<N, S>, R, T, P, Q>;
     actionMapping?: Record<T, U>; // ActionMapping = { MappedActionType: ActionType }
 }): Duck<S, N, T, P, R, Q, U> {
     const mappedActionTypes = { ...actionMapping } as Record<T, U>;
@@ -57,6 +56,9 @@ export function createDuck<
         initialState,
         name,
         reducer,
-        selectors: combineSelectors(name, selectors),
+        selectors: {
+            $: (s) => s[name],
+            ...selectors,
+        } as SelectorMapping<Record<N, S>, R, T, P, DuckSelectors<Q>>,
     };
 }

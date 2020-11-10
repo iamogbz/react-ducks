@@ -23,10 +23,11 @@ export default createDuck({
     increment: (state) => state + 1,
   },
   actionMapping: { otherActionType: "increment" },
+  selectors: { current: (namespacedState) => namespacedState["counter"] },
 });
 ```
 
-**Note**: This adds selectors to the duck created with the default selector to get the state exported under `$`.
+**Note**: The `current` selector is just an example. In an actual implementation it would be made redundant by `$` which is created by default for all ducks to fetch the namespaced state.
 
 ```js
 counterDuck.selectors.$(state);
