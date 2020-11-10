@@ -8,6 +8,8 @@
 
 Implement ducks in React following the redux pattern but using React Context.
 
+Uses [`immer`][immer-intro] to wrap reducers when creating, ensuring atomic state mutations.
+
 ## Usage
 
 Create the ducks for each slice of application logic.
@@ -196,10 +198,6 @@ As a proof of concept see the converted sandbox app from the react-redux basic t
 
 - With redux [example][react-redux-tutorial]
 - Without redux [code][react-ducks-no-redux]
-
-## Suggestions
-
-- Use `immer` to create immutable reducers, [see guide][immer-intro]
 
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable

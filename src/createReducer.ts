@@ -1,3 +1,5 @@
+import createNextState from "immer";
+
 export function createReducer<
     S,
     P,
@@ -12,9 +14,11 @@ export function createReducer<
         Object.prototype.hasOwnProperty.call(actionTypeToReducer, a.type);
 
     return function actionReducer(state = initialState, action?) {
-        if (!isReducerActionType(action)) {
-            return defaultReducer?.(state, action) ?? state;
-        }
-        return actionTypeToReducer[action.type](state, action);
+        return createNextState(state, (mutableState: S) => {
+            if (!isReducerActionType(action)) {
+                return defaultReducer?.(mutableState, action) ?? mutableState;
+            }
+            return actionTypeToReducer[action.type](mutableState, action);
+        }) as S;
     };
 }

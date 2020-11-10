@@ -89,6 +89,9 @@
             "pre-commit": "lint-staged"
         }
     },
+    "dependencies": {
+        "immer": "^7.0.0"
+    },
     "peerDependencies": {
         "react": "^16.13.0"
     },
