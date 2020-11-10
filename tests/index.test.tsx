@@ -111,8 +111,8 @@ describe("integration", () => {
 
     describe("createConnect", () => {
         const mapStateToProps = createStructuredSelector({
-            count: rootDuck.selectors.counter?.get ?? (() => 0),
-            isInitialised: rootDuck.selectors.init?.get ?? (() => false),
+            count: rootDuck.selectors.counter?.$ ?? (() => 0),
+            isInitialised: rootDuck.selectors.init?.$ ?? (() => false),
         });
         const mapDispatchToProps = {
             increment: rootDuck.actions.counter.increment,
@@ -356,7 +356,7 @@ describe("integration", () => {
                 const increment = useDispatch(
                     rootDuck.actions.counter.increment,
                 );
-                const init = useSelector(rootDuck.selectors.init?.get);
+                const init = useSelector(rootDuck.selectors.init?.$);
                 return (
                     <div>
                         <button disabled={!init} onClick={increment}>
@@ -391,7 +391,7 @@ describe("integration", () => {
                     rootDuck.actions.counter.increment,
                     Context,
                 );
-                const init = useSelector(rootDuck.selectors.init?.get, Context);
+                const init = useSelector(rootDuck.selectors.init?.$, Context);
                 return (
                     <div>
                         <button disabled={!init} onClick={increment}>

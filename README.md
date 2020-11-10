@@ -26,11 +26,23 @@ export default createDuck({
 });
 ```
 
+**Note**: This adds selectors to the duck created with the default selector to get the state exported under `$`.
+
+```js
+counterDuck.selectors.$(state); // this is equivalent to (counterState) => counterState
+```
+
 Create the root/global duck as a combination of all other ducks.
 
 ```js
 // duck/index.js
 export default createRootDuck(counterDuck, otherDuck);
+```
+
+**Note**: This wraps any selectors exported from the ducks inorder to get the state from the correct paths.
+
+```js
+rootDuck.selectors.counter.$(state); // this is equivalent to (rootState) => rootState[counterDuck.name]
 ```
 
 Create the global context.
@@ -56,7 +68,7 @@ Use the state and actions in your component.
 // app.jsx
 export default function App(props) {
   const { state, dispatch } = React.useContext(Context);
-  const count = state[counterDuck.name];
+  const count = rootDuck.selectors.counter.$(state);
   const increment = React.useCallback(
     () => dispatch(counterDuck.actions.increment()),
     [dispatch]
@@ -75,7 +87,7 @@ export default function App(props) {
 ```jsx
 // app.jsx
 ...
-  const count = useSelector(state => state[counterDuck.name], Context);
+  const count = useSelector(rootDuck.selectors.counter.$, Context);
   const increment = useDispatch(counterDuck.actions.increment, Context);
 ...
 ```
@@ -91,7 +103,7 @@ export default class App extends React.PureComponent {
     const { state } = this.context;
     return (
       <div>
-        Count: <span>{state[counterDuck.name]}</span>
+        Count: <span>{rootDuck.selectors.counter.$(state)}</span>
         <button onClick={this.increment} />
       </div>
     );
@@ -185,8 +197,8 @@ function App(props) {
 }
 
 export default connect(
-  (state) => ({ count: state[counterDuck.name] }),
-  (dispatch) => bindActionCreators(dispatch, counterDuck.actions)
+  createStructuredSelector({ count: rootDuck.selectors.counter.$ }),
+  counterDuck.actions
 )(App);
 ```
 

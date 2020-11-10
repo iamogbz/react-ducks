@@ -39,7 +39,6 @@ export function createMocks() {
         initialState: 0,
         name: "counter",
         reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
-        selectors: { get: (state) => state },
     });
 
     const INIT = "init";
@@ -49,7 +48,6 @@ export function createMocks() {
         initialState: false,
         name: "init",
         reducers: { [INIT]: init },
-        selectors: { get: (state) => state },
     });
 
     const dummyDuck = createDuck({
@@ -72,8 +70,8 @@ export function createMocks() {
 
     function Example() {
         const increment = useDispatch(counterDuck.actions.increment);
-        const init = useSelector(rootDuck.selectors.init?.get);
-        const count = useSelector(rootDuck.selectors.counter?.get, Context);
+        const init = useSelector(rootDuck.selectors.init?.$);
+        const count = useSelector(rootDuck.selectors.counter?.$, Context);
         return (
             <div>
                 Count: <span>{count}</span>

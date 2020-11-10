@@ -56,6 +56,9 @@ export function createDuck<
         initialState,
         name,
         reducer,
-        selectors,
+        selectors: {
+            $: (s) => s,
+            ...selectors,
+        } as SelectorMapping<S, R, T, P, DuckSelectors<Q>>,
     };
 }

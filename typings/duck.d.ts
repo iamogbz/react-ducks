@@ -54,6 +54,8 @@ type SelectorMapping<
     Q extends string = string /* All possible selector names*/
 > = Record<Q, Selector<S, R, T, P>>;
 
+type DuckSelectors<Q> = Q | "$";
+
 type Duck<
     S = unknown,
     N extends string = string /* Duck name */,
@@ -67,7 +69,7 @@ type Duck<
     initialState: S;
     name: N;
     reducer: Reducer<S, T, P>;
-    selectors?: SelectorMapping<S, R, T, P, Q>;
+    selectors?: SelectorMapping<S, R, T, P, DuckSelectors<Q>>;
 };
 
 type DuckReducerMapping<
