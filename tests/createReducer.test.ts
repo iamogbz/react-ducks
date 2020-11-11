@@ -9,7 +9,7 @@ describe("createReducer", () => {
         const initialState = { yes: false };
         const reducer = createReducer(initialState, {
             [actionType]: (state) => ({ ...state, yes: true }),
-        } as Record<string, Reducer<typeof initialState, Record<typeof actionType, void>>>);
+        });
         const state1 = reducer(initialState, unknownAction);
         expect(state1).toStrictEqual(initialState);
 
@@ -25,10 +25,7 @@ describe("createReducer", () => {
             initialState,
             {
                 [actionType]: (state) => ({ ...state, yes: "something" }),
-            } as Record<
-                string,
-                Reducer<typeof initialState, Record<typeof actionType, void>>
-            >,
+            },
             (state) => ({ ...state, yes: "nani!!!" }),
         );
         const state1 = reducer(initialState, unknownAction);

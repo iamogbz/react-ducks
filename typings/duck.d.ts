@@ -1,14 +1,14 @@
 type Action<
-    T extends string = string /* Action type */,
+    T extends string /* Action type */,
     P = unknown /* Payload type */
 > = {
     type: T;
     payload?: P;
-} & Record<string, unknown>;
+};
 
 interface ActionCreator<
-    T extends string = string /* Action Type */,
-    P = unknown /* Payload Type */,
+    T extends string /* Action Type */,
+    P /* Payload Type */,
     S = unknown /* State type */
 > {
     (payload?: P): React.ReducerAction<Reducer<S, T, P>, Action<T, P>>;
@@ -16,96 +16,106 @@ interface ActionCreator<
 }
 
 type ActionCreatorMapping<
-    TP extends Record<string, unknown> = Record<
-        string,
-        unknown
-    > /* Action type to payload mapping */,
-    CT extends Record<string, keyof TP> = Record<
-        keyof TP,
-        keyof TP
-    > /* Action creator key to type mapping */,
-    S = unknown /* State type */
-> = { [C in keyof CT]: Nullable<ActionCreator<CT[C], TP[CT[C]], S>> };
+    C extends string /* Action creator keys */,
+    T extends string /* Action Type */,
+    P /* Payload Type */,
+    S /* State type */,
+    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */,
+    CT extends Record<C, T> = Record<
+        C,
+        T
+    > /* Action creator key to type mapping */
+> = { [k in C]: Nullable<ActionCreator<CT[k], TP[CT[k]], S>> };
 
 type ActionDispatcher<
-    P extends unknown[] = unknown[] /* Dispatcher arguments, usually first argument is the payload */
+    P extends unknown[] /* Dispatcher arguments, usually first argument is the payload */
 > = (...args: P) => void;
 
 type Reducer<
-    S = unknown /* State type */,
-    TP extends Record<string, unknown> = Record<
-        string,
-        unknown
-    > /* Action type to payload mapping */
+    S /* State type */,
+    T extends string /* Action Type */,
+    P /* Payload Type */,
+    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */
 > = React.Reducer<
     S,
     {
-        [T in keyof TP]: Action<T, TP[T]>;
-    }[keyof TP]
+        [K in T]: Action<T, TP[K]>;
+    }[T]
 >;
 
 type ActionReducerMapping<
-    S = unknown,
-    T extends string = string,
-    P = unknown,
-    C extends string = T
-> = Record<C, Reducer<S, T, P>>;
+    S /* State type */,
+    T extends string /* Action types */,
+    P /* Payload types */,
+    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */
+> = { [K in T]: Reducer<S, K, TP[K]> };
 
 type Selector<
-    S = unknown,
-    R = unknown /* All possible selector return types */,
-    T extends string = string,
-    P = unknown,
-    E extends unknown[] = unknown[]
-> = (state: React.ReducerState<Reducer<S, Action<T, P>>>, ...args: E) => R;
+    S /* State type */,
+    R /* Return type */,
+    E extends unknown[] /* Selector extra arguments after state */,
+    T extends string /* Action types */,
+    P /* Payload types */
+> = (state: React.ReducerState<Reducer<S, T, P>>, ...args: E) => R;
 
 type SelectorMapping<
-    S = unknown,
-    R = unknown,
-    T extends string = string,
-    P = unknown,
-    Q extends string = string /* All possible selector names*/
-> = Record<Q, Selector<S, R, T, P>>;
+    S /* State type */,
+    Q extends string /* Selector keys */,
+    R /* Return type */,
+    E extends unknown[] /* Selector extra arguments after state */,
+    T extends string /* Action types */,
+    P /* Payload types */,
+    QR extends Record<Q, R> = Record<
+        Q,
+        R
+    > /* Selector key to return type mapping */,
+    QE extends Record<Q, E> = Record<
+        Q,
+        E
+    > /* Selector key to arguments mapping */
+> = { [K in Q]: Selector<S, QR[K], QE[K], T, P> };
 
-type DuckSelectors<Q> = Q | "$";
+type DuckSelectorGetStateKey = "$";
+type DuckSelectors<Q> = Q | DuckSelectorGetStateKey;
 
 type Duck<
-    S = unknown,
-    N extends string = string /* Duck name */,
-    T extends string = string,
-    P = unknown,
-    R = unknown,
-    Q extends string = string,
-    U extends string = string
+    N extends string /* Duck name */,
+    S /* State type */,
+    T extends string /* Action types */,
+    P /* Payload types */,
+    C extends string /* Action creator keys */,
+    Q extends string /* Selector keys */,
+    R /* Selector return types */,
+    E extends unknown[] /* Selector extra arguments */
 > = {
-    actions: ActionCreatorMapping<Record<T, P>, Record<U, T>, S>;
+    actions: ActionCreatorMapping<C, T, P, S>;
     actionTypes: T[];
     initialState: S;
     name: N;
-    reducer: Reducer<S, Record<T, P>>;
-    selectors: SelectorMapping<Record<N, S>, R, T, P, DuckSelectors<Q>>;
+    reducer: Reducer<S, T, P>;
+    selectors: SelectorMapping<Record<N, S>, Q, R, E, T, P>;
 };
 
 type DuckReducerMapping<
-    S = unknown,
-    N extends string = string,
-    T extends string = string,
-    P = unknown
-> = Record<N, Reducer<S, Record<T, P>>>;
+    N extends string /* Duck name */,
+    S /* State type */,
+    T extends string /* Action types */,
+    P /* Payload types */
+> = Record<N, Reducer<S, T, P>>;
 
 type RootDuck<
-    S = unknown,
-    N extends string = string /* All possible duck names */,
-    U extends string = string,
-    V extends string = string,
-    T extends U | V = string,
-    P = unknown,
-    R = unknown,
-    Q extends string = string
+    N extends string /* Duck names */,
+    S /* State types */,
+    T extends string /* Action types */,
+    P /* Payload types */,
+    C extends string /* Action creator keys */,
+    Q extends string /* Selector keys */,
+    R /* Selector return types */,
+    E extends unknown[] /* Selector extra arguments */
 > = {
-    actions: Record<N, ActionCreatorMapping<Record<T, P>, Record<U, T>, S>>;
+    actions: Record<N, ActionCreatorMapping<C, T, P, S>>;
     initialState: Record<N, S>;
     names: Set<N>;
-    reducer: Reducer<Record<N, S>, Record<T, P>>;
-    selectors: Record<N, Nullable<SelectorMapping<Record<N, S>, R, T, P, Q>>>;
+    reducer: Reducer<Record<N, S>, T, P>;
+    selectors: Record<N, SelectorMapping<Record<N, S>, Q, R, E, T, P>>;
 };

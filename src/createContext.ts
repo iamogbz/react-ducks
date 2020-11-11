@@ -12,7 +12,7 @@ function createUnimplemented(objectName?: string): (m: string) => () => never {
 }
 
 export function createContextWithValue<S, T extends string, P>(
-    value: Include<ContextValue<S, T, P>, "reducer" | "state" | "subscribe">,
+    value: Expected<ContextValue<S, T, P>, "reducer" | "state" | "subscribe">,
 ): Context<S, T, P> {
     return React.createContext<ContextValue<S, T, P>>({
         dispatch: async (a) => a,
@@ -22,7 +22,7 @@ export function createContextWithValue<S, T extends string, P>(
 }
 
 export function createContext<S, T extends string, P>(
-    rootReducer: Reducer<S, Record<T, P>>,
+    rootReducer: Reducer<S, T, P>,
     preloadedState: S,
     enhancer?: ContextEnhance<S, T, P>,
     displayName?: string,
