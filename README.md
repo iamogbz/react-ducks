@@ -48,8 +48,8 @@ Create the global context.
 export default createContext(
   rootDuck.reducer,
   rootDuck.initialState,
-  "ContextName",
   enhancer,
+  "ContextName",
   useAsGlobalContext
 );
 ```
@@ -171,7 +171,8 @@ See [redux applyMiddleware][redux-applymiddleware] for more documentation.
 As a proof of concept see the converted sandbox app from the react-redux basic tutorial below.
 
 - With redux [example][react-redux-tutorial]
-- Without redux [code][react-ducks-no-redux]
+- Without redux [example][react-ducks-no-redux]
+- With redux saga [example][react-ducks-saga]
 
 ## References
 
@@ -183,7 +184,8 @@ Lots of inspiration from the following tools
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable
 [react-ducks-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
+[react-ducks-saga]: https://github.com/iamogbz/example-react-duck-saga
+[react-redux]: https://react-redux.js.org/api/connect
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
 [redux-toolkit]: https://redux-toolkit.js.org/api/createReducer
-[react-redux]: https://react-redux.js.org/api/connect
