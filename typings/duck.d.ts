@@ -31,12 +31,6 @@ type ActionDispatcher<
     P extends unknown[] = unknown[] /* Dispatcher arguments, usually first argument is the payload */
 > = (...args: P) => void;
 
-type ActionDispatcherMapping<
-    T extends string = string,
-    P = unknown,
-    D extends string = T /* Action dispatcher mapping keys */
-> = Record<D, ActionDispatcher<[P], T>>;
-
 type Reducer<
     S = unknown,
     T extends string = string,
