@@ -11,7 +11,7 @@ interface ActionCreator<
     P = unknown /* Payload Type */,
     S = unknown /* State type */
 > {
-    (payload?: P): React.ReducerAction<Reducer<S, T, P>>;
+    (payload?: P): React.ReducerAction<Reducer<S, T, P>, Action<T, P>>;
     type: T;
 }
 
@@ -25,17 +25,24 @@ type ActionCreatorMapping<
         unknown
     > /* Action type to payload mapping */,
     S = unknown /* State type */
-> = { [K in keyof CT]: Nullable<ActionCreator<CT[K], TP[CT[K]], S>> };
+> = { [C in keyof CT]: Nullable<ActionCreator<CT[C], TP[CT[C]], S>> };
 
 type ActionDispatcher<
     P extends unknown[] = unknown[] /* Dispatcher arguments, usually first argument is the payload */
 > = (...args: P) => void;
 
 type Reducer<
-    S = unknown,
-    T extends string = string,
-    P = unknown
-> = React.Reducer<S /* All possible state types */, Action<T, P>>;
+    S = unknown /* State type */,
+    TP extends Record<string, unknown> = Record<
+        string,
+        unknown
+    > /* Action type to payload mapping */
+> = React.Reducer<
+    S,
+    {
+        [T in keyof TP]: Action<T, TP[T]>;
+    }[keyof TP]
+>;
 
 type ActionReducerMapping<
     S = unknown,
@@ -75,7 +82,7 @@ type Duck<
     actionTypes: T[];
     initialState: S;
     name: N;
-    reducer: Reducer<S, T, P>;
+    reducer: Reducer<S, Record<T, P>>;
     selectors: SelectorMapping<Record<N, S>, R, T, P, DuckSelectors<Q>>;
 };
 
@@ -84,7 +91,7 @@ type DuckReducerMapping<
     N extends string = string,
     T extends string = string,
     P = unknown
-> = Record<N, Reducer<S, T, P>>;
+> = Record<N, Reducer<S, Record<T, P>>>;
 
 type RootDuck<
     S = unknown,
@@ -99,6 +106,6 @@ type RootDuck<
     actions: Record<N, ActionCreatorMapping<Record<U, T>, Record<T, P>, S>>;
     initialState: Record<N, S>;
     names: Set<N>;
-    reducer: Reducer<Record<N, S>, T, P>;
+    reducer: Reducer<Record<N, S>, Record<T, P>>;
     selectors: Record<N, Nullable<SelectorMapping<Record<N, S>, R, T, P, Q>>>;
 };

@@ -22,7 +22,7 @@ export function createContextWithValue<S, T extends string, P>(
 }
 
 export function createContext<S, T extends string, P>(
-    rootReducer: Reducer<S, T, P>,
+    rootReducer: Reducer<S, Record<T, P>>,
     preloadedState: S,
     enhancer?: ContextEnhance<S, T, P>,
     displayName?: string,

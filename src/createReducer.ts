@@ -7,8 +7,8 @@ export function createReducer<
 >(
     initialState: S,
     actionTypeToReducer: ActionReducerMapping<S, T, P>,
-    defaultReducer?: Reducer<S, T, P>,
-): Reducer<S, T, P> {
+    defaultReducer?: Reducer<S, Record<T, P>>,
+): Reducer<S, Record<T, P>> {
     const isReducerActionType = (a?: Action<string, P>): a is Action<T, P> =>
         a !== undefined &&
         Object.prototype.hasOwnProperty.call(actionTypeToReducer, a.type);
