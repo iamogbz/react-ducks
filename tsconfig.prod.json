@@ -1,4 +1,10 @@
 {
-    "extends": "./tsconfig.json",
-    "exclude": ["node_modules", "dist", "tests", "e2e"]
+    "exclude": [
+        "dist",
+        "e2e",
+        "node_modules",
+        "tests",
+        "./webpack.config.ts"
+    ],
+    "extends": "./tsconfig.json"
 }
