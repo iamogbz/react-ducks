@@ -16,14 +16,14 @@ interface ActionCreator<
 }
 
 type ActionCreatorMapping<
-    CT extends Record<string, string> = Record<
-        string,
-        string
-    > /* Action creator key to type mapping */,
     TP extends Record<string, unknown> = Record<
         string,
         unknown
     > /* Action type to payload mapping */,
+    CT extends Record<string, keyof TP> = Record<
+        keyof TP,
+        keyof TP
+    > /* Action creator key to type mapping */,
     S = unknown /* State type */
 > = { [C in keyof CT]: Nullable<ActionCreator<CT[C], TP[CT[C]], S>> };
 
@@ -78,7 +78,7 @@ type Duck<
     Q extends string = string,
     U extends string = string
 > = {
-    actions: ActionCreatorMapping<Record<U, T>, Record<T, P>, S>;
+    actions: ActionCreatorMapping<Record<T, P>, Record<U, T>, S>;
     actionTypes: T[];
     initialState: S;
     name: N;
@@ -103,7 +103,7 @@ type RootDuck<
     R = unknown,
     Q extends string = string
 > = {
-    actions: Record<N, ActionCreatorMapping<Record<U, T>, Record<T, P>, S>>;
+    actions: Record<N, ActionCreatorMapping<Record<T, P>, Record<U, T>, S>>;
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, Record<T, P>>;
