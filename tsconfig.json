@@ -7,13 +7,16 @@
         "jsx": "react",
         "module": "commonjs",
         "moduleResolution": "node",
-        "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
+        "noImplicitReturns": true,
         "outDir": "./dist",
         "skipLibCheck": true,
         "strict": true,
         "target": "es5"
     },
-    "exclude": ["node_modules", "dist"]
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
 }

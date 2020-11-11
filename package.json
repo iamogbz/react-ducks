@@ -1,6 +1,6 @@
 {
     "name": "react-ducks",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
     "license": "Unlicense",
@@ -29,8 +29,8 @@
         "typings"
     ],
     "scripts": {
-        "build": "npm run clean && tsc --project tsconfig.prod.json",
-        "build-watch": "npm run clean && tsc --watch",
+        "build": "webpack",
+        "bundlewatch": "npm pack && bundlewatch",
         "clean": "rm -rf ./dist",
         "commit": "git-cz",
         "dedupe": "npm dedupe",
@@ -89,6 +89,15 @@
             "pre-commit": "lint-staged"
         }
     },
+    "bundlewatch": {
+        "files": [
+            {
+                "compression": "none",
+                "maxSize": "15kb",
+                "path": "react-ducks-*.tgz"
+            }
+        ]
+    },
     "dependencies": {
         "immer": "^7.0.0"
     },
@@ -108,6 +117,7 @@
         "@typescript-eslint/eslint-plugin": "^4.7.0",
         "@typescript-eslint/parser": "^4.7.0",
         "acorn": "^8.0.4",
+        "bundlewatch": "^0.3.1",
         "commitizen": "^4.2.2",
         "coveralls": "^3.1.0",
         "cz-conventional-changelog": "^3.3.0",
@@ -120,6 +130,8 @@
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.21.5",
         "eslint-plugin-react-hooks": "^4.2.0",
+        "fs-extra": "^9.0.1",
+        "glob": "^7.1.6",
         "husky": "^4.3.0",
         "jest": "^26.6.3",
         "lint-staged": "^10.5.1",
@@ -136,6 +148,9 @@
         "stylelint-processor-styled-components": "^1.10.0",
         "ts-jest": "^26.4.4",
         "ts-node": "^9.0.0",
-        "typescript": "^4.0.5"
+        "typescript": "^4.0.5",
+        "webpack": "^5.4.0",
+        "webpack-cli": "^4.2.0",
+        "webpack-compiler-plugin": "^1.1.3"
     }
 }
