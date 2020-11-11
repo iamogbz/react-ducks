@@ -10,14 +10,14 @@ function getNS<N extends string, T extends string, U extends string>(
 }
 
 export function createDuck<
-    S,
-    N extends string,
-    U extends string /* eventual namespaced action types */,
-    P,
+    S /* State type */,
+    N extends string /* Duck name */,
+    U extends string /* Namespaced action types */,
+    P /* Payload types */,
     T extends string /* action type creator keys from reducer mapping */,
-    E extends unknown[],
-    Q extends string,
-    R
+    Q extends string /* Selector keys */,
+    R /* Selector return types */,
+    E extends unknown[] /* Selector extra arguments */
 >({
     name,
     initialState,

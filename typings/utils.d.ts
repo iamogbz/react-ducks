@@ -8,3 +8,11 @@ type Entry<O> = {
 }[keyof O];
 
 type Entries<O> = Entry<O>[];
+
+type Length<T extends unknown[]> = T extends { length: infer L } ? L : never;
+
+type Tail<T extends unknown[]> = T extends [head, ...rest: infer U] ? U : T;
+
+type Last<T extends unknown[]> = T[Length<Tail<T>>];
+
+type Callable<P extends unknown[] = unknown[], R = unknown> = (...a: P) => R;

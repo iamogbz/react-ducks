@@ -93,7 +93,7 @@ type Duck<
     initialState: S;
     name: N;
     reducer: Reducer<S, T, P>;
-    selectors: SelectorMapping<Record<N, S>, Q, R, E, T, P>;
+    selectors: SelectorMapping<Record<N, S>, DuckSelectors<Q>, R, E, T, P>;
 };
 
 type DuckReducerMapping<
