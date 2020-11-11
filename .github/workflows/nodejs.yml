@@ -49,6 +49,8 @@ jobs:
         run: |
           npm run e2e
       - name: Package
+        env:
+          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
         run: |
           npm run bundlewatch
       - name: Deploy
