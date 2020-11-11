@@ -1,14 +1,16 @@
 type Action<
-    T extends string = string /* All possible action types */,
-    P = unknown /* All possible payload types */
+    T extends string = string /* Action type */,
+    P = unknown /* Payload type */
 > = {
     type: T;
     payload?: P;
 } & Record<string, unknown>;
 
 interface ActionCreator<T extends string = string, P = unknown, S = unknown> {
-    (payload?: P): React.ReducerAction<Reducer<S, T, P>>;
-    type: T;
+    (payload?: P): React.ReducerAction<
+        Reducer<S, T, P>
+    > /* Action creator signature */;
+    type: T /* Action type property on creator */;
 }
 
 type ActionCreatorMapping<
