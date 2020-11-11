@@ -48,8 +48,8 @@ Create the global context.
 export default createContext(
   rootDuck.reducer,
   rootDuck.initialState,
-  "ContextName",
   enhancer,
+  "ContextName",
   useAsGlobalContext
 );
 ```
@@ -166,46 +166,13 @@ export default createContext(..., applyMiddleware(logger));
 
 See [redux applyMiddleware][redux-applymiddleware] for more documentation.
 
-### createConnect(Context?)
-
-This a helper creates a function that can be used to smartly connect a component to your context value.
-
-```js
-// connect.js
-export default connect = createConnect(Context);
-```
-
-**Note**: if the `Context` argument is not supplied, the `GlobalContext` is used.
-
-**Note**: `createConnect` is just a helper and can be replaced with a direct import and use of `connect`.
-
-#### Example Usage
-
-```jsx
-// app.jsx
-function App(props) {
-  return (
-    <div>
-      Count: <span>{props.count}</span>
-      <button onClick={props.increment} />
-    </div>
-  );
-}
-
-export default connect(
-  createStructuredSelector({ count: counterDuck.selectors.$ }),
-  counterDuck.actions
-)(App);
-```
-
-See [redux connect][react-redux-connect] for more options.
-
 ## Demo
 
 As a proof of concept see the converted sandbox app from the react-redux basic tutorial below.
 
 - With redux [example][react-redux-tutorial]
-- Without redux [code][react-ducks-no-redux]
+- Without redux [example][react-ducks-no-redux]
+- With redux saga [example][react-ducks-saga]
 
 ## References
 
@@ -217,8 +184,8 @@ Lots of inspiration from the following tools
 [immer-intro]: https://medium.com/hackernoon/introducing-immer-immutability-the-easy-way-9d73d8f71cb3
 [proposal-observable]: https://github.com/tc39/proposal-observable
 [react-ducks-no-redux]: https://codesandbox.io/s/todo-app-without-redux-9yc57
-[react-redux-connect]: https://react-redux.js.org/api/connect
+[react-ducks-saga]: https://github.com/iamogbz/example-react-duck-saga
+[react-redux]: https://react-redux.js.org/api/connect
 [react-redux-tutorial]: https://react-redux.js.org/introduction/basic-tutorial
 [redux-applymiddleware]: https://redux.js.org/api/applymiddleware#applymiddlewaremiddleware
 [redux-toolkit]: https://redux-toolkit.js.org/api/createReducer
-[react-redux]: https://react-redux.js.org/api/connect
