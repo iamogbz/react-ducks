@@ -6,19 +6,26 @@ type Action<
     payload?: P;
 } & Record<string, unknown>;
 
-interface ActionCreator<T extends string = string, P = unknown, S = unknown> {
-    (payload?: P): React.ReducerAction<
-        Reducer<S, T, P>
-    > /* Action creator signature */;
-    type: T /* Action type property on creator */;
+interface ActionCreator<
+    T extends string = string /* Action Type */,
+    P = unknown /* Payload Type */,
+    S = unknown /* State type */
+> {
+    (payload?: P): React.ReducerAction<Reducer<S, T, P>>;
+    type: T;
 }
 
 type ActionCreatorMapping<
-    T extends string = string,
-    P = unknown,
-    S = unknown,
-    C extends string = T /* Action creator mapping keys */
-> = Record<C, Nullable<ActionCreator<T, P, S>>>;
+    CT extends Record<string, string> = Record<
+        string,
+        string
+    > /* Action creator key to type mapping */,
+    TP extends Record<string, unknown> = Record<
+        string,
+        unknown
+    > /* Action type to payload mapping */,
+    S = unknown /* State type */
+> = { [K in keyof CT]: Nullable<ActionCreator<CT[K], TP[CT[K]], S>> };
 
 type ActionDispatcher<P = unknown> = (...args: P[]) => void;
 
@@ -68,7 +75,7 @@ type Duck<
     Q extends string = string,
     U extends string = string
 > = {
-    actions: ActionCreatorMapping<T, P, S, U>;
+    actions: ActionCreatorMapping<Record<U, T>, Record<T, P>, S>;
     actionTypes: T[];
     initialState: S;
     name: N;
@@ -93,7 +100,7 @@ type RootDuck<
     R = unknown,
     Q extends string = string
 > = {
-    actions: Record<N, ActionCreatorMapping<T, P, S, U>>;
+    actions: Record<N, ActionCreatorMapping<Record<U, T>, Record<T, P>, S>>;
     initialState: Record<N, S>;
     names: Set<N>;
     reducer: Reducer<Record<N, S>, T, P>;

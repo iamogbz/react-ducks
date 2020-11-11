@@ -31,7 +31,7 @@ export function createDuck<
     actionMapping?: Record<T, U>; // ActionMapping = { MappedActionType: ActionType }
 }): Duck<S, N, T, P, R, Q, U> {
     const mappedActionTypes = { ...actionMapping } as Record<T, U>;
-    const actions = {} as ActionCreatorMapping<T, P, S, U>;
+    const actions = {} as ActionCreatorMapping<Record<U, T>, Record<T, P>, S>;
     for (const [actionType] of getEntries(reducers)) {
         const namespacedActionType = getNS<N, U, T>(name, actionType);
         actions[actionType] = createAction(namespacedActionType);
