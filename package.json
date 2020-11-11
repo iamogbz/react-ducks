@@ -1,6 +1,6 @@
 {
     "name": "react-ducks",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "description": "🦆 React ducks without Redux",
     "author": "iamogbz",
     "license": "Unlicense",
@@ -31,6 +31,7 @@
     "scripts": {
         "build": "npm run clean && tsc --project tsconfig.prod.json",
         "build-watch": "npm run clean && tsc --watch",
+        "bundlewatch": "npm pack && bundlewatch",
         "clean": "rm -rf ./dist",
         "commit": "git-cz",
         "dedupe": "npm dedupe",
@@ -89,6 +90,15 @@
             "pre-commit": "lint-staged"
         }
     },
+    "bundlewatch": {
+        "files": [
+            {
+                "compression": "none",
+                "maxSize": "17kb",
+                "path": "react-ducks-*.tgz"
+            }
+        ]
+    },
     "dependencies": {
         "immer": "^7.0.0"
     },
@@ -108,6 +118,7 @@
         "@typescript-eslint/eslint-plugin": "^4.7.0",
         "@typescript-eslint/parser": "^4.7.0",
         "acorn": "^8.0.4",
+        "bundlewatch": "^0.3.1",
         "commitizen": "^4.2.2",
         "coveralls": "^3.1.0",
         "cz-conventional-changelog": "^3.3.0",
