@@ -27,13 +27,15 @@ type ActionCreatorMapping<
     S = unknown /* State type */
 > = { [K in keyof CT]: Nullable<ActionCreator<CT[K], TP[CT[K]], S>> };
 
-type ActionDispatcher<P = unknown> = (...args: P[]) => void;
+type ActionDispatcher<
+    P extends unknown[] = unknown[] /* Dispatcher arguments, usually first argument is the payload */
+> = (...args: P) => void;
 
 type ActionDispatcherMapping<
     T extends string = string,
     P = unknown,
     D extends string = T /* Action dispatcher mapping keys */
-> = Record<D, ActionDispatcher<T, P>>;
+> = Record<D, ActionDispatcher<[P], T>>;
 
 type Reducer<
     S = unknown,
