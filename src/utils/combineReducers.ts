@@ -1,8 +1,8 @@
 import { getEntries } from "./object";
 
-export function combineReducers<S, N extends string, T extends string, P>(
+export function combineReducers<N extends string, S, T extends string, P>(
     initialState: Record<N, S>,
-    reducerMapping: DuckReducerMapping<S, N, T, P>,
+    reducerMapping: DuckReducerMapping<N, S, T, P>,
 ): Reducer<Record<N, S>, T, P> {
     const reducers = getEntries(reducerMapping);
     return function (state: Record<N, S> = initialState, action) {

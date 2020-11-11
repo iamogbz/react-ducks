@@ -57,7 +57,19 @@ export function createMocks() {
         reducers: {},
     });
 
-    const rootDuck = createRootDuck(counterDuck, initDuck, dummyDuck);
+    // TODO: fix type inference for createRootDuck
+    const ducks: Duck<
+        string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        any,
+        string,
+        unknown,
+        string,
+        string,
+        unknown,
+        []
+    >[] = [counterDuck, initDuck, dummyDuck];
+    const rootDuck = createRootDuck(...ducks);
 
     const Context = createContext(
         rootDuck.reducer,

@@ -19,9 +19,7 @@ export function applyMiddleware<S, T extends string, P>(
         const chain = middlewares.map((middleware) =>
             middleware(middlewareAPI),
         );
-        const dispatch = compose<typeof context.dispatch>(...chain)(
-            context.dispatch,
-        );
+        const dispatch = compose(...chain)(context.dispatch);
         return {
             ...context,
             dispatch,

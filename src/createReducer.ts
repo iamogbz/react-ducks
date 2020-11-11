@@ -1,10 +1,6 @@
 import createNextState from "immer";
 
-export function createReducer<
-    S,
-    P,
-    T extends string /* All action types the final reducer supports */
->(
+export function createReducer<S, T extends string, P>(
     initialState: S,
     actionTypeToReducer: ActionReducerMapping<S, T, P>,
     defaultReducer?: Reducer<S, T, P>,

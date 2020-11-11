@@ -80,6 +80,7 @@
     "lint-staged": {
         "*.(j|t)s{,x}": [
             "npm run lint",
+            "bash -c 'npm run typecheck'",
             "npm test -- --bail --findRelatedTests"
         ]
     },
@@ -130,8 +131,6 @@
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.21.5",
         "eslint-plugin-react-hooks": "^4.2.0",
-        "fs-extra": "^9.0.1",
-        "glob": "^7.1.6",
         "husky": "^4.3.0",
         "jest": "^26.6.3",
         "lint-staged": "^10.5.1",
