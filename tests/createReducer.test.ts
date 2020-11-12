@@ -18,6 +18,26 @@ describe("createReducer", () => {
         expect(state2.yes).toBe(true);
     });
 
+    it("is a noop identity function when no arguments are passed", () => {
+        const initialState = { noop: "please" };
+        const reducer = createReducer(initialState, {
+            actionType: (state) => ({ ...state, hmm: "say what!" }),
+        });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(reducer()).toBe(initialState);
+    });
+
+    it("is a noop identity function when no action is passed", () => {
+        const initialState = { noop: "please" };
+        const reducer = createReducer(initialState, {
+            actionType: (state) => ({ ...state, hmm: "say what!" }),
+        });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(reducer(initialState)).toBe(initialState);
+    });
+
     it("uses default reducer when no other action type matches", () => {
         const actionType = "actionType";
         const initialState = { yes: "nothing" };

@@ -1,6 +1,8 @@
 function polyfillSymbol(name: string) {
-    if (!Symbol[name]) {
+    try {
         Object.defineProperty(Symbol, name, { value: Symbol(name) });
+    } catch (e) {
+        // do nothing
     }
 }
 

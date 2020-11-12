@@ -147,7 +147,7 @@ describe("integration", () => {
                 const increment = useDispatch(
                     rootDuck.actions.counter.increment,
                 );
-                const init = useSelector(rootDuck.selectors.init?.$);
+                const init = useSelector(rootDuck.selectors.init!.$);
                 return (
                     <div>
                         <button disabled={!init} onClick={increment}>
@@ -182,7 +182,7 @@ describe("integration", () => {
                     rootDuck.actions.counter.increment,
                     Context,
                 );
-                const init = useSelector(rootDuck.selectors.init?.$, Context);
+                const init = useSelector(rootDuck.selectors.init!.$, Context);
                 return (
                     <div>
                         <button disabled={!init} onClick={increment}>

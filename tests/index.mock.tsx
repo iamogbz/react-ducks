@@ -83,7 +83,7 @@ export function createMocks() {
 
     function Example() {
         const increment = useDispatch(counterDuck.actions.increment);
-        const init = useSelector(rootDuck.selectors.init?.$, Context);
+        const init = useSelector(rootDuck.selectors.init!.$, Context);
         const count = useSelector(counterDuck.selectors?.get);
         return (
             <div>

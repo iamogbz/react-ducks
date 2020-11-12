@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { createAction, useDispatch } from "src";
+import { createAction, useDispatch, useSelector } from "src";
 import { createContextWithValue } from "src/createContext";
 import { useAccessor } from "src/hooks/useAccessor";
 import { useObservable } from "src/hooks/useObservable";
@@ -243,5 +243,32 @@ describe("useObservable", () => {
         act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener2).not.toHaveBeenCalled();
+    });
+});
+
+describe("useSelector", () => {
+    const createContext = (props?: Record<string, unknown>) =>
+        createContextWithValue({
+            dispatch: async (a: Action<string, string>) => a,
+            reducer: (s) => s,
+            state: "infinite",
+            subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
+            ...props,
+        });
+
+    it("calls selector once for same arguments", () => {
+        const selector = jest.fn((s) => s);
+        const { result, rerender } = renderHook(
+            (context) => useSelector(selector, context),
+            { initialProps: createContext() },
+        );
+        expect(result.current).toStrictEqual("infinite");
+        expect(selector).toHaveBeenCalledTimes(1);
+        act(rerender);
+        expect(result.current).toStrictEqual("infinite");
+        expect(selector).toHaveBeenCalledTimes(1);
+        act(() => rerender(createContext({ state: "finite" })));
+        expect(result.current).toStrictEqual("finite");
+        expect(selector).toHaveBeenCalledTimes(2);
     });
 });

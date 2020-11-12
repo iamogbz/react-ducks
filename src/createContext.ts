@@ -2,11 +2,10 @@ import * as React from "react";
 import "./utils/polyfillSymbol";
 import { setGlobalContext } from "./components/Context";
 
-function createUnimplemented(objectName?: string): (m: string) => () => never {
-    const prefix = objectName ? `${objectName}.` : "";
+function createUnimplemented(objectName: string): (m: string) => () => never {
     return function createUnimplemented(methodName) {
         return function unimplemented() {
-            throw new Error(`Unimplemented method: ${prefix}${methodName}`);
+            throw new Error(`Unimplemented method:${objectName}.${methodName}`);
         };
     };
 }
