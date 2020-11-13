@@ -1,10 +1,4 @@
 {
-    "exclude": [
-        "dist",
-        "e2e",
-        "node_modules",
-        "tests",
-        "./webpack.config.ts"
-    ],
+    "include": ["src", "typings"],
     "extends": "./tsconfig.json"
 }
