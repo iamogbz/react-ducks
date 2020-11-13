@@ -34,7 +34,7 @@
         "clean": "rm -rf ./dist",
         "commit": "git-cz",
         "dedupe": "npm dedupe",
-        "e2e": "jest -c ./jest.e2e.config.json tests/index",
+        "e2e": "jest -c ./jest.e2e.config.ts",
         "lint": "eslint . --max-warnings=0 --ext .js,.jsx,.ts,.tsx",
         "release": "semantic-release",
         "test": "jest",
@@ -46,25 +46,6 @@
             "@semantic-release/release-notes-generator",
             "@semantic-release/npm",
             "@semantic-release/github"
-        ]
-    },
-    "jest": {
-        "preset": "ts-jest",
-        "moduleDirectories": [
-            "./node_modules",
-            "<rootDir>/node_modules",
-            "."
-        ],
-        "coverageDirectory": "./artifacts/coverage",
-        "coveragePathIgnorePatterns": [
-            "<rootDir>/node_modules",
-            "<rootDir>/tests",
-            "<rootDir>/e2e"
-        ],
-        "testPathIgnorePatterns": [
-            "./artifacts/",
-            "./dist/",
-            "./node_modules/"
         ]
     },
     "commitlint": {

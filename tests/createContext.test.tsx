@@ -4,6 +4,15 @@ import { renderHook } from "@testing-library/react-hooks";
 import { Provider, applyMiddleware, createContext } from "src";
 
 describe("createContext", () => {
+    it("does not allow setting the global context multiple times", () => {
+        const createGlobalContext = () =>
+            createContext((s) => s, null, undefined, "NewGlobalContext", true);
+        createGlobalContext();
+        expect(createGlobalContext).toThrow(
+            "Global context can only be set once",
+        );
+    });
+
     it("creates context without displayname", () => {
         const Context = createContext((s) => s, {});
         expect(Context.displayName).toBeUndefined();

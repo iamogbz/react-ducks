@@ -3,22 +3,99 @@ import { RenderResult, act, cleanup, render } from "@testing-library/react";
 import {
     GlobalContext,
     Provider,
+    applyMiddleware,
     createContext,
+    createDuck,
+    createRootDuck,
+    createRootProvider,
     useDispatch,
     useSelector,
 } from "src";
-import { createMocks } from "./index.mock";
+import { ActionTypes } from "src/utils/actionTypes";
 
-describe("integration", () => {
-    const {
-        EnhancedContext,
-        ErrorContext,
-        Example,
-        RootProvider,
-        increment,
-        init,
-        rootDuck,
-    } = createMocks();
+describe("provider", () => {
+    const dummyMiddleware: Middleware<
+        Record<string, unknown>,
+        string,
+        unknown
+    > = () => (next) => (action) => next(action);
+
+    const DECREMENT = "decrement";
+    const INCREMENT = "increment";
+    const decrement = (state: number) => state - 1;
+    const increment = jest.fn((state: number) => state + 1);
+    const counterReducer: (s: number, a?: Action<string>) => number = (
+        state,
+        action,
+    ) => {
+        switch (action?.type) {
+            case DECREMENT:
+                return decrement(state);
+            case INCREMENT:
+                return increment(state);
+            default:
+                return state;
+        }
+    };
+    const counterDuck = createDuck({
+        initialState: 0,
+        name: "counter",
+        reducers: { [DECREMENT]: counterReducer, [INCREMENT]: counterReducer },
+        selectors: { get: (s) => s["counter"] },
+    });
+
+    const ACTION_TYPE_INIT = "init";
+    const init = jest.fn(() => true);
+    const initDuck = createDuck({
+        actionMapping: { [ActionTypes.INIT]: ACTION_TYPE_INIT },
+        initialState: false,
+        name: "init",
+        reducers: { [ACTION_TYPE_INIT]: init },
+    });
+
+    const dummyDuck = createDuck({
+        initialState: null,
+        name: "dummy",
+        reducers: {},
+    });
+
+    // TODO: fix type inference for createRootDuck
+    const ducks: Duck<
+        string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        any,
+        string,
+        unknown,
+        string,
+        string,
+        unknown,
+        []
+    >[] = [counterDuck, initDuck, dummyDuck];
+    const rootDuck = createRootDuck(...ducks);
+
+    const Context = createContext(
+        rootDuck.reducer,
+        rootDuck.initialState,
+        applyMiddleware(dummyMiddleware),
+        "GlobalContext",
+        true,
+    );
+
+    const RootProvider = createRootProvider(Context);
+
+    function Example() {
+        const increment = useDispatch(counterDuck.actions.increment);
+        const init = useSelector(rootDuck.selectors.init!.$, Context);
+        const count = useSelector(counterDuck.selectors?.get);
+        return (
+            <div>
+                Count: <span>{count}</span>
+                <button disabled={!init} onClick={increment}>
+                    increment
+                </button>
+            </div>
+        );
+    }
 
     afterEach(() => {
         increment.mockClear();
@@ -27,19 +104,7 @@ describe("integration", () => {
         cleanup();
     });
 
-    describe("createContext", () => {
-        it("does not allow setting the global context multiple times", () => {
-            expect(() => {
-                createContext(
-                    (s) => s,
-                    null,
-                    undefined,
-                    "NewGlobalContext",
-                    true,
-                );
-            }).toThrow("Global context can only be set once");
-        });
-
+    describe("context", () => {
         it("renders without root provider", async () => {
             const result = render(<Example />);
             expect(result.baseElement).toMatchSnapshot();
@@ -64,6 +129,28 @@ describe("integration", () => {
         });
 
         it("renders with enhanced context", async () => {
+            const loggerMiddleware: Middleware<
+                Record<string, unknown>,
+                string,
+                unknown
+            > = ({ getState }) => (next) => async (action) => {
+                // eslint-disable-next-line no-console
+                console.log("action to dispatch", action);
+                // Call the next dispatch method in the middleware chain.
+                const returnValue = await next(action);
+                // eslint-disable-next-line no-console
+                console.log("state after dispatch", getState());
+                // This will likely be the action itself, unless
+                // a middleware further in chain changed it.
+                return returnValue;
+            };
+            const EnhancedContext = createContext(
+                rootDuck.reducer,
+                rootDuck.initialState,
+                applyMiddleware(dummyMiddleware, loggerMiddleware),
+                "EnhancedContext",
+            );
+
             const spyConsoleLog = jest
                 .spyOn(console, "log")
                 .mockImplementation(() => undefined);
@@ -89,6 +176,21 @@ describe("integration", () => {
         });
 
         it("fails to render if middleware dispatches while constructing", () => {
+            const badMiddleware: Middleware<
+                Record<string, unknown>,
+                string,
+                unknown
+            > = ({ dispatch }) => {
+                dispatch({ type: "SOME_ACTION" });
+                return () => async (action) => action;
+            };
+            const emptyRootDuck = createRootDuck();
+            const ErrorContext = createContext(
+                emptyRootDuck.reducer,
+                emptyRootDuck.initialState,
+                applyMiddleware(dummyMiddleware, badMiddleware),
+                "ErrorContext",
+            );
             const spyConsoleError = jest
                 .spyOn(console, "error")
                 .mockImplementation(() => undefined);
@@ -105,7 +207,7 @@ describe("integration", () => {
         });
     });
 
-    describe("contextSubscribe", () => {
+    describe("observable", () => {
         async function runAssertions(
             result: RenderResult,
             listener: jest.Mock,
