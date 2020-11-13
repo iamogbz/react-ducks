@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration createContext renders with root provider and updates on action dispatch 1`] = `
+exports[`provider context renders with root provider and updates on action dispatch 1`] = `
 <body>
   <div>
     <div>
@@ -16,7 +16,7 @@ exports[`integration createContext renders with root provider and updates on act
 </body>
 `;
 
-exports[`integration createContext renders without root provider 1`] = `
+exports[`provider context renders without root provider 1`] = `
 <body>
   <div>
     <div>

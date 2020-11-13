@@ -1,75 +1,6 @@
-import { act, renderHook } from "@testing-library/react-hooks";
-import { createAction, useDispatch, useSelector } from "src";
-import { createContextWithValue } from "src/createContext";
-import { useAccessor } from "src/hooks/useAccessor";
+import { act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
 import { useObservable } from "src/hooks/useObservable";
-
-describe("useAccessor", () => {
-    const renderAccessorHook = <V>(initialValue?: V) =>
-        renderHook((value = initialValue) => useAccessor(value));
-
-    it("returns a getter and setter if no initial value provided", () => {
-        const { result, rerender } = renderAccessorHook();
-        const [getter, setter] = result.current;
-        expect(getter()).toBeUndefined();
-        expect(setter).toBeDefined();
-        setter?.("some value");
-        expect(getter()).toBe("some value");
-        rerender("other value");
-        expect(getter()).toBe("some value");
-    });
-
-    it("returns a getter only if an initial value is provided", () => {
-        const { result, rerender } = renderAccessorHook("initial value");
-        const [getter, setter] = result.current;
-        expect(getter()).toBe("initial value");
-        expect(setter).toBeUndefined();
-        expect(getter()).toBe("initial value");
-        rerender("other value");
-        expect(getter()).toBe("other value");
-    });
-});
-
-describe("useDispatch", () => {
-    const mockValue = {
-        dispatch: async (a: Action<string, string>) => a,
-        reducer: () => null,
-        state: null,
-        subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
-    };
-
-    it("uses dispatch from Context", () => {
-        const dispatch = jest.fn(mockValue.dispatch);
-        const context = createContextWithValue({ ...mockValue, dispatch });
-        const ACTION_TYPE = "ACTION_TYPE" as const;
-        const actionCreator = createAction(ACTION_TYPE, (payload?: string) => ({
-            payload,
-        }));
-        const { result } = renderHook(() =>
-            useDispatch(actionCreator, context),
-        );
-        const arg0 = "Some argument";
-        result.current(arg0);
-        expect(dispatch).toHaveBeenCalledTimes(1);
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: arg0,
-            type: ACTION_TYPE,
-        });
-    });
-
-    it.each`
-        actionCreator
-        ${"non function"}
-        ${null}
-        ${undefined}
-    `("fails to use dispatch with actionCreator", ({ actionCreator }) => {
-        const context = createContextWithValue(mockValue);
-        const { result } = renderHook(() =>
-            useDispatch(actionCreator, context),
-        );
-        expect(() => result.current).toThrow("Unable to bind action creator");
-    });
-});
 
 describe("useObservable", () => {
     const renderObservableHook = <P>(initialProps: P) =>
@@ -243,32 +174,5 @@ describe("useObservable", () => {
         act(result.current[1]);
         expect(listener1).toHaveBeenCalledTimes(1);
         expect(listener2).not.toHaveBeenCalled();
-    });
-});
-
-describe("useSelector", () => {
-    const createContext = (props?: Record<string, unknown>) =>
-        createContextWithValue({
-            dispatch: async (a: Action<string, string>) => a,
-            reducer: (s) => s,
-            state: "infinite",
-            subscribe: () => ({ closed: true, unsubscribe: () => undefined }),
-            ...props,
-        });
-
-    it("calls selector once for same arguments", () => {
-        const selector = jest.fn((s) => s);
-        const { result, rerender } = renderHook(
-            (context) => useSelector(selector, context),
-            { initialProps: createContext() },
-        );
-        expect(result.current).toStrictEqual("infinite");
-        expect(selector).toHaveBeenCalledTimes(1);
-        act(rerender);
-        expect(result.current).toStrictEqual("infinite");
-        expect(selector).toHaveBeenCalledTimes(1);
-        act(() => rerender(createContext({ state: "finite" })));
-        expect(result.current).toStrictEqual("finite");
-        expect(selector).toHaveBeenCalledTimes(2);
     });
 });
