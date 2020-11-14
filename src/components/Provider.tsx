@@ -4,22 +4,20 @@ import { createAction } from "../createAction";
 import { useAccessor } from "../hooks/useAccessor";
 import { useObservable } from "../hooks/useObservable";
 
-export function Provider<
-    State = unknown,
-    T extends Action = Action,
-    Value extends ContextValue<State, T> = ContextValue<State, T>
->({
+export function Provider<State = unknown, T extends Action = Action>({
     children,
     Context,
 }: React.PropsWithChildren<{
     Context: Context<State, T>;
 }>): React.ReactElement {
+    type Value = ContextValue<State, T>;
+
     const root = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
     const [getState] = useAccessor(state);
 
-    const dispatch = React.useCallback(
+    const dispatch = React.useCallback<ContextDispatch<T>>(
         async function contextDispatch(action) {
             reducerDispatch(action);
             return action;
@@ -27,7 +25,7 @@ export function Provider<
         [reducerDispatch],
     );
 
-    const unenhanced = React.useMemo(
+    const unenhanced = React.useMemo<Value>(
         function getUnenhanced() {
             const { enhancer: _, ...value } = root;
             return Object.assign(value, { dispatch, getState });
@@ -40,7 +38,7 @@ export function Provider<
 
     // This is the final value to be observed.
     // The enhanced value will be given below.
-    const value = React.useMemo(
+    const value = React.useMemo<Value>(
         function getValue() {
             return { ...unenhanced, ...getEnhanced(), state };
         },
@@ -56,8 +54,8 @@ export function Provider<
     React.useEffect(
         function enhanceAndIntialise() {
             const enhanced = root.enhancer?.(observable) ?? observable;
-            setEnhanced!(enhanced as Value);
-            enhanced.dispatch(createAction(ActionTypes.INIT)() as T);
+            setEnhanced!(enhanced);
+            enhanced.dispatch(createAction(ActionTypes.INIT)());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [root.enhancer],
