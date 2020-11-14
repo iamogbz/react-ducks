@@ -1,14 +1,21 @@
-import { getEntries } from "./object";
+import { getKeys } from "./object";
 
-export function combineReducers<N extends string, S, T extends string, P>(
-    initialState: Record<N, S>,
-    reducerMapping: DuckReducerMapping<N, S, T, P>,
-): Reducer<Record<N, S>, T, P> {
-    const reducers = getEntries(reducerMapping);
-    return function (state: Record<N, S> = initialState, action) {
-        return reducers.reduce(function reduce(acc, [name, reducer]) {
-            acc[name] = reducer(state[name], action);
-            return acc;
-        }, {} as Record<N, S>);
+export function combineReducers<
+    CombinedState extends Record<string, unknown>,
+    ReducerMapping extends Record<
+        keyof CombinedState,
+        Reducer<CombinedState[keyof CombinedState], T>
+    >,
+    T extends Action
+>(
+    initialState: CombinedState,
+    reducerMapping: ReducerMapping,
+): Reducer<CombinedState, T> {
+    const names = getKeys(initialState);
+    return function (state = initialState, action) {
+        return names.reduce(function reduce(newState, name) {
+            newState[name] = reducerMapping[name](state[name], action);
+            return newState;
+        }, {} as CombinedState);
     };
 }

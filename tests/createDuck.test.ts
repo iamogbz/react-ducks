@@ -20,9 +20,6 @@ describe("createDuck", () => {
     });
     it("creates duck with all properties", () => {
         expect(testDuck).toMatchSnapshot();
-        expect(testDuck.actions.actionName?.type).toStrictEqual(
-            "duckName/actionName",
-        );
     });
 
     it("does not mutate initial state", () => {

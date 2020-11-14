@@ -14,12 +14,6 @@ import {
 import { ActionTypes } from "src/utils/actionTypes";
 
 describe("provider", () => {
-    const dummyMiddleware: Middleware<
-        Record<string, unknown>,
-        string,
-        unknown
-    > = () => (next) => (action) => next(action);
-
     const DECREMENT = "decrement";
     const INCREMENT = "increment";
     const decrement = (state: number) => state - 1;
@@ -59,19 +53,12 @@ describe("provider", () => {
         reducers: {},
     });
 
-    // TODO: fix type inference for createRootDuck
-    const ducks: Duck<
-        string,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        any,
-        string,
-        unknown,
-        string,
-        string,
-        unknown,
-        []
-    >[] = [counterDuck, initDuck, dummyDuck];
-    const rootDuck = createRootDuck(...ducks);
+    const rootDuck = createRootDuck(counterDuck, initDuck, dummyDuck);
+
+    const dummyMiddleware: Middleware<
+        typeof rootDuck.initialState,
+        ContextDispatch<Action>
+    > = () => (next) => (action) => next(action);
 
     const Context = createContext(
         rootDuck.reducer,
@@ -130,9 +117,8 @@ describe("provider", () => {
 
         it("renders with enhanced context", async () => {
             const loggerMiddleware: Middleware<
-                Record<string, unknown>,
-                string,
-                unknown
+                typeof rootDuck.initialState,
+                ContextDispatch<Action>
             > = ({ getState }) => (next) => async (action) => {
                 // eslint-disable-next-line no-console
                 console.log("action to dispatch", action);
@@ -177,16 +163,16 @@ describe("provider", () => {
 
         it("fails to render if middleware dispatches while constructing", () => {
             const badMiddleware: Middleware<
-                Record<string, unknown>,
-                string,
-                unknown
+                typeof rootDuck.initialState,
+                ContextDispatch<Action>
             > = ({ dispatch }) => {
                 dispatch({ type: "SOME_ACTION" });
                 return () => async (action) => action;
             };
             const emptyRootDuck = createRootDuck();
             const ErrorContext = createContext(
-                emptyRootDuck.reducer,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                emptyRootDuck.reducer as Reducer<any, Action>,
                 emptyRootDuck.initialState,
                 applyMiddleware(dummyMiddleware, badMiddleware),
                 "ErrorContext",

@@ -1,12 +1,15 @@
-export function createAction<T extends string, P, S>(
-    type: T,
-    prepare = (payload?: P): Partial<Action<T, P>> => ({ payload }),
-): ActionCreator<T, P, S> {
-    return Object.assign(
-        function createAction(payload) {
-            const partialAction = prepare(payload);
-            return { ...partialAction, type };
-        } as ActionCreator<T, P, S>,
-        { type },
-    );
+export function createAction<
+    Type extends string = string,
+    Payload = unknown,
+    State = unknown
+>(
+    type: Type,
+    prepare = (payload?: Payload): Partial<Action<Type, Payload>> => ({
+        payload,
+    }),
+): ActionCreator<Type, Payload, State> {
+    return function createAction(payload?: Payload) {
+        const partialAction = prepare(payload);
+        return { ...partialAction, type };
+    };
 }

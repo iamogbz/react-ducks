@@ -30,9 +30,8 @@ describe("combineReducers", () => {
             sliceB: true,
         };
         const reducer = combineReducers(state, {
-            sliceA: (s, a: Action<string, unknown>) =>
-                s + String(a?.payload ?? ""),
-            sliceB: (s, a: Action<string, unknown>) => !!a?.payload,
+            sliceA: (s, a: Action) => s + String(a?.payload ?? ""),
+            sliceB: (s, a: Action) => !!a?.payload,
         });
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

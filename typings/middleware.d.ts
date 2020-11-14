@@ -1,8 +1,12 @@
-type MiddlewareAPI<S = unknown, T extends string = string, P = unknown> = {
-    dispatch: ContextDispatch<T, P>;
-    getState: () => S;
+type MiddlewareAPI<
+    State = unknown,
+    D extends ContextDispatch = ContextDispatch
+> = {
+    dispatch: D;
+    getState: () => State;
 };
 
-type Middleware<S = unknown, T extends string = string, P = unknown> = (
-    api: MiddlewareAPI<S, T, P>,
-) => (next: ContextDispatch<T, P>) => ContextDispatch<T, P>;
+type Middleware<
+    State = unknown,
+    D extends ContextDispatch = ContextDispatch
+> = (api: MiddlewareAPI<State, D>) => (next: D) => D;
