@@ -4,16 +4,20 @@ import { createAction } from "../createAction";
 import { useAccessor } from "../hooks/useAccessor";
 import { useObservable } from "../hooks/useObservable";
 
-export function Provider<S, T extends string, P>({
+export function Provider<State = unknown, T extends Action = Action>({
     children,
     Context,
-}: React.PropsWithChildren<{ Context: Context<S, T, P> }>): React.ReactElement {
+}: React.PropsWithChildren<{
+    Context: Context<State, T>;
+}>): React.ReactElement {
+    type Value = ContextValue<State, T>;
+
     const root = React.useContext(Context);
 
     const [state, reducerDispatch] = React.useReducer(root.reducer, root.state);
     const [getState] = useAccessor(state);
 
-    const dispatch = React.useCallback<ContextDispatch<T, P>>(
+    const dispatch = React.useCallback<ContextDispatch<T>>(
         async function contextDispatch(action) {
             reducerDispatch(action);
             return action;
@@ -21,7 +25,7 @@ export function Provider<S, T extends string, P>({
         [reducerDispatch],
     );
 
-    const unenhanced = React.useMemo<ContextValue<S, T, P>>(
+    const unenhanced = React.useMemo<Value>(
         function getUnenhanced() {
             const { enhancer: _, ...value } = root;
             return Object.assign(value, { dispatch, getState });
@@ -30,11 +34,11 @@ export function Provider<S, T extends string, P>({
     );
 
     // Get a reference that will be set once any supplied enhancer is run.
-    const [getEnhanced, setEnhanced] = useAccessor<ContextValue<S, T, P>>();
+    const [getEnhanced, setEnhanced] = useAccessor<Value>();
 
     // This is the final value to be observed.
     // The enhanced value will be given below.
-    const value = React.useMemo<ContextValue<S, T, P>>(
+    const value = React.useMemo<Value>(
         function getValue() {
             return { ...unenhanced, ...getEnhanced(), state };
         },
@@ -51,7 +55,7 @@ export function Provider<S, T extends string, P>({
         function enhanceAndIntialise() {
             const enhanced = root.enhancer?.(observable) ?? observable;
             setEnhanced!(enhanced);
-            enhanced.dispatch(createAction<T, P, S>(ActionTypes.INIT as T)());
+            enhanced.dispatch(createAction(ActionTypes.INIT)());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [root.enhancer],

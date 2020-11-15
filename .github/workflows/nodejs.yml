@@ -35,7 +35,7 @@ jobs:
           CI: true
         run: |
           npm test -- --ci --coverage
-      - name: Report
+      - name: Coverage
         if: matrix.node-version == '12.x'
         uses: coverallsapp/github-action@v1.1.2
         with:
@@ -48,7 +48,7 @@ jobs:
       - name: Integration
         run: |
           npm run e2e
-      - name: Package
+      - name: Bundle
         env:
           BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
         run: |

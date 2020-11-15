@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Provider } from "./components/Provider";
 
-export function createRootProvider<S, T extends string, P>(
-    Context: Context<S, T, P>,
+export function createRootProvider<S, T extends Action>(
+    Context: Context<S, T>,
 ) {
     return function RootProvider({
         children,

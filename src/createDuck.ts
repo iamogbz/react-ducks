@@ -9,15 +9,33 @@ function getNS<N extends string, T extends string, U extends string>(
     return `${name}/${actionType}` as U;
 }
 
+type CreateDuckReturnType<
+    Name extends string,
+    State,
+    T extends Action,
+    U extends string,
+    Selectors extends Record<
+        string,
+        Selector<Record<Name, State>, unknown, unknown[]>
+    >
+> = Duck<
+    Name,
+    State,
+    Record<T["type"], DuckActionCreators<T & { type: U }, State>>,
+    Selectors &
+        Record<DuckSelectorBaseKey, Selector<Record<Name, State>, State>>
+>;
+
 export function createDuck<
-    S /* State type */,
-    N extends string /* Duck name */,
-    U extends string /* Namespaced action types */,
-    P /* Payload types */,
-    T extends string /* action type creator keys from reducer mapping */,
-    Q extends string /* Selector keys */,
-    R /* Selector return types */,
-    E extends unknown[] /* Selector extra arguments */
+    Name extends string,
+    State,
+    T extends Action,
+    // optional
+    U extends string = string,
+    Selectors extends Record<
+        string,
+        Selector<Record<Name, State>, unknown, unknown[]>
+    > = Record<string, Selector<Record<Name, State>, unknown, unknown[]>>
 >({
     name,
     initialState,
@@ -25,32 +43,36 @@ export function createDuck<
     selectors,
     actionMapping,
 }: {
-    name: N;
-    initialState: S;
-    reducers: ActionReducerMapping<S, T, P>;
-    selectors?: SelectorMapping<Record<N, S>, Q, R, E, T, P>;
-    actionMapping?: Record<U, T>;
-}): Duck<N, S, U, P, T, Q, R, E> {
-    const mappedActionTypes = { ...actionMapping } as Record<U, T>;
-    const actions = {} as ActionCreatorMapping<T, U, P, S>;
+    name: Name;
+    initialState: State;
+    reducers: ActionReducerMapping<State, T>;
+    selectors?: Selectors;
+    actionMapping?: Record<U, T["type"]>;
+}): CreateDuckReturnType<Name, State, T, U, Selectors> {
+    type R = CreateDuckReturnType<Name, State, T, U, Selectors>;
+    const mappedActionTypes = { ...actionMapping } as Record<U, T["type"]>;
+    const actions = {} as R["actions"];
     for (const actionType of getKeys(reducers)) {
-        const namespacedActionType = getNS<N, T, U>(name, actionType);
-        actions[actionType] = createAction(namespacedActionType);
+        const namespacedActionType = getNS<Name, Action["type"], U>(
+            name,
+            actionType,
+        );
+        actions[actionType] = createAction<U, T["payload"], State>(
+            namespacedActionType,
+        ) as DuckActionCreators<T & { type: U }>;
         mappedActionTypes[namespacedActionType] = actionType;
     }
 
     const actionReducer = createReducer(initialState, reducers);
-    const isMappedActionType = (a?: Action<string, P>): a is Action<U, P> =>
+    const isMappedActionType = (a?: Action<string>): a is Action<U> =>
         a !== undefined &&
         Object.prototype.hasOwnProperty.call(mappedActionTypes, a.type);
-    function reducer(state: S, action: Action<T, P> | Action<U, P>): S {
-        return actionReducer(state, {
-            ...action,
-            type: isMappedActionType(action)
-                ? mappedActionTypes[action.type]
-                : action.type,
-        });
-    }
+
+    const reducer: R["reducer"] = (state, action) => {
+        if (!isMappedActionType(action)) return state;
+        const type = mappedActionTypes[action.type];
+        return actionReducer(state, { ...action, type });
+    };
 
     return {
         actionTypes: getKeys(mappedActionTypes),
@@ -59,8 +81,8 @@ export function createDuck<
         name,
         reducer,
         selectors: {
-            $: (s) => s[name],
+            $: (s: Record<Name, State>) => s[name],
             ...selectors,
-        } as SelectorMapping<Record<N, S>, DuckSelectors<Q>, R, E, T, P>,
-    };
+        },
+    } as R;
 }

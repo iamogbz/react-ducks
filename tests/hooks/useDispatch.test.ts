@@ -39,6 +39,8 @@ describe("useDispatch", () => {
         const { result } = renderHook(() =>
             useDispatch(actionCreator, context),
         );
-        expect(() => result.current).toThrow("Unable to bind action creator");
+        expect(() => result.current).toThrow(
+            "Can not bind dispatch to action creator",
+        );
     });
 });

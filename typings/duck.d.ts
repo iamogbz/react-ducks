@@ -1,121 +1,112 @@
 type Action<
-    T extends string /* Action type */,
-    P = unknown /* Payload type */
+    // optional
+    Type extends string = string,
+    Payload = unknown
 > = {
-    type: T;
-    payload?: P;
+    type: Type;
+    payload?: Payload;
 };
-
-interface ActionCreator<
-    T extends string /* Action Type */,
-    P /* Payload Type */,
-    S = unknown /* State type */
-> {
-    (payload?: P): React.ReducerAction<Reducer<S, T, P>, Action<T, P>>;
-    type: T;
-}
-
-type ActionCreatorMapping<
-    C extends string /* Action creator keys */,
-    T extends string /* Action Type */,
-    P /* Payload Type */,
-    S /* State type */,
-    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */,
-    CT extends Record<C, T> = Record<
-        C,
-        T
-    > /* Action creator key to type mapping */
-> = { [k in C]: Nullable<ActionCreator<CT[k], TP[CT[k]], S>> };
 
 type ActionDispatcher<
-    P extends unknown[] /* Dispatcher arguments, usually first argument is the payload */
-> = (...args: P) => void;
+    T extends Action,
+    // optional
+    Arguments extends unknown[] = never[]
+> = (p?: T["payload"], ...args: Arguments) => void;
 
-type Reducer<
-    S /* State type */,
-    T extends string /* Action Type */,
-    P /* Payload Type */,
-    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */
-> = React.Reducer<
-    S,
-    {
-        [K in T]: Action<T, TP[K]>;
-    }[T]
+type ActionPayloadMapping<ActionType extends string, Payload> = Record<
+    ActionType,
+    Payload
 >;
 
-type ActionReducerMapping<
-    S /* State type */,
-    T extends string /* Action types */,
-    P /* Payload types */,
-    TP extends Record<T, P> = Record<T, P> /* Action type to payload mapping */
-> = { [K in T]: Reducer<S, K, TP[K]> };
+type Reducer<State, T extends Action> = React.Reducer<State, T>;
 
-type Selector<
-    S /* State type */,
-    R /* Return type */,
-    E extends unknown[] /* Selector extra arguments after state */,
-    T extends string /* Action types */,
-    P /* Payload types */
-> = (state: React.ReducerState<Reducer<S, T, P>>, ...args: E) => R;
+type ActionMatching<T extends Action, K extends string> = Extract<
+    T,
+    { type: K }
+>;
 
-type SelectorMapping<
-    S /* State type */,
-    Q extends string /* Selector keys */,
-    R /* Return type */,
-    E extends unknown[] /* Selector extra arguments after state */,
-    T extends string /* Action types */,
-    P /* Payload types */,
-    QR extends Record<Q, R> = Record<
-        Q,
-        R
-    > /* Selector key to return type mapping */,
-    QE extends Record<Q, E> = Record<
-        Q,
-        E
-    > /* Selector key to arguments mapping */
-> = { [K in Q]: Selector<S, QR[K], QE[K], T, P> };
-
-type DuckSelectorGetStateKey = "$";
-type DuckSelectors<Q> = Q | DuckSelectorGetStateKey;
-
-type Duck<
-    N extends string /* Duck name */,
-    S /* State type */,
-    T extends string /* Action types */,
-    P /* Payload types */,
-    C extends string /* Action creator keys */,
-    Q extends string /* Selector keys */,
-    R /* Selector return types */,
-    E extends unknown[] /* Selector extra arguments */
-> = {
-    actions: ActionCreatorMapping<C, T, P, S>;
-    actionTypes: T[];
-    initialState: S;
-    name: N;
-    reducer: Reducer<S, T, P>;
-    selectors: SelectorMapping<Record<N, S>, DuckSelectors<Q>, R, E, T, P>;
+type ActionReducerMapping<State, T extends Action> = {
+    [K in T["type"]]: Reducer<State, ActionMatching<T, K>>;
 };
 
-type DuckReducerMapping<
-    N extends string /* Duck name */,
-    S /* State type */,
-    T extends string /* Action types */,
-    P /* Payload types */
-> = Record<N, Reducer<S, T, P>>;
+type ActionCreator<Type extends string, Payload = unknown, State = unknown> = (
+    payload?: Payload,
+) => React.ReducerAction<Reducer<State, Action<Type, Payload>>>;
 
-type RootDuck<
-    N extends string /* Duck names */,
-    S /* State types */,
-    T extends string /* Action types */,
-    P /* Payload types */,
-    C extends string /* Action creator keys */,
-    Q extends string /* Selector keys */,
-    R /* Selector return types */,
-    E extends unknown[] /* Selector extra arguments */
+type Selector<
+    State,
+    Returns, // optional
+    ExtraArguments extends unknown[] = never[]
+> = (state: State, ...args: ExtraArguments) => Returns;
+
+type DuckActionCreators<
+    T extends Action,
+    // optional
+    State = unknown
 > = {
-    actions: Record<N, ActionCreatorMapping<C, T, P, S>>;
-    initialState: Record<N, S>;
-    names: Set<N>;
-    reducer: Reducer<Record<N, S>, T, P>;
-    selectors: Record<N, SelectorMapping<Record<N, S>, Q, R, E, T, P>>;
+    [K in T["type"]]: (
+        payload?: ActionMatching<T, K>["payload"],
+    ) => React.ReducerAction<Reducer<State, ActionMatching<T, K>>>;
+}[T["type"]];
+
+type DuckSelectorBaseKey = "$";
+
+type Duck<
+    Name extends string,
+    State,
+    ActionCreatorMapping extends Record<
+        CreatorKeys,
+        DuckActionCreators<Actions, State>
+    >,
+    // optional
+    SelectorMapping extends Record<SelectorKeys, Selectors> = Record<
+        SelectorKeys,
+        Selectors
+    >,
+    CreatorKeys extends string = string,
+    ActionTypes extends string = string,
+    Payload = unknown,
+    Actions extends Action<ActionTypes, Payload> = Action<ActionTypes, Payload>,
+    SelectorKeys extends string = string,
+    SelectorReturns = unknown,
+    SelectorArguments extends unknown[] = never[],
+    Selectors extends Selector<
+        Record<Name, State>,
+        SelectorReturns,
+        SelectorArguments
+    > = Selector<Record<Name, State>, SelectorReturns, SelectorArguments>
+> = {
+    actions: ActionCreatorMapping;
+    actionTypes: ReturnType<
+        ActionCreatorMapping[keyof ActionCreatorMapping]
+    >["type"][];
+    initialState: State;
+    name: Name;
+    reducer: Reducer<
+        State,
+        ReturnType<ActionCreatorMapping[keyof ActionCreatorMapping]>
+    >;
+    selectors: SelectorMapping &
+        Record<DuckSelectorBaseKey, Selector<Record<Name, State>, State>>;
+};
+
+type RootReducer<
+    ReducerMapping extends Record<Names, Reducer<State, Actions>>,
+    // optional
+    Names extends string = string,
+    State = unknown,
+    ActionTypes extends string = string,
+    Payload = unknown,
+    Actions extends Action<ActionTypes, Payload> = Action<ActionTypes, Payload>
+> = Reducer<
+    { [K in keyof ReducerMapping]: Parameters<ReducerMapping[K]>[0] },
+    Parameters<ReducerMapping[keyof ReducerMapping]>[1]
+>;
+
+type RootDuck<Ducks extends Duck[]> = {
+    actions: Transpose<Ducks[number], "name", "actions">;
+    initialState: Transpose<Ducks[number], "name", "initialState">;
+    names: Ducks[number]["name"][];
+    reducer: RootReducer<Transpose<Ducks[number], "name", "reducer">>;
+    selectors: Transpose<Ducks[number], "name", "selectors">;
 };

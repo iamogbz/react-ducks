@@ -1,20 +1,20 @@
 import createNextState from "immer";
 
-export function createReducer<S, T extends string, P>(
-    initialState: S,
-    actionTypeToReducer: ActionReducerMapping<S, T, P>,
-    defaultReducer?: Reducer<S, T, P>,
-): Reducer<S, T, P> {
-    const isReducerActionType = (a?: Action<string, P>): a is Action<T, P> =>
+export function createReducer<State, T extends Action>(
+    initialState: State,
+    actionTypeToReducer: ActionReducerMapping<State, T>,
+    defaultReducer?: Reducer<State, T>,
+): Reducer<State, T> {
+    const isReducerAction = (a?: Action): a is ActionMatching<T, T["type"]> =>
         a !== undefined &&
         Object.prototype.hasOwnProperty.call(actionTypeToReducer, a.type);
 
     return function actionReducer(state = initialState, action?) {
-        return createNextState(state, (mutableState: S) => {
-            if (!isReducerActionType(action)) {
+        return createNextState(state, (mutableState: State) => {
+            if (!isReducerAction(action)) {
                 return defaultReducer?.(mutableState, action) ?? mutableState;
             }
             return actionTypeToReducer[action.type](mutableState, action);
-        }) as S;
+        }) as State;
     };
 }

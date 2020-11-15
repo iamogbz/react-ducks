@@ -10,23 +10,26 @@ function createUnimplemented(objectName: string): (m: string) => () => never {
     };
 }
 
-export function createContextWithValue<S, T extends string, P>(
-    value: Expected<ContextValue<S, T, P>, "reducer" | "state" | "subscribe">,
-): Context<S, T, P> {
-    return React.createContext<ContextValue<S, T, P>>({
+export function createContextWithValue<State, T extends Action>(
+    value: RequiredKeys<
+        ContextValue<State, T>,
+        "reducer" | "state" | "subscribe"
+    >,
+): Context<State, T> {
+    return React.createContext({
         dispatch: async (a) => a,
         getState: () => value.state,
         ...value,
     });
 }
 
-export function createContext<S, T extends string, P>(
-    rootReducer: Reducer<S, T, P>,
-    preloadedState: S,
-    enhancer?: ContextEnhance<S, T, P>,
+export function createContext<State, T extends Action>(
+    rootReducer: Reducer<State, T>,
+    preloadedState: State,
+    enhancer?: ContextEnhance<State, T>,
     displayName?: string,
     global = false,
-): Context<S, T, P> {
+): Context<State, T> {
     const unimplemented = createUnimplemented(`Context(${displayName ?? ""})`);
     const Context = createContextWithValue({
         enhancer,
