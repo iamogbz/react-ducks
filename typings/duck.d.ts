@@ -33,6 +33,12 @@ type ActionCreator<Type extends string, Payload = unknown, State = unknown> = (
     payload?: Payload,
 ) => React.ReducerAction<Reducer<State, Action<Type, Payload>>>;
 
+type Selector<
+    State,
+    Returns, // optional
+    ExtraArguments extends unknown[] = never[]
+> = (state: State, ...args: ExtraArguments) => Returns;
+
 type DuckActionCreators<
     T extends Action,
     // optional
@@ -43,16 +49,7 @@ type DuckActionCreators<
     ) => React.ReducerAction<Reducer<State, ActionMatching<T, K>>>;
 }[T["type"]];
 
-type Selector<
-    State,
-    Returns, // optional
-    ExtraArguments extends unknown[] = never[]
-> = (state: State, ...args: ExtraArguments) => Returns;
-
 type DuckSelectorBaseKey = "$";
-type DuckSelectors<DuckSelectorKeys extends string> =
-    | DuckSelectorKeys
-    | DuckSelectorBaseKey;
 
 type Duck<
     Name extends string,
@@ -94,14 +91,17 @@ type Duck<
 };
 
 type RootReducer<
-    T extends Record<ActionCreatorKeys, Reducer<State, Actions>>,
+    ReducerMapping extends Record<Names, Reducer<State, Actions>>,
     // optional
-    ActionCreatorKeys extends string = string,
+    Names extends string = string,
     State = unknown,
     ActionTypes extends string = string,
     Payload = unknown,
     Actions extends Action<ActionTypes, Payload> = Action<ActionTypes, Payload>
-> = Reducer<{ [K in keyof T]: Parameters<T[K]>[0] }, Parameters<T[keyof T]>[1]>;
+> = Reducer<
+    { [K in keyof ReducerMapping]: Parameters<ReducerMapping[K]>[0] },
+    Parameters<ReducerMapping[keyof ReducerMapping]>[1]
+>;
 
 type RootDuck<Ducks extends Duck[]> = {
     actions: Transpose<Ducks[number], "name", "actions">;
