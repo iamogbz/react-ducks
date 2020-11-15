@@ -1,8 +1,8 @@
 # React Ducks
 
 [![NPM badge](https://img.shields.io/npm/v/react-ducks)](https://www.npmjs.com/package/react-ducks)
-[![Dependabot badge](https://badgen.net/dependabot/iamogbz/react-ducks/?icon=dependabot)](https://app.dependabot.com)
-[![Dependencies](https://david-dm.org/iamogbz/react-ducks.svg)](https://github.com/iamogbz/react-ducks)
+[![Dependabot badge](https://badgen.net/github/dependabot/iamogbz/react-ducks/?icon=dependabot)](https://app.dependabot.com)
+[![Dependencies](https://img.shields.io/librariesio/github/iamogbz/react-ducks)](https://github.com/iamogbz/react-ducks)
 [![Build Status](https://github.com/iamogbz/react-ducks/workflows/Build/badge.svg)](https://github.com/iamogbz/react-ducks/actions)
 [![Coverage Status](https://coveralls.io/repos/github/iamogbz/react-ducks/badge.svg?branch=master)](https://coveralls.io/github/iamogbz/react-ducks?branch=master)
 
