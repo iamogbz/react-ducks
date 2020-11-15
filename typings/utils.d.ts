@@ -24,6 +24,6 @@ type Tail<T extends unknown[]> = T extends [head, ...rest: infer U] ? U : T;
 
 type Last<T extends unknown[]> = T[Length<Tail<T>>];
 
-type Callable<Arguments extends unknown[] = unknown[], Returns = unknown> = (
+type Callable<Arguments extends unknown[] = never[], Returns = unknown> = (
     ...a: Arguments
 ) => Returns;
