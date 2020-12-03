@@ -6,8 +6,7 @@ describe("combineReducers", () => {
         const reducerA = jest.fn((s, _) => s);
         const reducerB = jest.fn((s, _) => s);
         const reducer = combineReducers(initialState, { reducerA, reducerB });
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error 2 arguments needed for reducer
         reducer();
         expect(reducerA).toHaveBeenLastCalledWith(
             initialState.reducerA,
@@ -30,11 +29,10 @@ describe("combineReducers", () => {
             sliceB: true,
         };
         const reducer = combineReducers(state, {
-            sliceA: (s, a: Action) => s + String(a?.payload ?? ""),
-            sliceB: (s, a: Action) => !!a?.payload,
+            sliceA: (s, a) => s + String(a?.payload ?? ""),
+            sliceB: (s, a) => !!a?.payload,
         });
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error 2 arguments needed for reducer
         expect(reducer()).toMatchObject({
             sliceA: "a",
             sliceB: false,
