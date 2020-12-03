@@ -3,8 +3,8 @@ import { combineReducers } from "src/utils/combineReducers";
 describe("combineReducers", () => {
     it("calls all reducers", () => {
         const initialState = { reducerA: "a", reducerB: "b" };
-        const reducerA = jest.fn((s) => s);
-        const reducerB = jest.fn((s) => s);
+        const reducerA = jest.fn((s, _) => s);
+        const reducerB = jest.fn((s, _) => s);
         const reducer = combineReducers(initialState, { reducerA, reducerB });
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
