@@ -23,8 +23,7 @@ describe("createReducer", () => {
         const reducer = createReducer(initialState, {
             actionType: (state) => ({ ...state, hmm: "say what!" }),
         });
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error 2 arguments needed for reducer
         expect(reducer()).toBe(initialState);
     });
 
@@ -33,8 +32,7 @@ describe("createReducer", () => {
         const reducer = createReducer(initialState, {
             actionType: (state) => ({ ...state, hmm: "say what!" }),
         });
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error 2 arguments needed for reducer
         expect(reducer(initialState)).toBe(initialState);
     });
 
