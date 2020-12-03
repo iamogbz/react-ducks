@@ -34,7 +34,7 @@ describe("createContext", () => {
 
     it("passes context value to consumer", () => {
         const initialState = {};
-        const reducer = jest.fn((s) => s);
+        const reducer = jest.fn((s, _) => s);
         const Context = createContext(reducer, initialState);
         const { result } = renderHook(() => React.useContext(Context));
         const contextValue = result.current;
