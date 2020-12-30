@@ -123,7 +123,7 @@
         "react-dom": "^17.0.1",
         "react-test-renderer": "^17.0.1",
         "rxjs": "^6.6.3",
-        "semantic-release": "^17.3.0",
+        "semantic-release": "^17.3.1",
         "stylelint": "^13.8.0",
         "stylelint-config-standard": "^20.0.0",
         "stylelint-config-styled-components": "^0.1.1",
