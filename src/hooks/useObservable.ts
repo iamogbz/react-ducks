@@ -40,9 +40,11 @@ const asObserver = (
 export function useObservable<V>(value: V): [V & Observable, () => void] {
     type Key = Observer | OnNextFunction;
 
-    const { value: observers, add, remove } = useCollection(
-        new Map<Key, Observer>(),
-    );
+    const {
+        value: observers,
+        add,
+        remove,
+    } = useCollection(new Map<Key, Observer>());
 
     const subscribe = React.useCallback(
         function subscribe(

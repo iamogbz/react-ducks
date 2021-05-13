@@ -5,7 +5,7 @@ export function useSelector<
     State,
     Returns,
     ExtraArguments extends unknown[],
-    T extends Action
+    T extends Action,
 >(
     selector: Selector<State, Returns, ExtraArguments>,
     Context?: Context<State, T>,

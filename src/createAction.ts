@@ -1,7 +1,7 @@
 export function createAction<
     Type extends string = string,
     Payload = unknown,
-    State = unknown
+    State = unknown,
 >(
     type: Type,
     prepare = (payload?: Payload): Partial<Action<Type, Payload>> => ({

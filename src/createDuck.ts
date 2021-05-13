@@ -17,7 +17,7 @@ type CreateDuckReturnType<
     Selectors extends Record<
         string,
         Selector<Record<Name, State>, unknown, unknown[]>
-    >
+    >,
 > = Duck<
     Name,
     State,
@@ -35,7 +35,7 @@ export function createDuck<
     Selectors extends Record<
         string,
         Selector<Record<Name, State>, unknown, unknown[]>
-    > = Record<string, Selector<Record<Name, State>, unknown, unknown[]>>
+    > = Record<string, Selector<Record<Name, State>, unknown, unknown[]>>,
 >({
     name,
     initialState,
