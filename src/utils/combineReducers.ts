@@ -6,7 +6,7 @@ export function combineReducers<
         keyof CombinedState,
         Reducer<CombinedState[keyof CombinedState], T>
     >,
-    T extends Action
+    T extends Action,
 >(
     initialState: CombinedState,
     reducerMapping: ReducerMapping,

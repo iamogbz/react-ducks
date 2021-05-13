@@ -119,17 +119,20 @@ describe("provider", () => {
             const loggerMiddleware: Middleware<
                 typeof rootDuck.initialState,
                 ContextDispatch<Action>
-            > = ({ getState }) => (next) => async (action) => {
-                // eslint-disable-next-line no-console
-                console.log("action to dispatch", action);
-                // Call the next dispatch method in the middleware chain.
-                const returnValue = await next(action);
-                // eslint-disable-next-line no-console
-                console.log("state after dispatch", getState());
-                // This will likely be the action itself, unless
-                // a middleware further in chain changed it.
-                return returnValue;
-            };
+            > =
+                ({ getState }) =>
+                (next) =>
+                async (action) => {
+                    // eslint-disable-next-line no-console
+                    console.log("action to dispatch", action);
+                    // Call the next dispatch method in the middleware chain.
+                    const returnValue = await next(action);
+                    // eslint-disable-next-line no-console
+                    console.log("state after dispatch", getState());
+                    // This will likely be the action itself, unless
+                    // a middleware further in chain changed it.
+                    return returnValue;
+                };
             const EnhancedContext = createContext(
                 rootDuck.reducer,
                 rootDuck.initialState,
