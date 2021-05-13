@@ -18,9 +18,8 @@ describe("utils.d", () => {
     });
 
     it("defines RequiredKeys<T, K> to only requires specified keys", () => {
-        const t = forType<
-            RequiredKeys<{ propA: number; propB: "2" }, "propA">
-        >();
+        const t =
+            forType<RequiredKeys<{ propA: number; propB: "2" }, "propA">>();
 
         t.accept({ propA: 1 });
         t.accept({ propA: 2, propB: "2" });
@@ -35,12 +34,13 @@ describe("utils.d", () => {
     });
 
     it("defines OptionalKeys<T, K> to only requires unspecified keys", () => {
-        const t = forType<
-            OptionalKeys<
-                { propA: number; propB: "2"; propC?: undefined },
-                "propA"
-            >
-        >();
+        const t =
+            forType<
+                OptionalKeys<
+                    { propA: number; propB: "2"; propC?: undefined },
+                    "propA"
+                >
+            >();
 
         t.accept({ propA: 2, propB: "2" });
         t.accept({ propB: "2" });

@@ -10,7 +10,7 @@ export function createRootDuck<
     Names extends string = string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     State = any,
-    T extends Action = Action
+    T extends Action = Action,
 >(...ducks: DD): RootDuck<DD> {
     const rootDuck = {
         actions: {},

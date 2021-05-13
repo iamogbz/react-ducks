@@ -45,7 +45,7 @@ describe("createContext", () => {
             </Provider>,
         );
         expect(spyConsume).toHaveBeenCalledTimes(1);
-        const [consumeValue] = (spyConsume.mock.calls[0] as unknown) as [
+        const [consumeValue] = spyConsume.mock.calls[0] as unknown as [
             ContextValue,
         ];
         expect(consumeValue.enhancer).toBeUndefined();

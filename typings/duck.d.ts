@@ -1,7 +1,7 @@
 type Action<
     // optional
     Type extends string = string,
-    Payload = unknown
+    Payload = unknown,
 > = {
     type: Type;
     payload?: Payload;
@@ -10,7 +10,7 @@ type Action<
 type ActionDispatcher<
     T extends Action,
     // optional
-    Arguments extends unknown[] = never[]
+    Arguments extends unknown[] = never[],
 > = (p?: T["payload"], ...args: Arguments) => void;
 
 type ActionPayloadMapping<ActionType extends string, Payload> = Record<
@@ -36,13 +36,13 @@ type ActionCreator<Type extends string, Payload = unknown, State = unknown> = (
 type Selector<
     State,
     Returns, // optional
-    ExtraArguments extends unknown[] = never[]
+    ExtraArguments extends unknown[] = never[],
 > = (state: State, ...args: ExtraArguments) => Returns;
 
 type DuckActionCreators<
     T extends Action,
     // optional
-    State = unknown
+    State = unknown,
 > = {
     [K in T["type"]]: (
         payload?: ActionMatching<T, K>["payload"],
@@ -74,7 +74,7 @@ type Duck<
         Record<Name, State>,
         SelectorReturns,
         SelectorArguments
-    > = Selector<Record<Name, State>, SelectorReturns, SelectorArguments>
+    > = Selector<Record<Name, State>, SelectorReturns, SelectorArguments>,
 > = {
     actions: ActionCreatorMapping;
     actionTypes: ReturnType<
@@ -97,7 +97,7 @@ type RootReducer<
     State = unknown,
     ActionTypes extends string = string,
     Payload = unknown,
-    Actions extends Action<ActionTypes, Payload> = Action<ActionTypes, Payload>
+    Actions extends Action<ActionTypes, Payload> = Action<ActionTypes, Payload>,
 > = Reducer<
     { [K in keyof ReducerMapping]: Parameters<ReducerMapping[K]>[0] },
     Parameters<ReducerMapping[keyof ReducerMapping]>[1]
