@@ -20,7 +20,7 @@ export function createContextWithValue<State, T extends Action>(
         dispatch: async (a) => a,
         getState: () => value.state,
         ...value,
-    });
+    } as ContextValue<State, T>);
 }
 
 export function createContext<State, T extends Action>(

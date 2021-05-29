@@ -5,12 +5,13 @@ type ContextEnhance<State, T extends Action> = (
 ) => ContextValue<State, T>;
 
 // this is similar to a redux store
-type ContextValue<State = unknown, T extends Action = Action> = {
+interface ContextValue<State = unknown, T extends Action = Action>
+    extends MiddlewareAPI<State, ContextDispatch<T>>,
+        Omit<Observable, "constructor" | "from" | "of"> {
     enhancer?: ContextEnhance<ContextValue<State, T>>;
     reducer: Reducer<State, T>;
     state: State;
-} & MiddlewareAPI<State, ContextDispatch<T>> &
-    Omit<Observable, "constructor" | "from" | "of">;
+}
 
 type Context<State = unknown, T extends Action = Action> = React.Context<
     ContextValue<State, T>
