@@ -97,7 +97,7 @@
         "@types/node": "^15.6.1",
         "@types/react": "^17.0.8",
         "@types/react-is": "^17.0.0",
-        "@typescript-eslint/eslint-plugin": "^4.25.0",
+        "@typescript-eslint/eslint-plugin": "^4.26.0",
         "@typescript-eslint/parser": "^4.25.0",
         "acorn": "^8.3.0",
         "bundlewatch": "^0.3.2",
