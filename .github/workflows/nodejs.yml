@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [14.x, 16.x]
     steps:
       - uses: actions/checkout@v2
       - name: Setup
@@ -36,7 +36,7 @@ jobs:
         run: |
           npm test -- --ci --coverage
       - name: Coverage
-        if: matrix.node-version == '12.x' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+        if: matrix.node-version == '14.x' && github.actor != 'dependabot[bot]'
         uses: coverallsapp/github-action@v1.1.2
         with:
           flag-name: run-${{ matrix.node-version }}
@@ -49,13 +49,13 @@ jobs:
         run: |
           npm run e2e
       - name: Bundle
-        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+        if: github.actor != 'dependabot[bot]'
         env:
           BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
         run: |
           npm run bundlewatch
       - name: Deploy
-        if: matrix.node-version == '12.x' && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+        if: matrix.node-version == '14.x' && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -3,14 +3,14 @@ on: pull_request_target
 
 jobs:
   approve:
-    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+    if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
     - uses: hmarr/auto-approve-action@v2.0.0
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
   merge:
-    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+    if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/github-script@v2
