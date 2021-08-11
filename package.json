@@ -94,7 +94,7 @@
         "@testing-library/react": "^12.0.0",
         "@testing-library/dom": "8.1.0",
         "@testing-library/react-hooks": "^7.0.1",
-        "@types/jest": "^26.0.24",
+        "@types/jest": "^27.0.0",
         "@types/node": "^16.4.13",
         "@types/react": "^17.0.17",
         "@types/react-is": "^17.0.2",
