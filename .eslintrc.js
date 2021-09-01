@@ -65,6 +65,7 @@ module.exports = {
         "react/jsx-first-prop-new-line": [2, "multiline"],
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
+        "react/prop-types": [2, { ignore: ["children"] }],
         "sort-imports": [
             2,
             {
