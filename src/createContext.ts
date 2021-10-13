@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./utils/polyfillSymbol";
+import { polyfillObservable } from "./utils/polyfillSymbol";
 import { setGlobalContext } from "./components/Context";
 
 function createUnimplemented(objectName: string): (m: string) => () => never {
@@ -16,6 +16,7 @@ export function createContextWithValue<State, T extends Action>(
         "reducer" | "state" | "subscribe"
     >,
 ): Context<State, T> {
+    polyfillObservable();
     return React.createContext({
         dispatch: async (a) => a,
         getState: () => value.state,

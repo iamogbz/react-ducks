@@ -19,13 +19,13 @@ describe("useSelector", () => {
             (context) => useSelector(selector, context),
             { initialProps: createContext() },
         );
-        expect(result.current).toStrictEqual("infinite");
+        expect(result.current).toBe("infinite");
         expect(selector).toHaveBeenCalledTimes(1);
         act(rerender);
-        expect(result.current).toStrictEqual("infinite");
+        expect(result.current).toBe("infinite");
         expect(selector).toHaveBeenCalledTimes(1);
         act(() => rerender(createContext({ state: "finite" })));
-        expect(result.current).toStrictEqual("finite");
+        expect(result.current).toBe("finite");
         expect(selector).toHaveBeenCalledTimes(2);
     });
 });

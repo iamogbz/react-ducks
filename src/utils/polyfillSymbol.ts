@@ -6,4 +6,6 @@ function polyfillSymbol(name: string) {
     }
 }
 
-polyfillSymbol("observable");
+export function polyfillObservable(): void {
+    return polyfillSymbol("observable");
+}

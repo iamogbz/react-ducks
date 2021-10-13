@@ -55,7 +55,6 @@ module.exports = {
             2,
             {
                 bracketSpacing: true,
-                jsxBracketSameLine: false,
                 semi: true,
                 singleQuote: false,
                 tabWidth: 4,
