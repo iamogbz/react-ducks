@@ -95,7 +95,7 @@
         "@testing-library/dom": "^8.11.1",
         "@testing-library/react-hooks": "^7.0.2",
         "@types/jest": "^27.0.3",
-        "@types/node": "^16.11.9",
+        "@types/node": "^16.11.10",
         "@types/react": "^17.0.36",
         "@types/react-is": "^17.0.3",
         "@typescript-eslint/eslint-plugin": "^4.32.0",
