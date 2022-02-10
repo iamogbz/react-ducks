@@ -94,6 +94,7 @@ describe("provider", () => {
     describe("context", () => {
         it("renders without root provider", async () => {
             const result = render(<Example />);
+            // eslint-disable-next-line jest/prefer-snapshot-hint
             expect(result.baseElement).toMatchSnapshot();
             const element = await result.findByText("increment");
             act(() => element.click());
@@ -111,6 +112,7 @@ describe("provider", () => {
             expect(increment).toHaveBeenCalledWith(0);
             act(() => element.click());
             expect(increment).toHaveBeenCalledWith(1);
+            // eslint-disable-next-line jest/prefer-snapshot-hint
             expect(result.baseElement).toMatchSnapshot();
             expect(init).toHaveBeenCalledTimes(1);
         });

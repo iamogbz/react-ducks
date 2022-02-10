@@ -29,19 +29,22 @@ describe("combineReducers", () => {
             sliceB: true,
         };
         const reducer = combineReducers(state, {
-            sliceA: (s, a) => s + String(a?.payload ?? ""),
+            sliceA: (s, a) => s + String(a?.payload),
             sliceB: (s, a) => !!a?.payload,
         });
         // @ts-expect-error 2 arguments needed for reducer
-        expect(reducer()).toMatchObject({
-            sliceA: "a",
-            sliceB: false,
-        });
-        expect(reducer(state, { payload: true, type: "action" })).toMatchObject(
-            {
-                sliceA: "atrue",
-                sliceB: true,
-            },
-        );
+        expect(reducer()).toMatchInlineSnapshot(`
+      Object {
+        "sliceA": "aundefined",
+        "sliceB": false,
+      }
+    `);
+        expect(reducer(state, { payload: true, type: "action" }))
+            .toMatchInlineSnapshot(`
+      Object {
+        "sliceA": "atrue",
+        "sliceB": true,
+      }
+    `);
     });
 });
