@@ -76,7 +76,7 @@
         "files": [
             {
                 "compression": "none",
-                "maxSize": "15kb",
+                "maxSize": "16kb",
                 "path": "react-ducks-*.tgz"
             }
         ]
