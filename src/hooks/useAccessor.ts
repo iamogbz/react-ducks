@@ -10,7 +10,7 @@ export function useAccessor<R>(
     const getValue = React.useCallback(function getValue() {
         return ref.current;
     }, []);
-    const setValue = React.useCallback(function setValue(value) {
+    const setValue = React.useCallback(function setValue(value?: R) {
         ref.current = value;
     }, []);
 
