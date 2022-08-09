@@ -99,7 +99,7 @@
         "@types/react": "^18.0.9",
         "@types/react-is": "^17.0.3",
         "@typescript-eslint/eslint-plugin": "^5.33.0",
-        "@typescript-eslint/parser": "^5.32.0",
+        "@typescript-eslint/parser": "^5.33.0",
         "acorn": "^8.8.0",
         "bundlewatch": "^0.3.3",
         "commitizen": "^4.2.5",
