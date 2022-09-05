@@ -90,7 +90,7 @@
     "devDependencies": {
         "@commitlint/cli": "^17.0.3",
         "@commitlint/config-conventional": "^17.1.0",
-        "@commitlint/travis-cli": "^17.0.3",
+        "@commitlint/travis-cli": "^17.1.2",
         "@testing-library/dom": "^8.17.1",
         "@testing-library/react": "^12.1.5",
         "@testing-library/react-hooks": "^8.0.1",
