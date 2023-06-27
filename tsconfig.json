@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
+        "allowJs": true,
         "allowSyntheticDefaultImports": true,
+        "checkJs": true,
         "baseUrl": ".",
         "declaration": true,
         "downlevelIteration": true,
@@ -19,5 +21,9 @@
     "exclude": [
         "dist",
         "node_modules"
-    ]
+    ],
+    "include": [
+        ".eslintrc.js",
+        "**/*",
+    ],
 }
