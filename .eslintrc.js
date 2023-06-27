@@ -21,6 +21,7 @@ module.exports = {
             jsx: true,
         },
         ecmaVersion: 6,
+        project: ["tsconfig.json"],
         sourceType: "module",
     },
     rules: {
@@ -31,6 +32,7 @@ module.exports = {
         ],
         "arrow-body-style": [2, "as-needed"],
         "class-methods-use-this": 0,
+        "jest/max-expects": 0,
         "jest/no-hooks": 0,
         "jest/prefer-expect-assertions": 0,
         "no-console": 1,
