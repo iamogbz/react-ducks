@@ -1,4 +1,4 @@
-import createNextState from "immer";
+import { produce as createNextState } from "immer";
 
 export function createReducer<State, T extends Action>(
     initialState: State,
