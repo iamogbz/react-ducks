@@ -85,14 +85,14 @@
         "immer": "^10.0.2"
     },
     "peerDependencies": {
-        "react": "^16.0.0||^17.0.0"
+        "react": "^16.0.0||^17.0.0||^18.0.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^17.6.6",
         "@commitlint/config-conventional": "^17.6.6",
         "@commitlint/travis-cli": "^17.6.6",
         "@testing-library/dom": "^9.3.1",
-        "@testing-library/react": "^12.1.5",
+        "@testing-library/react": "^14.0.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@types/jest": "^27.5.0",
         "@types/node": "^20.3.2",
@@ -120,9 +120,9 @@
         "lint-staged": "^13.2.3",
         "prettier": "^2.8.0",
         "prettier-eslint": "^15.0.1",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "react-test-renderer": "^17.0.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-test-renderer": "^18.2.0",
         "rxjs": "^7.8.1",
         "semantic-release": "^19.0.5",
         "ts-jest": "^27.1.4",
