@@ -36,7 +36,7 @@ jobs:
         run: |
           npm test -- --ci --coverage
       - name: Coverage
-        if: matrix.node-version == '16.x' && github.actor != 'dependabot[bot]'
+        if: matrix.node-version == '18.x' && github.actor != 'dependabot[bot]'
         uses: coverallsapp/github-action@v1.1.2
         with:
           flag-name: run-${{ matrix.node-version }}
@@ -55,7 +55,7 @@ jobs:
         run: |
           npm run bundlewatch
       - name: Deploy
-        if: matrix.node-version == '16.x' && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]'
+        if: matrix.node-version == '18.x' && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
