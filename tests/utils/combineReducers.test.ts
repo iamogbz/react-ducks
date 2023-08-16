@@ -34,17 +34,17 @@ describe("combineReducers", () => {
         });
         // @ts-expect-error 2 arguments needed for reducer
         expect(reducer()).toMatchInlineSnapshot(`
-      Object {
-        "sliceA": "aundefined",
-        "sliceB": false,
-      }
-    `);
+        {
+          "sliceA": "aundefined",
+          "sliceB": false,
+        }
+      `);
         expect(reducer(state, { payload: true, type: "action" }))
             .toMatchInlineSnapshot(`
-      Object {
-        "sliceA": "atrue",
-        "sliceB": true,
-      }
-    `);
+            {
+              "sliceA": "atrue",
+              "sliceB": true,
+            }
+          `);
     });
 });

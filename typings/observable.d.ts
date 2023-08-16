@@ -22,10 +22,10 @@ interface Observable {
     [Symbol.observable](): Observable;
 
     // Converts items to an Observable
-    static of(...items): Observable;
+    of(...items): Observable;
 
     // Converts an observable or iterable to an Observable
-    static from(observable): Observable;
+    from(observable): Observable;
 }
 
 interface Observer {

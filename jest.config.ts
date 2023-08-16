@@ -7,6 +7,7 @@ export default {
     ],
     moduleDirectories: ["./node_modules", "<rootDir>/node_modules", "."],
     preset: "ts-jest",
+    prettierPath: null,
     testEnvironment: "jsdom",
     testPathIgnorePatterns: ["./artifacts/", "./dist/", "./node_modules/"],
 };

@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createContext has expected default context value 1`] = `
-Object {
+{
   "dispatch": [Function],
   "enhancer": undefined,
   "getState": [Function],
   "reducer": [Function],
-  "state": Object {},
+  "state": {},
   "subscribe": [Function],
 }
 `;
