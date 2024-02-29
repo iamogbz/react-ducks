@@ -88,7 +88,7 @@
         "react": "^16.0.0||^17.0.0||^18.0.0"
     },
     "devDependencies": {
-        "@commitlint/cli": "^19.0.2",
+        "@commitlint/cli": "^19.0.3",
         "@commitlint/config-conventional": "^19.0.0",
         "@commitlint/travis-cli": "^19.0.2",
         "@testing-library/dom": "^9.3.4",
