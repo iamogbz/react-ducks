@@ -126,7 +126,7 @@
         "react-test-renderer": "^18.3.1",
         "rxjs": "^7.8.1",
         "semantic-release": "^24.0.0",
-        "ts-jest": "^29.1.4",
+        "ts-jest": "^29.1.5",
         "ts-node": "^10.9.2",
         "type-plus": "^7.6.2",
         "typescript": "^5.2.2",
